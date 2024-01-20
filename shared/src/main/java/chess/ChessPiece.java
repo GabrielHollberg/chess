@@ -89,6 +89,11 @@ public class ChessPiece {
 
                         if (board.getPiece(newPosition) == null) {
                             result.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
+                        } else if (board.getPiece(newPosition).pieceColor != myPiece.pieceColor) {
+                            result.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
+                            stop = true;
+                            newPosition.setRow(myPosition.getRow());
+                            newPosition.setColumn(myPosition.getColumn());
                         } else {
                             stop = true;
                             newPosition.setRow(myPosition.getRow());
