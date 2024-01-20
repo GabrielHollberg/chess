@@ -59,7 +59,10 @@ public class ChessPiece {
         {
             if(myPosition.getColumn() + i < 8)
             {
-                result.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() + i), board.getPiece(myPosition).getPieceType()));
+                ChessPosition newPosition = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() + i);
+                ChessMove move = new ChessMove(myPosition, newPosition, this.type);
+                
+                result.add(move);
             }
             else
             {
