@@ -10,8 +10,8 @@ public class ChessPosition {
 
     public ChessPosition(int row, int col)
     {
-        this.row = row;
-        this.col = col;
+        this.row = row - 1;
+        this.col = col - 1;
     }
 
     /**

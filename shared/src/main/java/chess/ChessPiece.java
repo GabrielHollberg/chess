@@ -52,23 +52,8 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition)
     {
         Collection<ChessMove> result = new ArrayList<>();
-        /*int i = 0;
-        boolean stop = false;
 
-        while(!stop && myPosition.getRow() + i < 8)
-        {
-            if(myPosition.getColumn() + i < 8)
-            {
-                ChessPosition newPosition = new ChessPosition(myPosition.getRow() + i, myPosition.getColumn() + i);
-                ChessMove move = new ChessMove(myPosition, newPosition, this.type);
-                
-                result.add(move);
-            }
-            else
-            {
-                stop = true;
-            }
-        }*/
+
 
         return result;
     }
