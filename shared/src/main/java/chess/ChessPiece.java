@@ -74,13 +74,12 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> result = new ArrayList<>();
 
-        ChessPiece myPiece = board.getPiece(myPosition);
         ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
         int i = 1;
         int j = 1;
         boolean stop = false;
 
-        if (myPiece.type == ChessPiece.PieceType.BISHOP) {
+        if (board.getPiece(myPosition).type == PieceType.BISHOP) {
             for (int k = 0; k < 4; k++) {
                 while (!stop) {
                     if (newPosition.getRow() + i < 8 && newPosition.getRow() + i >= 0 && newPosition.getColumn() + j < 8 && newPosition.getColumn() + j >= 0) {
@@ -89,7 +88,7 @@ public class ChessPiece {
 
                         if (board.getPiece(newPosition) == null) {
                             result.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
-                        } else if (board.getPiece(newPosition).pieceColor != myPiece.pieceColor) {
+                        } else if (board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor) {
                             result.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
                             stop = true;
                             newPosition.setRow(myPosition.getRow());
@@ -106,10 +105,11 @@ public class ChessPiece {
                     }
                 }
                 stop = false;
+
                 if (k % 2 == 0) {
-                    j *= -1;
-                } else {
                     i *= -1;
+                } else {
+                    j *= -1;
                 }
             }
         }
