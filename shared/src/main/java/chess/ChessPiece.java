@@ -198,11 +198,11 @@ public class ChessPiece {
                 }
             }
         }
-        /*//King
+        //King
         else if (board.getPiece(myPosition).type == PieceType.KING) {
             int incRow = 1;
             int incCol = 0;
-            for (int k = 0; k < 4; k++) {
+            for (int k = 0; k < 8; k++) {
                 if (newPosition.getRow() + incRow < 8 && newPosition.getRow() + incRow >= 0 && newPosition.getColumn() + incCol < 8 && newPosition.getColumn() + incCol >= 0) {
                     newPosition.setRow(newPosition.getRow() + incRow);
                     newPosition.setColumn(newPosition.getColumn() + incCol);
@@ -225,9 +225,18 @@ public class ChessPiece {
                         incRow = 0;
                         incCol = -1;
                         break;
+                    case 3:
+                        incRow = 1;
+                        incCol = 1;
+                    default:
+                        if (k % 2 == 0) {
+                            incRow *= -1;
+                        } else {
+                            incCol *= -1;
+                        }
                 }
             }
-        }*/
+        }
         /*//Pawn
         else if (board.getPiece(myPosition).type == PieceType.PAWN) {
             int incRow = 0;
