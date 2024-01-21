@@ -65,6 +65,16 @@ public class ChessPosition {
         this.col = col;
     }
 
+    public void update(int incRow, int incCol) {
+        setRow(row + incRow);
+        setColumn(col + incCol);
+    }
+
+    public void resetTo(ChessPosition myPosition) {
+        setRow(myPosition.getRow());
+        setColumn(myPosition.getColumn());
+    }
+
     private int row;
     private int col;
 }
