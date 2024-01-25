@@ -307,7 +307,7 @@ public class ChessPiece {
                                     }
                                 }
                             }
-                        } else if (i % 2 == 0) {
+                        } else {
                             if (!newIsNull()) {
                                 if (newIsEnemy()) {
                                     if (myPosition.getRow() == 6) {
@@ -349,7 +349,7 @@ public class ChessPiece {
                                     }
                                 }
                             }
-                        } else if (i % 2 == 0) {
+                        } else {
                             if (!newIsNull()) {
                                 if (newIsEnemy()) {
                                     if (myPosition.getRow() == 1) {
@@ -375,10 +375,10 @@ public class ChessPiece {
 
     private int itRow;
     private int itCol;
-    private ChessGame.TeamColor pieceColor;
-    private ChessPiece.PieceType type;
+    private final ChessGame.TeamColor pieceColor;
+    private final ChessPiece.PieceType type;
     private ChessBoard board;
     private ChessPosition myPosition;
     private ChessPosition newPosition;
-    private Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
+    private final Collection<ChessMove> validMoves = new ArrayList<>();
 }
