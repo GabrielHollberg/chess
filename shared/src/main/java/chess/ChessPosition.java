@@ -10,8 +10,7 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
-    public ChessPosition(int row, int col)
-    {
+    public ChessPosition(int row, int col) {
         this.row = row - 1;
         this.col = col - 1;
     }
@@ -41,8 +40,7 @@ public class ChessPosition {
      * @return which row this position is in
      * 1 codes for the bottom row
      */
-    public int getRow()
-    {
+    public int getRow() {
         return row;
     }
 
@@ -50,29 +48,16 @@ public class ChessPosition {
      * @return which column this position is in
      * 1 codes for the left row
      */
-    public int getColumn()
-    {
+    public int getColumn() {
         return col;
     }
 
-    public void setRow(int row)
-    {
+    public void setRow(int row) {
         this.row = row;
     }
 
-    public void setColumn(int col)
-    {
+    public void setColumn(int col) {
         this.col = col;
-    }
-
-    public void update(int incRow, int incCol) {
-        setRow(row + incRow);
-        setColumn(col + incCol);
-    }
-
-    public void resetTo(ChessPosition myPosition) {
-        setRow(myPosition.getRow());
-        setColumn(myPosition.getColumn());
     }
 
     private int row;

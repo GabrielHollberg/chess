@@ -64,34 +64,112 @@ public class ChessPiece {
         return type;
     }
 
-    public boolean isInBounds() {
+    public boolean newInBounds() {
         return newPosition.getRow() < 8 && newPosition.getRow() >= 0 && newPosition.getColumn() < 8 && newPosition.getColumn() >= 0;
     }
 
-    public boolean validMove() {
-        return board.getPiece(newPosition) == null || board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor;
+    public boolean validNewPosition() {
+        return board.getPiece(newPosition) == null || newIsEnemy();
     }
 
-    public void addMove() {
+    public boolean newIsEnemy() {
+        return board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor;
+    }
+
+    public boolean newIsNull() {
+        return board.getPiece(newPosition) == null;
+    }
+
+    public void updateNewPosition() {
+        newPosition.setRow(newPosition.getRow() + itRow);
+        newPosition.setColumn(newPosition.getColumn() + itCol);
+    }
+
+    public void addNewPosition() {
         validMoves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
     }
 
-    public void addMove(PieceType promotion) {
-        validMoves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), promotion));
+    public void addNewPosition(PieceType promotionPiece) {
+        validMoves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), promotionPiece));
     }
 
-    public void checkPositions(int incRow, int incCol) {
-        newPosition.update(incRow, incCol);
-        while (isInBounds()) {
-            if (validMove()) {
-                addMove();
+    public void resetNewPosition() {
+        newPosition.setRow(myPosition.getRow());
+        newPosition.setColumn(myPosition.getColumn());
+    }
+
+    public void updateIterators(int i) {
+        if(board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
+            switch (i) {
+                case 0:
+                    itRow = 0;
+                    itCol = 1;
+                    break;
+                case 1:
+                    itRow = -1;
+                    itCol = 0;
+                    break;
+                case 2:
+                    itRow = 0;
+                    itCol = -1;
+                    break;
             }
-            if (board.getPiece(newPosition) != null){
-                break;
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
+            if(i % 2 == 0) {
+                itRow *= -1;
+            } else if(i % 2 == 1) {
+                int temp = itRow;
+                itRow = itCol;
+                itCol = temp;
             }
-            newPosition.update(incRow, incCol);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
+            switch (i) {
+                case 0:
+                    itRow = -1;
+                    itCol = 1;
+                    break;
+                case 1:
+                    itRow = 1;
+                    itCol = -1;
+                    break;
+                case 2:
+                    itRow = -1;
+                    itCol = -1;
+                    break;
+            }
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN || board.getPiece(myPosition).getPieceType() == PieceType.KING) {
+            switch (i) {
+                case 0:
+                    itRow = -1;
+                    itCol = 1;
+                    break;
+                case 1:
+                    itRow = 1;
+                    itCol = -1;
+                    break;
+                case 2:
+                    itRow = -1;
+                    itCol = -1;
+                    break;
+                case 3:
+                    itRow = 0;
+                    itCol = 1;
+                    break;
+                case 4:
+                    itRow = -1;
+                    itCol = 0;
+                    break;
+                case 5:
+                    itRow = 0;
+                    itCol = -1;
+                    break;
+                case 6:
+                    itRow = 1;
+                    itCol = 0;
+            }
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
+            itCol++;
         }
-        newPosition.resetTo(myPosition);
     }
 
     /**
@@ -101,219 +179,206 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition)
-    {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         this.board = board;
         this.myPosition = myPosition;
-        this.newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+        newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
 
         //Rook
-        if (board.getPiece(myPosition).type == PieceType.ROOK)
-        {
-            int incRow = 1;
-            int incCol = 0;
-            for (int i = 0; i < 4; i++) {
-                checkPositions(incRow, incCol);
-                switch (i) {
-                    case 0:
-                        incRow = 0;
-                        incCol = 1;
+        if(board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
+            itRow = 1;
+            itCol = 0;
+
+            for(int i = 0; i < 4; i++) {
+                updateNewPosition();
+                while (newInBounds()) {
+                    if (validNewPosition()) {
+                        addNewPosition();
+                    }
+                    if (!newIsNull()) {
                         break;
-                    case 1:
-                        incRow = -1;
-                        incCol = 0;
-                        break;
-                    case 2:
-                        incRow = 0;
-                        incCol = -1;
-                        break;
+                    }
+                    updateNewPosition();
                 }
+                resetNewPosition();
+                updateIterators(i);
             }
         }
 
         //Knight
-        else if (board.getPiece(myPosition).type == PieceType.KNIGHT) {
-            int incRow = 2;
-            int incCol = 1;
-            for (int i = 0; i < 8; i++) {
-                newPosition.update(incRow, incCol);
-                if (isInBounds() && validMove()) {
-                    addMove();
+        else if (board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
+            itRow = 2;
+            itCol = 1;
+
+            for(int i = 0; i < 8; i++) {
+                updateNewPosition();
+                if (newInBounds()) {
+                    if (validNewPosition()) {
+                        addNewPosition();
+                    }
                 }
-                newPosition.resetTo(myPosition);
-                int temp = incRow;
-                incRow = incCol;
-                incCol = temp;
-                if(i % 4 == 0) {
-                    incRow *= -1;
-                }
-                else if(i % 4 == 2) {
-                    incCol *= -1;
-                }
+                resetNewPosition();
+                updateIterators(i);
             }
         }
 
         //Bishop
-        else if (board.getPiece(myPosition).type == PieceType.BISHOP) {
-            int incRow = 1;
-            int incCol = 1;
-            for (int k = 0; k < 4; k++) {
-                checkPositions(incRow, incCol);
-                if (k % 2 == 0) {
-                    incRow *= -1;
-                } else {
-                    incCol *= -1;
+        else if(board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
+            itRow = 1;
+            itCol = 1;
+
+            for(int i = 0; i < 4; i++) {
+                updateNewPosition();
+                while (newInBounds()) {
+                    if (validNewPosition()) {
+                        addNewPosition();
+                    }
+                    if (!newIsNull()) {
+                        break;
+                    }
+                    updateNewPosition();
                 }
+                resetNewPosition();
+                updateIterators(i);
             }
         }
 
         //Queen
-        else if (board.getPiece(myPosition).type == PieceType.QUEEN) {
-            int incRow = 1;
-            int incCol = 0;
-            for (int k = 0; k < 8; k++) {
-                checkPositions(incRow, incCol);
-                switch (k) {
-                    case 0:
-                        incRow = 0;
-                        incCol = 1;
+        else if (board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
+            itRow = 1;
+            itCol = 1;
+
+            for(int i = 0; i < 8; i++) {
+                updateNewPosition();
+                while (newInBounds()) {
+                    if (validNewPosition()) {
+                        addNewPosition();
+                    }
+                    if (!newIsNull()) {
                         break;
-                    case 1:
-                        incRow = -1;
-                        incCol = 0;
-                        break;
-                    case 2:
-                        incRow = 0;
-                        incCol = -1;
-                        break;
-                    case 3:
-                        incRow = 1;
-                        incCol = 1;
-                    default:
-                        if (k % 2 == 0) {
-                            incRow *= -1;
-                        } else {
-                            incCol *= -1;
-                        }
+                    }
+                    updateNewPosition();
                 }
+                resetNewPosition();
+                updateIterators(i);
             }
         }
 
         //King
-        else if (board.getPiece(myPosition).type == PieceType.KING) {
-            int incRow = 1;
-            int incCol = 0;
-            for (int k = 0; k < 8; k++) {
-                newPosition.update(incRow, incCol);
-                if (isInBounds()) {
-                    if(validMove()) {
-                        addMove();
+        else if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
+            itRow = 1;
+            itCol = 1;
+
+            for(int i = 0; i < 8; i++) {
+                updateNewPosition();
+                if (newInBounds()) {
+                    if (validNewPosition()) {
+                        addNewPosition();
                     }
                 }
-                newPosition.resetTo(myPosition);
-                switch (k) {
-                    case 0:
-                        incRow = 0;
-                        incCol = 1;
-                        break;
-                    case 1:
-                        incRow = -1;
-                        incCol = 0;
-                        break;
-                    case 2:
-                        incRow = 0;
-                        incCol = -1;
-                        break;
-                    case 3:
-                        incRow = 1;
-                        incCol = 1;
-                    default:
-                        if (k % 2 == 0) {
-                            incRow *= -1;
-                        } else {
-                            incCol *= -1;
-                        }
-                }
+                resetNewPosition();
+                updateIterators(i);
             }
         }
 
         //Pawn
-        else if (board.getPiece(myPosition).type == PieceType.PAWN) {
-            if(board.getPiece(myPosition).pieceColor == ChessGame.TeamColor.WHITE) {
-                int incRow = 1;
-                int incCol = -1;
+        else if(board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
+            if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                itCol = -1;
+                itRow = 1;
+
                 for(int i = 0; i < 3; i++) {
-                    newPosition.update(incRow, incCol);
-                    if (i % 2 == 0 && board.getPiece(newPosition) != null && isInBounds() && board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor) {
-                        if (myPosition.getRow() == 6) {
-                            addMove(PieceType.ROOK);
-                            addMove(PieceType.KNIGHT);
-                            addMove(PieceType.BISHOP);
-                            addMove(PieceType.QUEEN);
-                        } else {
-                            addMove();
-                        }
-                    } else if(i % 2 == 1 && isInBounds() && board.getPiece(newPosition) == null) {
-                        if (myPosition.getRow() == 6) {
-                            addMove(PieceType.ROOK);
-                            addMove(PieceType.KNIGHT);
-                            addMove(PieceType.BISHOP);
-                            addMove(PieceType.QUEEN);
-                        } else {
-                            addMove();
-                        }
-                        if(myPosition.getRow() == 1) {
-                            newPosition.update(incRow, incCol);
-                            if(isInBounds() && board.getPiece(newPosition) == null) {
-                                addMove();
+                    updateNewPosition();
+                    if (newInBounds()) {
+                        if(i % 2 == 1) {
+                            if (newIsNull()) {
+                                if (myPosition.getRow() == 6) {
+                                    addNewPosition(PieceType.ROOK);
+                                    addNewPosition(PieceType.KNIGHT);
+                                    addNewPosition(PieceType.BISHOP);
+                                    addNewPosition(PieceType.QUEEN);
+                                } else {
+                                    addNewPosition();
+                                    if(myPosition.getRow() == 1) {
+                                        updateNewPosition();
+                                        if (newIsNull()) {
+                                            addNewPosition();
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (i % 2 == 0) {
+                            if (!newIsNull()) {
+                                if (newIsEnemy()) {
+                                    if (myPosition.getRow() == 6) {
+                                        addNewPosition(PieceType.ROOK);
+                                        addNewPosition(PieceType.KNIGHT);
+                                        addNewPosition(PieceType.BISHOP);
+                                        addNewPosition(PieceType.QUEEN);
+                                    } else {
+                                        addNewPosition();
+                                    }
+                                }
                             }
                         }
                     }
-                    newPosition.resetTo(myPosition);
-                    incCol++;
+                    resetNewPosition();
+                    updateIterators(i);
                 }
-            } else {
-                int incRow = -1;
-                int incCol = -1;
+            } else if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                itCol = -1;
+                itRow = -1;
+
                 for(int i = 0; i < 3; i++) {
-                    newPosition.update(incRow, incCol);
-                    if (i % 2 == 0 && board.getPiece(newPosition) != null && isInBounds() && board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor) {
-                        if (myPosition.getRow() == 1) {
-                            addMove(PieceType.ROOK);
-                            addMove(PieceType.KNIGHT);
-                            addMove(PieceType.BISHOP);
-                            addMove(PieceType.QUEEN);
-                        } else {
-                            addMove();
-                        }
-                    } else if(i % 2 == 1 && isInBounds() && board.getPiece(newPosition) == null) {
-                        if (myPosition.getRow() == 1) {
-                            addMove(PieceType.ROOK);
-                            addMove(PieceType.KNIGHT);
-                            addMove(PieceType.BISHOP);
-                            addMove(PieceType.QUEEN);
-                        } else {
-                            addMove();
-                        }
-                        if(myPosition.getRow() == 6) {
-                            newPosition.update(incRow, incCol);
-                            if(isInBounds() && board.getPiece(newPosition) == null) {
-                                addMove();
+                    updateNewPosition();
+                    if (newInBounds()) {
+                        if(i % 2 == 1) {
+                            if (newIsNull()) {
+                                if (myPosition.getRow() == 1) {
+                                    addNewPosition(PieceType.ROOK);
+                                    addNewPosition(PieceType.KNIGHT);
+                                    addNewPosition(PieceType.BISHOP);
+                                    addNewPosition(PieceType.QUEEN);
+                                } else {
+                                    addNewPosition();
+                                    if(myPosition.getRow() == 6) {
+                                        updateNewPosition();
+                                        if (newIsNull()) {
+                                            addNewPosition();
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (i % 2 == 0) {
+                            if (!newIsNull()) {
+                                if (newIsEnemy()) {
+                                    if (myPosition.getRow() == 1) {
+                                        addNewPosition(PieceType.ROOK);
+                                        addNewPosition(PieceType.KNIGHT);
+                                        addNewPosition(PieceType.BISHOP);
+                                        addNewPosition(PieceType.QUEEN);
+                                    } else {
+                                        addNewPosition();
+                                    }
+                                }
                             }
                         }
                     }
-                    newPosition.resetTo(myPosition);
-                    incCol++;
+                    resetNewPosition();
+                    updateIterators(i);
                 }
             }
         }
+
         return validMoves;
     }
 
+    private int itRow;
+    private int itCol;
+    private ChessGame.TeamColor pieceColor;
+    private ChessPiece.PieceType type;
     private ChessBoard board;
     private ChessPosition myPosition;
     private ChessPosition newPosition;
-    private ChessGame.TeamColor pieceColor;
-    private ChessPiece.PieceType type;
-    private Collection<ChessMove> validMoves = new ArrayList<>();
+    private Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
 }
