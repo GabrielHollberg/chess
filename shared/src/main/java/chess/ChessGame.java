@@ -13,6 +13,10 @@ public class ChessGame {
     public ChessGame() {
 
     }
+    public ChessGame(ChessBoard board, ChessPosition position) {
+        this.board = board;
+        this.position = position;
+    }
 
     /**
      * @return Which team's turn it is
@@ -45,8 +49,18 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
-    public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+    public Collection<ChessMove> validMoves(ChessPosition position) {
+        if (board.getPiece(position) == null) {
+            return null;
+        } else {
+            ChessRuleBook ruleBook = new RegularRuleBook();
+            return ruleBook.validMoves(board, position);
+        }
+    }
+
+    public Collection<ChessMove> validMoves() {
+        ChessRuleBook ruleBook = new RegularRuleBook();
+        return ruleBook.validMoves(board, position);
     }
 
     /**
@@ -96,7 +110,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = board;
     }
 
     /**
@@ -105,6 +119,9 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
     }
+
+    private ChessBoard board;
+    private ChessPosition position;
 }
