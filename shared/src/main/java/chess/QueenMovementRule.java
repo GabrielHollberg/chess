@@ -1,10 +1,9 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class QueenMovementRule extends MovementRule {
-    public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition position) {
+    public ArrayList<ChessMove> validMoves(ChessBoard board, ChessPosition position) {
         this.board = board;
         this.position = position;
         newPosition = new ChessPosition(position.getRow() + 1, position.getColumn() + 1);

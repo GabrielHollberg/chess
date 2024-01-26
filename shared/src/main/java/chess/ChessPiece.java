@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -12,8 +11,8 @@ import java.util.Objects;
  */
 public class ChessPiece {
 
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
-        this.pieceColor = pieceColor;
+    public ChessPiece(ChessGame.TeamColor color, ChessPiece.PieceType type) {
+        this.color = color;
         this.type = type;
     }
 
@@ -22,18 +21,18 @@ public class ChessPiece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPiece that = (ChessPiece) o;
-        return pieceColor == that.pieceColor && type == that.type;
+        return color == that.color && type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pieceColor, type);
+        return Objects.hash(color, type);
     }
 
     @Override
     public String toString() {
         return "ChessPiece{" +
-                "pieceColor=" + pieceColor +
+                "pieceColor=" + color +
                 ", type=" + type +
                 '}';
     }
@@ -54,7 +53,7 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        return pieceColor;
+        return color;
     }
 
     /**
@@ -62,6 +61,14 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return type;
+    }
+
+    public ChessPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(ChessPosition position) {
+        this.position = position;
     }
 
     /**
@@ -76,6 +83,7 @@ public class ChessPiece {
         return game.validMoves();
     }
 
-    private final ChessGame.TeamColor pieceColor;
+    private final ChessGame.TeamColor color;
     private final ChessPiece.PieceType type;
+    private ChessPosition position;
 }

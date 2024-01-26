@@ -1,12 +1,12 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public interface ChessRuleBook {
-    public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition position);
-    public boolean isBoardValid(ChessBoard board);
-    public boolean isInCheck(ChessBoard board, ChessGame.TeamColor color);
-    public boolean isInCheckmate(ChessBoard board, ChessGame.TeamColor color);
-    public boolean isInStalemate(ChessBoard board, ChessGame.TeamColor color);
+    ArrayList<ChessMove> validMoves(ChessBoard board, ChessPosition position);
+    ArrayList<ChessMove> validMoves(ChessBoard board, ChessGame.TeamColor color);
+    boolean isBoardValid(ChessBoard board);
+    boolean isInCheck(ChessBoard board, ChessGame.TeamColor color);
+    boolean isInCheckmate(ChessBoard board, ChessGame.TeamColor color);
+    boolean isInStalemate(ChessBoard board, ChessGame.TeamColor color);
 }

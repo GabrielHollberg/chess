@@ -1,10 +1,9 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public abstract class MovementRule {
-    abstract Collection<ChessMove> validMoves(ChessBoard board, ChessPosition position);
+    abstract ArrayList<ChessMove> validMoves(ChessBoard board, ChessPosition position);
 
     public boolean newInBounds() {
         return newPosition.getRow() < 8 && newPosition.getRow() >= 0 && newPosition.getColumn() < 8 && newPosition.getColumn() >= 0;
@@ -119,5 +118,5 @@ public abstract class MovementRule {
     ChessBoard board;
     ChessPosition position;
     ChessPosition newPosition;
-    final Collection<ChessMove> validMoves = new ArrayList<>();
+    final ArrayList<ChessMove> validMoves = new ArrayList<>();
 }
