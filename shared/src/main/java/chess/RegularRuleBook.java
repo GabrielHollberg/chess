@@ -45,7 +45,26 @@ public class RegularRuleBook implements ChessRuleBook {
         throw new RuntimeException("Not implemented");
     }
     public boolean isInCheck(ChessBoard board, ChessGame.TeamColor color) {
-        throw new RuntimeException("Not implemented");
+        if(color == ChessGame.TeamColor.WHITE) {
+            validMoves.addAll(validMoves(board, ChessGame.TeamColor.BLACK));
+            for(int i = 0; i < validMoves.size(); i++) {
+                if(board.getPiece(validMoves.get(i).getEndPosition()) != null) {
+                    if (board.getPiece(validMoves.get(i).getEndPosition()).getPieceType() == ChessPiece.PieceType.KING && board.getPiece(validMoves.get(i).getEndPosition()).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            validMoves.addAll(validMoves(board, ChessGame.TeamColor.WHITE));
+            for(int i = 0; i < validMoves.size(); i++) {
+                if(board.getPiece(validMoves.get(i).getEndPosition()) != null) {
+                    if (board.getPiece(validMoves.get(i).getEndPosition()).getPieceType() == ChessPiece.PieceType.KING && board.getPiece(validMoves.get(i).getEndPosition()).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     public boolean isInCheckmate(ChessBoard board, ChessGame.TeamColor color) {
         throw new RuntimeException("Not implemented");
