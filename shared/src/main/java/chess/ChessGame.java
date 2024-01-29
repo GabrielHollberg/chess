@@ -32,7 +32,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        teamTurn = team;
     }
 
     /**
@@ -74,6 +74,15 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         board.movePiece(move);
+        if(board.getPiece(move.getEndPosition()).getTeamColor() == TeamColor.WHITE) {
+            if(isInCheck(TeamColor.WHITE)) {
+                board.movePieceBack(move);
+            }
+        } else {
+            if(isInCheck(TeamColor.BLACK)) {
+                board.movePieceBack(move);
+            }
+        }
     }
 
     /**
@@ -125,6 +134,7 @@ public class ChessGame {
         return board;
     }
 
+    private TeamColor teamTurn;
     private ChessBoard board;
     private ChessPosition position;
     ChessRuleBook ruleBook = new RegularRuleBook();

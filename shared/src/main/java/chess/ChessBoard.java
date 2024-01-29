@@ -64,8 +64,14 @@ public class ChessBoard {
     }
 
     public void movePiece(ChessMove move) {
+        oldPiece = board[move.getEndPosition().getRow()][move.getEndPosition().getColumn()];
         addPiece(move.getEndPosition(), board[move.getStartPosition().getRow()][move.getStartPosition().getColumn()]);
         removePiece(move.getStartPosition());
+    }
+
+    public void movePieceBack(ChessMove move) {
+        addPiece(move.getStartPosition(), board[move.getEndPosition().getRow()][move.getEndPosition().getColumn()]);
+        addPiece(move.getEndPosition(), oldPiece);
     }
 
     /**
@@ -106,5 +112,6 @@ public class ChessBoard {
         board[7][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
     }
 
+    private ChessPiece oldPiece;
     private final ChessPiece[][] board = new ChessPiece[8][8];
 }
