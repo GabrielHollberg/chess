@@ -85,31 +85,11 @@ public class ChessPiece {
         }
         else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
 
-            int x = myPosition.getColumn();
-            int y = myPosition.getRow();
-            int changex = 1;
-            int changey = 1;
+            return MoveRules.bishopMoves(board, myPosition);
+        }
+        else if (board.getPiece(myPosition).type == PieceType.QUEEN) {
 
-            for(int i = 0; i < 4; i++) {
-
-                if(i % 2 == 0) {
-                    changex *= -1;
-                }
-                else {
-                    changey *= -1;
-                }
-
-                while(x >= 0 && x <= 7 && y >= 0 && y <= 7) {
-
-                    x += changex;
-                    y += changey;
-                }
-            }
-
-            while(x > 0 && y > 0) {
-
-
-            }
+            return queenMoves(board, myPosition);
         }
     }
 
