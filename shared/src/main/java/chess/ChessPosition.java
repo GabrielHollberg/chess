@@ -10,6 +10,11 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
+    public ChessPosition(int row, int col) {
+        this.row = row - 1;
+        this.col = col - 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,18 +36,11 @@ public class ChessPosition {
                 '}';
     }
 
-    public ChessPosition(int row, int col) {
-
-        this.row = row - 1;
-        this.col = col - 1;
-    }
-
     /**
      * @return which row this position is in
      * 1 codes for the bottom row
      */
     public int getRow() {
-
         return row;
     }
 
@@ -51,7 +49,6 @@ public class ChessPosition {
      * 1 codes for the left row
      */
     public int getColumn() {
-
         return col;
     }
 

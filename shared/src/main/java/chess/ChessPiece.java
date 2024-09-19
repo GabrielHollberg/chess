@@ -13,7 +13,6 @@ import java.util.Objects;
 public class ChessPiece {
 
     public ChessPiece(ChessGame.TeamColor color, ChessPiece.PieceType type) {
-
         this.color = color;
         this.type = type;
     }
@@ -43,7 +42,6 @@ public class ChessPiece {
      * The various different chess piece options
      */
     public enum PieceType {
-
         KING,
         QUEEN,
         BISHOP,
@@ -56,7 +54,6 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-
         return color;
     }
 
@@ -64,7 +61,6 @@ public class ChessPiece {
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-
         return type;
     }
 
@@ -76,20 +72,15 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
         if(board.getPiece(myPosition) == null) {
-
             return null;
-        }
-        else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
+        } else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
 
             return MoveRules.bishopMoves(board, myPosition);
-        }
-        else if (board.getPiece(myPosition).type == PieceType.QUEEN) {
-
-            return queenMoves(board, myPosition);
+        } else {
+            return null;
         }
     }
 

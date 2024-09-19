@@ -29,7 +29,7 @@ public class ChessBoard {
     @Override
     public String toString() {
         return "ChessBoard{" +
-                "board=" + Arrays.toString(board) +
+                "board=" + Arrays.deepToString(board) +
                 '}';
     }
 
@@ -40,7 +40,6 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-
         board[position.getRow()][position.getColumn()] = piece;
     }
 
@@ -52,7 +51,6 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-
         return board[position.getRow()][position.getColumn()];
     }
 
@@ -61,69 +59,51 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-
         for(int i = 0; i < 8; i++) {
-
             for(int j = 0; j < 8; j++) {
-
                 switch(i) {
-
                     case 0:
                         switch(j) {
-
                             case 0, 7:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
                                 break;
-
                             case 1, 6:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
                                 break;
-
                             case 2, 5:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
                                 break;
-
                             case 3:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
                                 break;
-
                             case 4:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
                                 break;
                         }
                         break;
-
                     case 1:
                         board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
                         break;
-
                     case 2, 3, 4, 5:
                         board[i][j] = null;
                         break;
-
                     case 6:
                         board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
                         break;
-
                     case 7:
                         switch(j) {
-
                             case 0, 7:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
                                 break;
-
                             case 1, 6:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
                                 break;
-
                             case 2, 5:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
                                 break;
-
                             case 3:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
                                 break;
-
                             case 4:
                                 board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
                                 break;
