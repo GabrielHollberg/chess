@@ -72,16 +72,73 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
         if(board.getPiece(myPosition) == null) {
             return null;
+        } else if(board.getPiece(myPosition).type == PieceType.ROOK) {
+            return rookMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).type == PieceType.KNIGHT) {
+            return knightMoves(board, myPosition);
         } else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
-
-            return MoveRules.bishopMoves(board, myPosition);
+            return bishopMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).type == PieceType.QUEEN) {
+            return queenMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).type == PieceType.KING) {
+            return kingMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).type == PieceType.PAWN) {
+            return pawnMoves(board, myPosition);
         } else {
             return null;
         }
+    }
+
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+
+        for(int i = 0; i < 4; i++) {
+            while (myPosition.getColumn() >= 0 && myPosition.getColumn() <= 7 && myPosition.getRow() >= 0 && myPosition.getRow() <= 7) {
+                ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+
+                if(board.getPiece(newPosition) != null) {
+                    break;
+                } else {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                }
+            }
+        }
+
+        return moves;
+    }
+
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        return null;
+    }
+
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        return null;
+    }
+
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        return null;
+    }
+
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        return null;
+    }
+
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        return null;
     }
 
     private final ChessGame.TeamColor color;

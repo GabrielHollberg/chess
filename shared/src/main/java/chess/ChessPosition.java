@@ -10,9 +10,9 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
-    public ChessPosition(int row, int col) {
+    public ChessPosition(int row, int column) {
         this.row = row - 1;
-        this.col = col - 1;
+        this.column = column - 1;
     }
 
     @Override
@@ -20,19 +20,19 @@ public class ChessPosition {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPosition that = (ChessPosition) o;
-        return row == that.row && col == that.col;
+        return row == that.row && column == that.column;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(row, col);
+        return Objects.hash(row, column);
     }
 
     @Override
     public String toString() {
         return "ChessPosition{" +
                 "row=" + row +
-                ", col=" + col +
+                ", column=" + column +
                 '}';
     }
 
@@ -49,9 +49,9 @@ public class ChessPosition {
      * 1 codes for the left row
      */
     public int getColumn() {
-        return col;
+        return column;
     }
 
     private final int row;
-    private final int col;
+    private final int column;
 }

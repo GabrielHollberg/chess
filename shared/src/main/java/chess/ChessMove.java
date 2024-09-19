@@ -11,7 +11,16 @@ import java.util.Objects;
 public class ChessMove {
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
-                     ChessPiece.PieceType promotionPiece) {}
+                     ChessPiece.PieceType promotionPiece) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.promotionPiece = promotionPiece;
+    }
+
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,7 +68,7 @@ public class ChessMove {
         return promotionPiece;
     }
 
-    private ChessPosition startPosition;
-    private ChessPosition endPosition;
+    private final ChessPosition startPosition;
+    private final ChessPosition endPosition;
     private ChessPiece.PieceType promotionPiece;
 }
