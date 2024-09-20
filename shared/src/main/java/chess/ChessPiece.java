@@ -129,38 +129,212 @@ public class ChessPiece {
             xPrevious = myPosition.getRow();
             yPrevious = myPosition.getColumn();
         }
-
         return moves;
     }
 
     public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
-        return null;
+        // Iterate through four movement directions
+        for(int i = 0; i < 4; i++) {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
+                }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
+            }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
+        }
+        return moves;
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
-        return null;
+        // Iterate through four movement directions
+        for(int i = 0; i < 4; i++) {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
+                }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
+            }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
+        }
+        return moves;
     }
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
-        return null;
+        // Iterate through four movement directions
+        for(int i = 0; i < 4; i++) {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
+                }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
+            }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
+        }
+        return moves;
     }
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
-        return null;
+        // Iterate through four movement directions
+        for(int i = 0; i < 4; i++) {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
+                }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
+            }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
+        }
+        return moves;
     }
 
     public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        int xIt = 1;
+        int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
-        return null;
+        // Iterate through four movement directions
+        for(int i = 0; i < 4; i++) {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
+                }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
+            }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
+        }
+        return moves;
     }
 
     private final ChessGame.TeamColor color;
