@@ -95,17 +95,36 @@ public class ChessPiece {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
         int xIt = 1;
         int yIt = 0;
+        int xPrevious = myPosition.getRow();
+        int yPrevious = myPosition.getColumn();
 
         for(int i = 0; i < 4; i++) {
-            while (myPosition.getColumn() >= 0 && myPosition.getColumn() <= 7 && myPosition.getRow() >= 0 && myPosition.getRow() <= 7) {
-                ChessPosition newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-
-                if(board.getPiece(newPosition) != null) {
-                    break;
-                } else {
+            do {
+                ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
+                if(newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0 && board.getPiece(newPosition) == null) {
                     moves.add(new ChessMove(myPosition, newPosition));
+                } else {
+                    break;
                 }
+                xPrevious += xIt;
+                yPrevious += yIt;
+            } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+            switch(i) {
+                case 0:
+                    xIt = 0;
+                    yIt = 1;
+                    break;
+                case 1:
+                    xIt = -1;
+                    yIt = 0;
+                    break;
+                case 2:
+                    xIt = 0;
+                    yIt = -1;
+                    break;
             }
+            xPrevious = myPosition.getRow();
+            yPrevious = myPosition.getColumn();
         }
 
         return moves;

@@ -52,6 +52,14 @@ public class ChessPosition {
         return column;
     }
 
-    private final int row;
-    private final int column;
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    private int row;
+    private int column;
 }
