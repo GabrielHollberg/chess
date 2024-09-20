@@ -98,6 +98,7 @@ public class ChessPiece {
         int xPrevious = myPosition.getRow();
         int yPrevious = myPosition.getColumn();
 
+        // Iterate through four movement directions
         for(int i = 0; i < 4; i++) {
             do {
                 ChessPosition newPosition = new ChessPosition(xPrevious + xIt + 1, yPrevious + yIt + 1);
@@ -109,6 +110,8 @@ public class ChessPiece {
                 xPrevious += xIt;
                 yPrevious += yIt;
             } while (xPrevious + xIt >= 0 && xPrevious + xIt <= 7 && yPrevious + yIt >= 0 && yPrevious + yIt <= 7);
+
+            // Update iterators and reset row and column trackers
             switch(i) {
                 case 0:
                     xIt = 0;
