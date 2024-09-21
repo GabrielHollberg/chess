@@ -254,7 +254,7 @@ public class ChessPiece {
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else if (isPositionInBounds(newPosition)) {
+                            } else {
                                 moves.add(new ChessMove(myPosition, newPosition, null));
                             }
                         }
@@ -282,7 +282,7 @@ public class ChessPiece {
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else if (isPositionInBounds(newPosition)) {
+                            } else {
                                 moves.add(new ChessMove(myPosition, newPosition, null));
                             }
                         }
