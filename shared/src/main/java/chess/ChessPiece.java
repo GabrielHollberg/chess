@@ -72,28 +72,60 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+
         if(board.getPiece(myPosition) == null) {
             return null;
-        } else if(board.getPiece(myPosition).type == PieceType.ROOK) {
-            return rookMoves(board, myPosition);
+        }
+
+        this.board = board;
+        this.myPosition = myPosition;
+
+        if(board.getPiece(myPosition).type == PieceType.ROOK) {
+            return rookMoves();
         } else if(board.getPiece(myPosition).type == PieceType.KNIGHT) {
-            return knightMoves(board, myPosition);
+            return knightMoves();
         } else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
-            return bishopMoves(board, myPosition);
+            return bishopMoves();
         } else if(board.getPiece(myPosition).type == PieceType.QUEEN) {
-            return queenMoves(board, myPosition);
+            return queenMoves();
         } else if(board.getPiece(myPosition).type == PieceType.KING) {
-            return kingMoves(board, myPosition);
-        } /*else if(board.getPiece(myPosition).type == PieceType.PAWN) {
-            return pawnMoves(board, myPosition);
-        }*/ else {
-            return null;
+            return kingMoves();
+        } else {
+            return pawnMoves();
         }
     }
 
-    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
+    public Collection<ChessMove> rookMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        // Iterate through four movement directions
+        for(int i = 4; i < 8; i++) {
+            // Reset row and column trackers
+            resetTrackers();
+            // Update Iterators
+            updateIt(i);
+            // Iterate through squares
+            checkSquares(moves);
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> knightMoves() {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+
+        // Iterate through eight moves
+        for(int i = 0; i < 8; i++) {
+            // Reset row and column trackers
+            resetTrackers();
+            // Update Iterators
+            updateIt(i);
+            // Iterate through squares
+            checkSquares(moves);
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> bishopMoves() {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
         // Iterate through four movement directions
@@ -108,43 +140,7 @@ public class ChessPiece {
         return moves;
     }
 
-    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through four movement directions
-        for(int i = 0; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through four movement directions
-        for(int i = 0; i < 4; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
+    public Collection<ChessMove> queenMoves() {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
         // Iterate through eight movement directions
@@ -159,12 +155,10 @@ public class ChessPiece {
         return moves;
     }
 
-    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
+    public Collection<ChessMove> kingMoves() {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
-        // Iterate through eight movement directions
+        // Iterate through eight moves
         for(int i = 0; i < 8; i++) {
             // Reset row and column trackers
             resetTrackers();
@@ -176,45 +170,38 @@ public class ChessPiece {
         return moves;
     }
 
-    /*public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
-        this.board = board;
-        this.myPosition = myPosition;
+    public Collection<ChessMove> pawnMoves() {
         ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
         if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-
-            if(myPosition.getRow() == 1) {
+            // Iterate through three movement directions
+            for (int i = 0; i < 3; i++) {
+                // Reset row and column trackers
                 resetTrackers();
-                xIt = 0;
-                yIt = 1;
-                do {
-                    xTracker += xIt;
-                    yTracker += yIt;
-                    if()
-                }
-            } else {
-
+                // Update Iterators
+                updateIt(i);
+                // Iterate through squares
+                checkSquares(moves);
             }
-
-        }
-
-        // Iterate through eight movement directions
-        for(int i = 0; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
+        } else {
+            // Iterate through three movement directions
+            for (int i = 3; i < 6; i++) {
+                // Reset row and column trackers
+                resetTrackers();
+                // Update Iterators
+                updateIt(i);
+                // Iterate through squares
+                checkSquares(moves);
+            }
         }
         return moves;
-    }*/
+    }
 
     public void checkSquares(ArrayList<ChessMove> moves) {
         switch(board.getPiece(myPosition).getPieceType()) {
             case ROOK, QUEEN, BISHOP:
                 do {
-                    ChessPosition newPosition = new ChessPosition(xTracker + xIt + 1, yTracker + yIt + 1);
+                    ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
                     if (isPositionInBounds(newPosition)) {
                         if (board.getPiece(newPosition) == null) {
                             moves.add(new ChessMove(myPosition, newPosition));
@@ -225,23 +212,58 @@ public class ChessPiece {
                             break;
                         }
                     }
-                    xTracker += xIt;
-                    yTracker += yIt;
-                } while (xTracker + xIt >= 0 && xTracker + xIt <= 7 && yTracker + yIt >= 0 && yTracker + yIt <= 7);
+                    columnTracker += columnIt;
+                    rowTracker += rowIt;
+                } while (columnTracker + columnIt >= 0 && columnTracker + columnIt <= 7 && rowTracker + rowIt >= 0 && rowTracker + rowIt <= 7);
                 break;
-            case KNIGHT, KING:
-                ChessPosition newPosition = new ChessPosition(xTracker + xIt + 1, yTracker + yIt + 1);
+            case KNIGHT, KING: {
+                ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
                 if (isPositionInBounds(newPosition)) {
                     if (board.getPiece(newPosition) == null) {
                         moves.add(new ChessMove(myPosition, newPosition));
                     } else if (isPositionEnemy(newPosition)) {
                         moves.add(new ChessMove(myPosition, newPosition));
                         break;
-                    } else {
-                        break;
+                    }
+                }}
+                break;
+            case PAWN: {
+                ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
+                if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    if (columnIt == 0) {
+                        if (myPosition.getRow() == 1) {
+                            if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
+                                moves.add(new ChessMove(myPosition, newPosition));
+                                ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1);
+                                if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
+                                    moves.add(new ChessMove(myPosition, newPositionTwo));
+                                }
+                            }
+                        } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
+                            moves.add(new ChessMove(myPosition, newPosition));
+                        }
+                    } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        moves.add(new ChessMove(myPosition, newPosition));
+                    }
+                } else {
+                    if (columnIt == 0) {
+                        if (myPosition.getRow() == 6) {
+                            if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
+                                moves.add(new ChessMove(myPosition, newPosition));
+                                ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1);
+                                if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
+                                    moves.add(new ChessMove(myPosition, newPositionTwo));
+                                }
+                            }
+                        } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
+                            moves.add(new ChessMove(myPosition, newPosition));
+                        }
+                    } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        moves.add(new ChessMove(myPosition, newPosition));
                     }
                 }
-                break;
+            }
+            break;
         }
     }
 
@@ -255,110 +277,117 @@ public class ChessPiece {
 
     public void updateIt(int i) {
         switch(board.getPiece(myPosition).getPieceType()) {
-            case ROOK:
+            case BISHOP, QUEEN, KING, ROOK:
                 switch (i) {
                     case 0:
-                        xIt = 1;
-                        yIt = 0;
+                        columnIt = -1;
+                        rowIt = -1;
                         break;
                     case 1:
-                        xIt = 0;
-                        yIt = 1;
+                        columnIt = -1;
+                        rowIt = 1;
                         break;
                     case 2:
-                        xIt = -1;
-                        yIt = 0;
+                        columnIt = 1;
+                        rowIt = -1;
                         break;
                     case 3:
-                        xIt = 0;
-                        yIt = -1;
+                        columnIt = 1;
+                        rowIt = 1;
+                        break;
+                    case 4:
+                        columnIt = 1;
+                        rowIt = 0;
+                        break;
+                    case 5:
+                        columnIt = 0;
+                        rowIt = 1;
+                        break;
+                    case 6:
+                        columnIt = 0;
+                        rowIt = -1;
+                        break;
+                    case 7:
+                        columnIt = -1;
+                        rowIt = 0;
                         break;
                 }
                 break;
             case KNIGHT:
                 switch (i) {
                     case 0:
-                        xIt = 2;
-                        yIt = 1;
+                        columnIt = 2;
+                        rowIt = 1;
                         break;
                     case 1:
-                        xIt = 2;
-                        yIt = -1;
+                        columnIt = 2;
+                        rowIt = -1;
                         break;
                     case 2:
-                        xIt = -2;
-                        yIt = 1;
+                        columnIt = -2;
+                        rowIt = 1;
                         break;
                     case 3:
-                        xIt = -2;
-                        yIt = -1;
+                        columnIt = -2;
+                        rowIt = -1;
                         break;
                     case 4:
-                        xIt = 1;
-                        yIt = 2;
+                        columnIt = 1;
+                        rowIt = 2;
                         break;
                     case 5:
-                        xIt = 1;
-                        yIt = -2;
+                        columnIt = 1;
+                        rowIt = -2;
                         break;
                     case 6:
-                        xIt = -1;
-                        yIt = 2;
+                        columnIt = -1;
+                        rowIt = 2;
                         break;
                     case 7:
-                        xIt = -1;
-                        yIt = -2;
+                        columnIt = -1;
+                        rowIt = -2;
                         break;
                 }
                 break;
-            case BISHOP, QUEEN, KING:
-                switch (i) {
+            case PAWN:
+                switch(i) {
                     case 0:
-                        xIt = 1;
-                        yIt = 1;
+                        columnIt = -1;
+                        rowIt = 1;
                         break;
                     case 1:
-                        xIt = -1;
-                        yIt = 1;
+                        columnIt = 1;
+                        rowIt = 1;
                         break;
                     case 2:
-                        xIt = 1;
-                        yIt = -1;
+                        columnIt = 0;
+                        rowIt = 1;
                         break;
                     case 3:
-                        xIt = -1;
-                        yIt = -1;
+                        columnIt = -1;
+                        rowIt = -1;
                         break;
                     case 4:
-                        xIt = 1;
-                        yIt = 0;
+                        columnIt = 1;
+                        rowIt = -1;
                         break;
                     case 5:
-                        xIt = 0;
-                        yIt = 1;
-                        break;
-                    case 6:
-                        xIt = -1;
-                        yIt = 0;
-                        break;
-                    case 7:
-                        xIt = 0;
-                        yIt = -1;
+                        columnIt = 0;
+                        rowIt = -1;
                         break;
                 }
-                break;
         }
     }
 
     public void resetTrackers() {
-        xTracker = myPosition.getRow();
-        yTracker = myPosition.getColumn();
+        rowTracker = myPosition.getRow();
+        columnTracker = myPosition.getColumn();
     }
 
-    private int xIt;
-    private int yIt;
-    private int xTracker;
-    private int yTracker;
+    private int columnIt;
+    private int rowIt;
+    private int columnTracker;
+    private int rowTracker;
     private ChessBoard board;
     private ChessPosition myPosition;
     private final ChessGame.TeamColor color;
