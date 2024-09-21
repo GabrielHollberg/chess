@@ -229,64 +229,62 @@ public class ChessPiece {
                 break;
             case PAWN: {
                 ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
-                if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                    if (columnIt == 0) {
-                        if (myPosition.getRow() == 1) {
-                            if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                                ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1);
-                                if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
-                                    moves.add(new ChessMove(myPosition, newPositionTwo, null));
+                if(isPositionInBounds(newPosition)) {
+                    if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        if (columnIt == 0) {
+                            if (board.getPiece(newPosition) == null) {
+                                if (newPosition.getRow() == 7) {
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                                } else {
+                                    moves.add(new ChessMove(myPosition, newPosition, null));
+                                    if (myPosition.getRow() == 1) {
+                                        ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1);
+                                        if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
+                                            moves.add(new ChessMove(myPosition, newPositionTwo, null));
+                                        }
+                                    }
                                 }
                             }
-                        } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
-                            if(newPosition.getRow() == 7) {
+                        } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            if (newPosition.getRow() == 7) {
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
+                            } else if (isPositionInBounds(newPosition)) {
                                 moves.add(new ChessMove(myPosition, newPosition, null));
                             }
                         }
-                    } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                        if(newPosition.getRow() == 7) {
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                        } else if(isPositionInBounds(newPosition)) {
-                            moves.add(new ChessMove(myPosition, newPosition, null));
-                        }
-                    }
-                } else {
-                    if (columnIt == 0) {
-                        if (myPosition.getRow() == 6) {
-                            if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                                ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1);
-                                if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
-                                    moves.add(new ChessMove(myPosition, newPositionTwo, null));
+                    } else {
+                        if (columnIt == 0) {
+                            if (board.getPiece(newPosition) == null) {
+                                if (newPosition.getRow() == 0) {
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                                } else {
+                                    moves.add(new ChessMove(myPosition, newPosition, null));
+                                    if (myPosition.getRow() == 6) {
+                                        ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1);
+                                        if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
+                                            moves.add(new ChessMove(myPosition, newPositionTwo, null));
+                                        }
+                                    }
                                 }
                             }
-                        } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) == null) {
-                            if(newPosition.getRow() == 0) {
+                        } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            if (newPosition.getRow() == 0) {
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
+                            } else if (isPositionInBounds(newPosition)) {
                                 moves.add(new ChessMove(myPosition, newPosition, null));
                             }
-                        }
-                    } else if (isPositionInBounds(newPosition) && board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                        if(newPosition.getRow() == 0) {
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                        } else if(isPositionInBounds(newPosition)) {
-                            moves.add(new ChessMove(myPosition, newPosition, null));
                         }
                     }
                 }
