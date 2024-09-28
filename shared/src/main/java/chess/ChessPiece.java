@@ -1,8 +1,8 @@
 package chess;
 
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ArrayList;
 
 /**
  * Represents a single chess piece
@@ -18,6 +18,14 @@ public class ChessPiece {
     }
 
     @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "color=" + color +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -28,14 +36,6 @@ public class ChessPiece {
     @Override
     public int hashCode() {
         return Objects.hash(color, type);
-    }
-
-    @Override
-    public String toString() {
-        return "ChessPiece{" +
-                "color=" + color +
-                ", type=" + type +
-                '}';
     }
 
     /**
@@ -72,350 +72,346 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-
-        if(board.getPiece(myPosition) == null) {
+        if(board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
+            return rookMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
+            return knightMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
+            return bishopMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
+            return queenMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
+            return kingMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE && board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
+            return whitePawnMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK && board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
+            return blackPawnMoves(board, myPosition);
+        } else {
             return null;
         }
+    }
 
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
         this.board = board;
         this.myPosition = myPosition;
-
-        if(board.getPiece(myPosition).type == PieceType.ROOK) {
-            return rookMoves();
-        } else if(board.getPiece(myPosition).type == PieceType.KNIGHT) {
-            return knightMoves();
-        } else if(board.getPiece(myPosition).type == PieceType.BISHOP) {
-            return bishopMoves();
-        } else if(board.getPiece(myPosition).type == PieceType.QUEEN) {
-            return queenMoves();
-        } else if(board.getPiece(myPosition).type == PieceType.KING) {
-            return kingMoves();
-        } else {
-            return pawnMoves();
-        }
-    }
-
-    public Collection<ChessMove> rookMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through four movement directions
-        for(int i = 4; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> knightMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through eight moves
-        for(int i = 0; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> bishopMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through four movement directions
         for(int i = 0; i < 4; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> queenMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through eight movement directions
-        for(int i = 0; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> kingMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        // Iterate through eight moves
-        for(int i = 0; i < 8; i++) {
-            // Reset row and column trackers
-            resetTrackers();
-            // Update Iterators
-            updateIt(i);
-            // Iterate through squares
-            checkSquares(moves);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> pawnMoves() {
-        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-
-        if(board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-            // Iterate through three movement directions
-            for (int i = 0; i < 3; i++) {
-                // Reset row and column trackers
-                resetTrackers();
-                // Update Iterators
-                updateIt(i);
-                // Iterate through squares
-                checkSquares(moves);
+            updateIterators(i);
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            while(inBounds(newPosition)) {
+                if (isNull(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                } else if (isEnemy(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    break;
+                } else {
+                    break;
+                }
+                updateNewPosition();
             }
-        } else {
-            // Iterate through three movement directions
-            for (int i = 3; i < 6; i++) {
-                // Reset row and column trackers
-                resetTrackers();
-                // Update Iterators
-                updateIt(i);
-                // Iterate through squares
-                checkSquares(moves);
-            }
+            newPosition = myPosition;
         }
         return moves;
     }
 
-    public void checkSquares(ArrayList<ChessMove> moves) {
-        switch(board.getPiece(myPosition).getPieceType()) {
-            case ROOK, QUEEN, BISHOP:
-                do {
-                    ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
-                    if (isPositionInBounds(newPosition)) {
-                        if (board.getPiece(newPosition) == null) {
-                            moves.add(new ChessMove(myPosition, newPosition, null));
-                        } else if (isPositionEnemy(newPosition)) {
-                            moves.add(new ChessMove(myPosition, newPosition, null));
-                            break;
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        for(int i = 8; i < 16; i++) {
+            updateIterators(i);
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            if(inBounds(newPosition)) {
+                if (isNull(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                } else if (isEnemy(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                }
+                updateNewPosition();
+            }
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        for(int i = 4; i < 8; i++) {
+            updateIterators(i);
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            while(inBounds(newPosition)) {
+                if (isNull(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                } else if (isEnemy(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    break;
+                } else {
+                    break;
+                }
+                updateNewPosition();
+            }
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        for(int i = 0; i < 8; i++) {
+            updateIterators(i);
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            while(inBounds(newPosition)) {
+                if (isNull(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                } else if (isEnemy(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    break;
+                } else {
+                    break;
+                }
+                updateNewPosition();
+            }
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        for(int i = 0; i < 8; i++) {
+            updateIterators(i);
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            if(inBounds(newPosition)) {
+                if (isNull(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                } else if (isEnemy(newPosition)) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                }
+                updateNewPosition();
+            }
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> whitePawnMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        xIt = -1;
+        yIt = 1;
+        for(int i = 16; i < 19; i++) {
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            if(i % 2 == 0) {
+                if(inBounds(newPosition)) {
+                    if(!isNull(newPosition)) {
+                        if (isEnemy(newPosition)) {
+                            if (myPosition.getRow() == 6) {
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                            } else {
+                                moves.add(new ChessMove(myPosition, newPosition, null));
+                            }
                         } else {
                             break;
                         }
                     }
-                    columnTracker += columnIt;
-                    rowTracker += rowIt;
-                } while (columnTracker + columnIt >= 0 && columnTracker + columnIt <= 7 && rowTracker + rowIt >= 0 && rowTracker + rowIt <= 7);
-                break;
-            case KNIGHT, KING: {
-                ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
-                if (isPositionInBounds(newPosition)) {
-                    if (board.getPiece(newPosition) == null) {
-                        moves.add(new ChessMove(myPosition, newPosition, null));
-                    } else if (isPositionEnemy(newPosition)) {
-                        moves.add(new ChessMove(myPosition, newPosition, null));
-                        break;
-                    }
-                }}
-                break;
-            case PAWN: {
-                ChessPosition newPosition = new ChessPosition(rowTracker + rowIt + 1, columnTracker + columnIt + 1);
-                if(isPositionInBounds(newPosition)) {
-                    if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                        if (columnIt == 0) {
-                            if (board.getPiece(newPosition) == null) {
-                                if (newPosition.getRow() == 7) {
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                                } else {
-                                    moves.add(new ChessMove(myPosition, newPosition, null));
-                                    if (myPosition.getRow() == 1) {
-                                        ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1);
-                                        if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
-                                            moves.add(new ChessMove(myPosition, newPositionTwo, null));
-                                        }
-                                    }
+                }
+            } else {
+                if(inBounds(newPosition)) {
+                    if(isNull(newPosition)) {
+                        if(myPosition.getRow() == 6) {
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                        } else {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
+                            if (myPosition.getRow() == 1) {
+                                if (isNull(new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1))) {
+                                    moves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 2, newPosition.getColumn() + 1), null));
                                 }
-                            }
-                        } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            if (newPosition.getRow() == 7) {
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                            }
-                        }
-                    } else {
-                        if (columnIt == 0) {
-                            if (board.getPiece(newPosition) == null) {
-                                if (newPosition.getRow() == 0) {
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                                } else {
-                                    moves.add(new ChessMove(myPosition, newPosition, null));
-                                    if (myPosition.getRow() == 6) {
-                                        ChessPosition newPositionTwo = new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1);
-                                        if (isPositionInBounds(newPositionTwo) && board.getPiece(newPositionTwo) == null) {
-                                            moves.add(new ChessMove(myPosition, newPositionTwo, null));
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            if (newPosition.getRow() == 0) {
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
                             }
                         }
                     }
                 }
             }
-            break;
+            updateNewPosition();
+            updateIterators(i);
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public Collection<ChessMove> blackPawnMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
+        this.board = board;
+        this.myPosition = myPosition;
+        xIt = -1;
+        yIt = -1;
+        for(int i = 19; i < 22; i++) {
+            newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
+            if(i % 2 == 1) {
+                if(inBounds(newPosition)) {
+                    if (!isNull(newPosition)) {
+                        if (isEnemy(newPosition)) {
+                            if (myPosition.getRow() == 1) {
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                            } else {
+                                moves.add(new ChessMove(myPosition, newPosition, null));
+                            }
+                        }
+                    }
+                }
+            } else {
+                if(inBounds(newPosition)) {
+                    if(isNull(newPosition)) {
+                        if(myPosition.getRow() == 1) {
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                        } else {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
+                            if (myPosition.getRow() == 6) {
+                                if (isNull(new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1))) {
+                                    moves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow(), newPosition.getColumn() + 1), null));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            updateNewPosition();
+            updateIterators(i);
+            newPosition = myPosition;
+        }
+        return moves;
+    }
+
+    public boolean inBounds(ChessPosition newPosition) {
+        return newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0;
+    }
+
+    public boolean isNull(ChessPosition newPosition) {
+        return board.getPiece(newPosition) == null;
+    }
+
+    public boolean isEnemy(ChessPosition newPosition) {
+        return board.getPiece(myPosition).getTeamColor() != board.getPiece(newPosition).getTeamColor();
+    }
+
+    public void updateNewPosition() {
+        newPosition = new ChessPosition(newPosition.getRow() + yIt + 1, newPosition.getColumn() + xIt + 1);
+    }
+
+    public void updateIterators(int i) {
+        switch(i) {
+            case 0:
+                xIt = 1;
+                yIt = 0;
+                break;
+            case 1:
+                xIt = 0;
+                yIt = -1;
+                break;
+            case 2:
+                xIt = -1;
+                yIt = 0;
+                break;
+            case 3:
+                xIt = 0;
+                yIt = 1;
+                break;
+            case 4:
+                xIt = -1;
+                yIt = -1;
+                break;
+            case 5:
+                xIt = -1;
+                yIt = 1;
+                break;
+            case 6:
+                xIt = 1;
+                yIt = -1;
+                break;
+            case 7:
+                xIt = 1;
+                yIt = 1;
+                break;
+            case 8:
+                xIt = 2;
+                yIt = 1;
+                break;
+            case 9:
+                xIt = -1;
+                yIt = 2;
+                break;
+            case 10:
+                xIt = 2;
+                yIt = -1;
+                break;
+            case 11:
+                xIt = -1;
+                yIt = -2;
+                break;
+            case 12:
+                xIt = -2;
+                yIt = -1;
+                break;
+            case 13:
+                xIt = 1;
+                yIt = -2;
+                break;
+            case 14:
+                xIt = -2;
+                yIt = 1;
+                break;
+            case 15:
+                xIt = 1;
+                yIt = 2;
+                break;
+            case 16:
+                xIt = 0;
+                yIt = 1;
+                break;
+            case 17:
+                xIt = 1;
+                yIt = 1;
+                break;
+            case 18:
+                xIt = -1;
+                yIt = 1;
+                break;
+            case 19:
+                xIt = 0;
+                yIt = -1;
+                break;
+            case 20:
+                xIt = 1;
+                yIt = -1;
+                break;
+            case 21:
+                xIt = -1;
+                yIt = -1;
+                break;
         }
     }
 
-    public boolean isPositionInBounds(ChessPosition newPosition) {
-        return (newPosition.getRow() <= 7 && newPosition.getRow() >= 0 && newPosition.getColumn() <= 7 && newPosition.getColumn() >= 0);
-    }
-
-    public boolean isPositionEnemy(ChessPosition newPosition) {
-        return (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor());
-    }
-
-    public void updateIt(int i) {
-        switch(board.getPiece(myPosition).getPieceType()) {
-            case BISHOP, QUEEN, KING, ROOK:
-                switch (i) {
-                    case 0:
-                        columnIt = -1;
-                        rowIt = -1;
-                        break;
-                    case 1:
-                        columnIt = -1;
-                        rowIt = 1;
-                        break;
-                    case 2:
-                        columnIt = 1;
-                        rowIt = -1;
-                        break;
-                    case 3:
-                        columnIt = 1;
-                        rowIt = 1;
-                        break;
-                    case 4:
-                        columnIt = 1;
-                        rowIt = 0;
-                        break;
-                    case 5:
-                        columnIt = 0;
-                        rowIt = 1;
-                        break;
-                    case 6:
-                        columnIt = 0;
-                        rowIt = -1;
-                        break;
-                    case 7:
-                        columnIt = -1;
-                        rowIt = 0;
-                        break;
-                }
-                break;
-            case KNIGHT:
-                switch (i) {
-                    case 0:
-                        columnIt = 2;
-                        rowIt = 1;
-                        break;
-                    case 1:
-                        columnIt = 2;
-                        rowIt = -1;
-                        break;
-                    case 2:
-                        columnIt = -2;
-                        rowIt = 1;
-                        break;
-                    case 3:
-                        columnIt = -2;
-                        rowIt = -1;
-                        break;
-                    case 4:
-                        columnIt = 1;
-                        rowIt = 2;
-                        break;
-                    case 5:
-                        columnIt = 1;
-                        rowIt = -2;
-                        break;
-                    case 6:
-                        columnIt = -1;
-                        rowIt = 2;
-                        break;
-                    case 7:
-                        columnIt = -1;
-                        rowIt = -2;
-                        break;
-                }
-                break;
-            case PAWN:
-                switch(i) {
-                    case 0:
-                        columnIt = -1;
-                        rowIt = 1;
-                        break;
-                    case 1:
-                        columnIt = 1;
-                        rowIt = 1;
-                        break;
-                    case 2:
-                        columnIt = 0;
-                        rowIt = 1;
-                        break;
-                    case 3:
-                        columnIt = -1;
-                        rowIt = -1;
-                        break;
-                    case 4:
-                        columnIt = 1;
-                        rowIt = -1;
-                        break;
-                    case 5:
-                        columnIt = 0;
-                        rowIt = -1;
-                        break;
-                }
-        }
-    }
-
-    public void resetTrackers() {
-        rowTracker = myPosition.getRow();
-        columnTracker = myPosition.getColumn();
-    }
-
-    private int columnIt;
-    private int rowIt;
-    private int columnTracker;
-    private int rowTracker;
+    private int xIt, yIt;
+    private ChessGame.TeamColor color;
+    private PieceType type;
     private ChessBoard board;
-    private ChessPosition myPosition;
-    private final ChessGame.TeamColor color;
-    private final PieceType type;
+    private ChessPosition myPosition, newPosition;
 }
