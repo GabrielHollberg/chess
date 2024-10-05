@@ -312,6 +312,8 @@ public class ChessPiece {
         return board.getPiece(myPosition).getTeamColor() != board.getPiece(newPosition).getTeamColor();
     }
 
+
+
     public void updateNewPosition() {
         newPosition = new ChessPosition(newPosition.getRow() + yIt + 1, newPosition.getColumn() + xIt + 1);
     }
