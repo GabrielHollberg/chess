@@ -1,6 +1,8 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -46,7 +48,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        if(board.getPiece(startPosition) != null) {
+            Collection<ChessMove> moves = board.getPiece(startPosition).pieceMoves(board, startPosition);
+            Iterator<ChessMove> iterator = moves.iterator();
+            while (iterator.hasNext()) {
+                ChessMove move = iterator.next();
+                if(testMove(move)) {
+
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public Collection<ChessMove> validTeamMoves(TeamColor teamColor) {
+
     }
 
     /**
@@ -67,7 +84,21 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        Collection<ChessMove> moves = new ArrayList<ChessMove>();
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                ChessPosition position = new ChessPosition(i + 1, j + 1);
+                if(board.getPiece(position).getTeamColor() != teamColor) {
+                    moves.addAll(board.getPiece(position).pieceMoves(board, position));
+                }
+            }
+        }
+        for (ChessMove move : moves) {
+            if (board.getPiece(move.getEndPosition()).getPieceType() == ChessPiece.PieceType.KING) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -77,7 +108,10 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if(isInCheck(teamColor)) {
+
+        }
+        return false;
     }
 
     /**
