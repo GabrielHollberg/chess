@@ -178,7 +178,7 @@ public class ChessGame {
             for(int i = 0; i < 8; i++) {
                 for(int j = 0; j < 8; j++) {
                     ChessPosition position = new ChessPosition(i + 1, j + 1);
-                    if(board.getPiece(position).getTeamColor() == teamColor) {
+                    if(board.getPiece(position) != null && board.getPiece(position).getTeamColor() == teamColor) {
                         moves.addAll(validMoves(position));
                     }
                 }
