@@ -101,13 +101,13 @@ public class ChessPiece {
             while(inBounds(newPosition)) {
                 if (isNull(newPosition)) {
                     moves.add(new ChessMove(myPosition, newPosition, null));
+                    updateNewPosition();
                 } else if (isEnemy(newPosition)) {
                     moves.add(new ChessMove(myPosition, newPosition, null));
                     break;
                 } else {
                     break;
                 }
-                updateNewPosition();
             }
             newPosition = myPosition;
         }
@@ -209,20 +209,18 @@ public class ChessPiece {
         for(int i = 16; i < 19; i++) {
             newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
             if(i % 2 == 0) {
-                if(inBounds(newPosition)) {
-                    if(!isNull(newPosition)) {
-                        if (isEnemy(newPosition)) {
-                            if (myPosition.getRow() == 6) {
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                            }
+                if(inBounds(newPosition) && !isNull(newPosition)) {
+                    if (isEnemy(newPosition)) {
+                        if (myPosition.getRow() == 6) {
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
                         } else {
-                            break;
+                            moves.add(new ChessMove(myPosition, newPosition, null));
                         }
+                    } else {
+                        break;
                     }
                 }
             } else {
@@ -260,17 +258,15 @@ public class ChessPiece {
         for(int i = 19; i < 22; i++) {
             newPosition = new ChessPosition(myPosition.getRow() + yIt + 1, myPosition.getColumn() + xIt + 1);
             if(i % 2 == 1) {
-                if(inBounds(newPosition)) {
-                    if (!isNull(newPosition)) {
-                        if (isEnemy(newPosition)) {
-                            if (myPosition.getRow() == 1) {
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                                moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                            } else {
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                            }
+                if(inBounds(newPosition) && !isNull(newPosition)) {
+                    if (isEnemy(newPosition)) {
+                        if (myPosition.getRow() == 1) {
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
+                            moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
+                        } else {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
                         }
                     }
                 }
@@ -311,8 +307,6 @@ public class ChessPiece {
     public boolean isEnemy(ChessPosition newPosition) {
         return board.getPiece(myPosition).getTeamColor() != board.getPiece(newPosition).getTeamColor();
     }
-
-
 
     public void updateNewPosition() {
         newPosition = new ChessPosition(newPosition.getRow() + yIt + 1, newPosition.getColumn() + xIt + 1);
