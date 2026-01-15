@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ public class ChessPiece {
     private ChessPosition newPosition;
     private int dRow;
     private int dColumn;
-    private Collection<ChessMove> moves;
+    private Collection<ChessMove> moves = new ArrayList<>();
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -79,6 +80,9 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        if (moves != null) {
+            moves.clear();
+        }
         if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
             return kingMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
@@ -97,47 +101,75 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-
+        return null;
     }
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
-
+        return null;
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-
+        return null;
     }
 
     public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
-
+        return null;
     }
 
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        dColumn = 1;
-        dRow = 0;
-        newPosition = myPosition;
-
-        incrementPosition(newPosition);
-        if (checkNewPosition(board, myPosition)) {
-
+        for(int i = 0; i < 4; i++) {
+            newPosition = new ChessPosition(myPosition.getRow(), myPosition.getColumn());
+            switch (i) {
+                case 0:
+                    dColumn = 1;
+                    dRow = 0;
+                    break;
+                case 1:
+                    dColumn = -1;
+                    dRow = 0;
+                    break;
+                case 2:
+                    dColumn = 0;
+                    dRow = 1;
+                    break;
+                case 3:
+                    dColumn = 0;
+                    dRow = -1;
+                    break;
+            }
+            do {
+                incrementPosition(newPosition);
+            } while (checkNewPosition(board, myPosition));
         }
-
+        return moves;
     }
 
     public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
-
+        return null;
     }
 
     public void incrementPosition(ChessPosition newPosition) {
         newPosition.setRow(newPosition.getRow() + dRow);
-        newPosition.setColumn(newPosition.getRow() + dColumn);
+        newPosition.setColumn(newPosition.getColumn() + dColumn);
     }
 
     public boolean checkNewPosition(ChessBoard board, ChessPosition myPosition) {
-        if (board.getPiece(newPosition) != null) {
-            if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
+        if (validPosition(newPosition)) {
+            if (board.getPiece(newPosition) != null) {
+                if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                }
                 return false;
+            } else {
+                moves.add(new ChessMove(myPosition, newPosition, null));
+                return true;
             }
+        } else {
+            return false;
         }
+    }
+
+    public boolean validPosition(ChessPosition position) {
+        return position.getRow() >= 0 && position.getColumn() >= 0 && position.getRow() <= 7 && position.getColumn() <= 7;
     }
 }
