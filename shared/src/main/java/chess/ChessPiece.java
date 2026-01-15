@@ -13,6 +13,10 @@ public class ChessPiece {
 
     private final ChessGame.TeamColor pieceColor;
     private final ChessPiece.PieceType type;
+    private ChessPosition newPosition;
+    private int dRow;
+    private int dColumn;
+    private Collection<ChessMove> moves;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -75,6 +79,65 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
+            return kingMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
+            return queenMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
+            return bishopMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
+            return knightMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
+            return rookMoves(board, myPosition);
+        } else if(board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
+            return pawnMoves(board, myPosition);
+        } else {
+            return null;
+        }
+    }
+
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+
+    }
+
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+
+    }
+
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+
+    }
+
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+
+    }
+
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        dColumn = 1;
+        dRow = 0;
+        newPosition = myPosition;
+
+        incrementPosition(newPosition);
+        if (checkNewPosition(board, myPosition)) {
+
+        }
+
+    }
+
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+
+    }
+
+    public void incrementPosition(ChessPosition newPosition) {
+        newPosition.setRow(newPosition.getRow() + dRow);
+        newPosition.setColumn(newPosition.getRow() + dColumn);
+    }
+
+    public boolean checkNewPosition(ChessBoard board, ChessPosition myPosition) {
+        if (board.getPiece(newPosition) != null) {
+            if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
+                return false;
+            }
+        }
     }
 }
