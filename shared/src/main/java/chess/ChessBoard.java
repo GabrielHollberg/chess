@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,8 +11,39 @@ package chess;
  */
 public class ChessBoard {
 
-    public ChessBoard() {
-        
+    private ChessPiece [][] board =
+            {
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null},
+                    {null,null,null,null,null,null,null,null}
+            };
+
+    public ChessBoard() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) o;
+        return Objects.deepEquals(board, that.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessBoard{" +
+                "board=" + Arrays.deepToString(board) +
+                '}';
     }
 
     /**
@@ -19,7 +53,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        board[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -30,7 +64,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return board[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -38,6 +72,56 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        for(int i = 0; i <= 7; i++) {
+            for(int j = 0; j <= 7; j++) {
+                if(i==0) {
+                    switch(j) {
+                        case 0,7:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+                            break;
+                        case 1,6:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+                            break;
+                        case 2,5:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+                            break;
+                        case 3:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+                            break;
+                        case 4:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+                            break;
+                        default:
+                            break;
+                    }
+                } else if(i==1) {
+                    board[i][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+                } else if(i==6) {
+                    board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+                } else if(i==7) {
+                    switch(j) {
+                        case 0,7:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+                            break;
+                        case 1,6:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+                            break;
+                        case 2,5:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+                            break;
+                        case 3:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+                            break;
+                        case 4:
+                            board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    board[i][j] = null;
+                }
+            }
+        }
     }
 }
