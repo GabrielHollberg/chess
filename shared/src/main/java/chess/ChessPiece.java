@@ -287,7 +287,40 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+        if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            newPosition = new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn());
+            for (int i = 0; i < 3; i++) {
+                if(i % 2 == 0) {
+                    checkNewPosition(board, myPosition);
+                } else if (board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    if(myPosition.getRow() == 6) {
+                        newPosition.setRow(newPosition.getRow() + 1);
+                        if (board.getPiece(newPosition) == null) {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
+                        }
+                        newPosition.setRow(newPosition.getRow() - 1);
+                    }
+                }
+            }
+        } else {
+            newPosition = new ChessPosition(myPosition.getRow(), myPosition.getColumn());
+            for (int i = 0; i < 3; i++) {
+                if(i % 2 == 0) {
+                    checkNewPosition(board, myPosition);
+                } else if (board.getPiece(newPosition) == null) {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    if(myPosition.getRow() == 6) {
+                        newPosition.setRow(newPosition.getRow() - 1);
+                        if (board.getPiece(newPosition) == null) {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
+                        }
+                        newPosition.setRow(newPosition.getRow() + 1);
+                    }
+                }
+            }
+        }
+        return moves;
     }
 
     public void incrementPosition(ChessPosition newPosition) {
