@@ -17,7 +17,7 @@ public class ChessPiece {
     private ChessPosition newPosition;
     private int dRow;
     private int dColumn;
-    private Collection<ChessMove> moves = new ArrayList<>();
+    private final Collection<ChessMove> moves = new ArrayList<>();
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -80,9 +80,7 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        if (moves != null) {
-            moves.clear();
-        }
+        moves.clear();
         if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
             return kingMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
