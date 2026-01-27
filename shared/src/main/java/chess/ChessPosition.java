@@ -55,12 +55,4 @@ public class ChessPosition {
     public int getColumn() {
         return this.col;
     }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public void setColumn(int column) {
-        this.col = column;
-    }
 }

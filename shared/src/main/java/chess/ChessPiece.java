@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -14,10 +13,6 @@ public class ChessPiece {
 
     private final ChessGame.TeamColor pieceColor;
     private final ChessPiece.PieceType type;
-    private ChessPosition newPosition;
-    private int dRow;
-    private int dColumn;
-    private final Collection<ChessMove> moves = new ArrayList<>();
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -80,315 +75,26 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        moves.clear();
         if(board.getPiece(myPosition).getPieceType() == PieceType.KING) {
-            return kingMoves(board, myPosition);
+            PieceMovesCalculator calculator = new KingMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
-            return queenMoves(board, myPosition);
+            PieceMovesCalculator calculator = new QueenMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
-            return bishopMoves(board, myPosition);
+            PieceMovesCalculator calculator = new BishopMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
-            return knightMoves(board, myPosition);
+            PieceMovesCalculator calculator = new KnightMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
-            return rookMoves(board, myPosition);
+            PieceMovesCalculator calculator = new RookMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else if(board.getPiece(myPosition).getPieceType() == PieceType.PAWN) {
-            return pawnMoves(board, myPosition);
+            PieceMovesCalculator calculator = new PawnMovesCalculator();
+            return calculator.pieceMoves(board, myPosition);
         } else {
             return null;
-        }
-    }
-
-    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 8; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            incrementPosition(newPosition);
-            checkNewPosition(board, myPosition);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 8; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            do {
-                incrementPosition(newPosition);
-            } while (checkNewPosition(board, myPosition));
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 4; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            do {
-                incrementPosition(newPosition);
-            } while (checkNewPosition(board, myPosition));
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 8; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            incrementPosition(newPosition);
-            checkNewPosition(board, myPosition);
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 4; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            do {
-                incrementPosition(newPosition);
-            } while (checkNewPosition(board, myPosition));
-        }
-        return moves;
-    }
-
-    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
-        for(int i = 0; i < 3; i++) {
-            newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
-            changeIterationVector(board, myPosition, i);
-            incrementPosition(newPosition);
-            checkNewPawnPosition(board, myPosition);
-        }
-        return moves;
-    }
-
-    public void incrementPosition(ChessPosition newPosition) {
-        this.newPosition = new ChessPosition(newPosition.getRow() + 1 + dRow, newPosition.getColumn() + 1 + dColumn);
-    }
-
-    public boolean checkNewPosition(ChessBoard board, ChessPosition myPosition) {
-        if (onBoard(newPosition)) {
-            if (board.getPiece(newPosition) != null) {
-                if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                }
-                return false;
-            } else {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public void checkNewPawnPosition(ChessBoard board, ChessPosition myPosition) {
-        if (onBoard(newPosition)) {
-            if (myPosition.getColumn() != newPosition.getColumn() && board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
-                if (newPosition.getRow() != 7 && newPosition.getRow() != 0) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                } else {
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                }
-            } else if (myPosition.getColumn() == newPosition.getColumn() && (dRow == 1 || dRow == -1) && board.getPiece(newPosition) == null) {
-                if (newPosition.getRow() != 7 && newPosition.getRow() != 0) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                } else {
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
-                    moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
-                }
-                incrementPosition(newPosition);
-                if (myPosition.getRow() == 1 && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE && board.getPiece(newPosition) == null) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                } else if (myPosition.getRow() == 6 && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK && board.getPiece(newPosition) == null) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                }
-            }
-        }
-    }
-
-    public boolean onBoard(ChessPosition position) {
-        return position.getRow() >= 0 && position.getColumn() >= 0 && position.getRow() <= 7 && position.getColumn() <= 7;
-    }
-
-    public void changeIterationVector(ChessBoard board, ChessPosition myPosition, int i) {
-        if (board.getPiece(myPosition).getPieceType() == PieceType.KING) {
-            switch (i) {
-                case 0:
-                    dColumn = 1;
-                    dRow = 0;
-                    break;
-                case 1:
-                    dColumn = -1;
-                    dRow = 0;
-                    break;
-                case 2:
-                    dColumn = 0;
-                    dRow = 1;
-                    break;
-                case 3:
-                    dColumn = 0;
-                    dRow = -1;
-                    break;
-                case 4:
-                    dColumn = 1;
-                    dRow = 1;
-                    break;
-                case 5:
-                    dColumn = 1;
-                    dRow = -1;
-                    break;
-                case 6:
-                    dColumn = -1;
-                    dRow = 1;
-                    break;
-                case 7:
-                    dColumn = -1;
-                    dRow = -1;
-                    break;
-            }
-        } else if (board.getPiece(myPosition).getPieceType() == PieceType.QUEEN) {
-            switch (i) {
-                case 0:
-                    dColumn = 1;
-                    dRow = 0;
-                    break;
-                case 1:
-                    dColumn = -1;
-                    dRow = 0;
-                    break;
-                case 2:
-                    dColumn = 0;
-                    dRow = 1;
-                    break;
-                case 3:
-                    dColumn = 0;
-                    dRow = -1;
-                    break;
-                case 4:
-                    dColumn = 1;
-                    dRow = 1;
-                    break;
-                case 5:
-                    dColumn = 1;
-                    dRow = -1;
-                    break;
-                case 6:
-                    dColumn = -1;
-                    dRow = 1;
-                    break;
-                case 7:
-                    dColumn = -1;
-                    dRow = -1;
-                    break;
-            }
-        } else if (board.getPiece(myPosition).getPieceType() == PieceType.BISHOP) {
-            switch (i) {
-                case 0:
-                    dColumn = 1;
-                    dRow = 1;
-                    break;
-                case 1:
-                    dColumn = 1;
-                    dRow = -1;
-                    break;
-                case 2:
-                    dColumn = -1;
-                    dRow = 1;
-                    break;
-                case 3:
-                    dColumn = -1;
-                    dRow = -1;
-                    break;
-            }
-        } else if (board.getPiece(myPosition).getPieceType() == PieceType.KNIGHT) {
-            switch (i) {
-                case 0:
-                    dColumn = 2;
-                    dRow = 1;
-                    break;
-                case 1:
-                    dColumn = 1;
-                    dRow = 2;
-                    break;
-                case 2:
-                    dColumn = -1;
-                    dRow = 2;
-                    break;
-                case 3:
-                    dColumn = -2;
-                    dRow = 1;
-                    break;
-                case 4:
-                    dColumn = -2;
-                    dRow = -1;
-                    break;
-                case 5:
-                    dColumn = -1;
-                    dRow = -2;
-                    break;
-                case 6:
-                    dColumn = 1;
-                    dRow = -2;
-                    break;
-                case 7:
-                    dColumn = 2;
-                    dRow = -1;
-                    break;
-            }
-        } else if (board.getPiece(myPosition).getPieceType() == PieceType.ROOK) {
-            switch (i) {
-                case 0:
-                    dColumn = 1;
-                    dRow = 0;
-                    break;
-                case 1:
-                    dColumn = -1;
-                    dRow = 0;
-                    break;
-                case 2:
-                    dColumn = 0;
-                    dRow = 1;
-                    break;
-                case 3:
-                    dColumn = 0;
-                    dRow = -1;
-                    break;
-            }
-        } else if (board.getPiece(myPosition).getPieceType() == PieceType.PAWN && board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE){
-            switch (i) {
-                case 0:
-                    dColumn = -1;
-                    dRow = 1;
-                    break;
-                case 1:
-                    dColumn = 1;
-                    dRow = 1;
-                    break;
-                case 2:
-                    dColumn = 0;
-                    dRow = 1;
-                    break;
-            }
-        } else {
-            switch (i) {
-                case 0:
-                    dColumn = -1;
-                    dRow = -1;
-                    break;
-                case 1:
-                    dColumn = 1;
-                    dRow = -1;
-                    break;
-                case 2:
-                    dColumn = 0;
-                    dRow = -1;
-                    break;
-            }
         }
     }
 }
