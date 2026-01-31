@@ -25,6 +25,12 @@ public class ChessBoard {
 
     public ChessBoard() {}
 
+    public ChessBoard(ChessBoard copy) {
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(copy.board[i], 0, this.board[i], 0, 8);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -54,6 +60,10 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()][position.getColumn()] = piece;
+    }
+
+    public void removePiece(ChessPosition position) {
+        board[position.getRow()][position.getColumn()] = null;
     }
 
     /**
