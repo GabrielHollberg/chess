@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -84,7 +83,13 @@ public class ChessGame {
         boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
         boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
         boardHistory.getLast().removePiece(move.getStartPosition());
-        return !isInCheck(getTeamTurn());
+        if (isInCheck(getTeamTurn())) {
+            undoMove();
+            return false;
+        } else {
+            undoMove();
+            return true;
+        }
     }
 
     public void undoMove() {
@@ -100,10 +105,12 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
         KingMovesCalculator calculator = new KingMovesCalculator();
         ChessPosition kingPosition = null;
+        outerLoop:
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (boardHistory.getLast().getPiece(new ChessPosition(i,j)).getPieceType() == ChessPiece.PieceType.KING && boardHistory.getLast().getPiece(new ChessPosition(i,j)).getTeamColor() == teamColor) {
+                if (boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)) != null && boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)).getPieceType() == ChessPiece.PieceType.KING && boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)).getTeamColor() == teamColor) {
                     kingPosition = new ChessPosition(i,j);
+                    break outerLoop;
                 }
             }
         }
