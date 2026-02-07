@@ -3,9 +3,12 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
+// Provides general methods to Calculator subclasses to return an ArrayList of ChessMove objects given a ChessBoard and a ChessPosition.
+
 abstract public class PieceMovesCalculator {
 
     ChessPosition newPosition = null;
+    ChessPosition possibleCheckPosition = null;
     int dRow = 0;
     int dColumn = 0;
     final Collection<ChessMove> moves = new ArrayList<>();
@@ -14,6 +17,26 @@ abstract public class PieceMovesCalculator {
 
     public void moveNewPosition(ChessPosition newPosition) {
         this.newPosition = new ChessPosition(newPosition.getRow() + 1 + dRow, newPosition.getColumn() + 1 + dColumn);
+    }
+
+    public boolean checkPossibleCheck(ChessBoard board, ChessPosition kingPosition, int i) {
+        if (onBoard(possibleCheckPosition)) {
+            if (board.getPiece(possibleCheckPosition) != null && board.getPiece(possibleCheckPosition).getTeamColor() != board.getPiece(kingPosition).getTeamColor()) {
+                if (i < 4 && (board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.ROOK || board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.QUEEN)) {
+                    return true;
+                } else if (i >= 4 && i < 8 && (board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.BISHOP || board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.QUEEN)) {
+                    return true;
+                } else if (i >= 8 && board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public boolean checkNewPosition(ChessBoard board, ChessPosition myPosition) {

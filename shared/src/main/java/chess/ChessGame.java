@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,9 +55,12 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        Collection<ChessMove> startingMoves = this.board.getPiece(startPosition).pieceMoves(this.board, startPosition);
-        for (ChessMove move : startingMoves) {
-            makeMove(move);
+        if (boardHistory.getLast().getPiece(startPosition) != null) {
+            Collection<ChessMove> pieceMoves = this.getBoard().getPiece(startPosition).pieceMoves(this.getBoard(), startPosition);
+            pieceMoves.removeIf(chessMove -> !isValidMove(chessMove));
+            return pieceMoves;
+        } else {
+            return null;
         }
     }
 
@@ -67,9 +71,20 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        if (validMoves(move.getStartPosition()).contains(move)) {
+            boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
+            boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
+            boardHistory.getLast().removePiece(move.getStartPosition());
+        } else {
+            throw new InvalidMoveException("Not a Valid Move");
+        }
+    }
+
+    public boolean isValidMove(ChessMove move) {
         boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
         boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
         boardHistory.getLast().removePiece(move.getStartPosition());
+        return !isInCheck(getTeamTurn());
     }
 
     public void undoMove() {
@@ -83,7 +98,16 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        KingMovesCalculator calculator = new KingMovesCalculator();
+        ChessPosition kingPosition = null;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (boardHistory.getLast().getPiece(new ChessPosition(i,j)).getPieceType() == ChessPiece.PieceType.KING && boardHistory.getLast().getPiece(new ChessPosition(i,j)).getTeamColor() == teamColor) {
+                    kingPosition = new ChessPosition(i,j);
+                }
+            }
+        }
+        return calculator.isInCheck(boardHistory.getLast(), kingPosition);
     }
 
     /**
