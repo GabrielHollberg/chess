@@ -84,7 +84,8 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not Implemented");
+        CheckCalculator calculator = new CheckCalculator();
+        return calculator.isInCheck(boardHistory.getLast(), teamColor);
     }
 
     /**
@@ -94,7 +95,8 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        CheckCalculator calculator = new CheckCalculator();
+        return calculator.isInCheckMate(boardHistory.getLast(), teamColor);
     }
 
     /**
@@ -105,7 +107,8 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        CheckCalculator calculator = new CheckCalculator();
+        return calculator.isInStaleMate(boardHistory.getLast(), teamColor);
     }
 
     /**
