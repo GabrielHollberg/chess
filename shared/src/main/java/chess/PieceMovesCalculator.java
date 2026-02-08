@@ -19,26 +19,6 @@ abstract public class PieceMovesCalculator {
         this.newPosition = new ChessPosition(newPosition.getRow() + 1 + dRow, newPosition.getColumn() + 1 + dColumn);
     }
 
-    public boolean checkPossibleCheck(ChessBoard board, ChessPosition kingPosition, int i) {
-        if (onBoard(possibleCheckPosition)) {
-            if (board.getPiece(possibleCheckPosition) != null && board.getPiece(possibleCheckPosition).getTeamColor() != board.getPiece(kingPosition).getTeamColor()) {
-                if (i < 4 && (board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.ROOK || board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.QUEEN)) {
-                    return true;
-                } else if (i >= 4 && i < 8 && (board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.BISHOP || board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.QUEEN)) {
-                    return true;
-                } else if (i >= 8 && board.getPiece(possibleCheckPosition).getPieceType() == ChessPiece.PieceType.KNIGHT) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     public boolean checkNewPosition(ChessBoard board, ChessPosition myPosition) {
         if (onBoard(newPosition)) {
             if (board.getPiece(newPosition) != null) {

@@ -13,7 +13,7 @@ import java.util.List;
 public class ChessGame {
 
     TeamColor teamTurn;
-    List<ChessBoard> boardHistory = new ArrayList<>();
+    List<ChessBoard> boardHistory = new ArrayList<>(); // Keeps track of every state of the board so far
 
     public ChessGame() {
         setTeamTurn(TeamColor.WHITE);
@@ -54,13 +54,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        if (boardHistory.getLast().getPiece(startPosition) != null) {
-            Collection<ChessMove> pieceMoves = this.getBoard().getPiece(startPosition).pieceMoves(this.getBoard(), startPosition);
-            pieceMoves.removeIf(chessMove -> !isValidMove(chessMove));
-            return pieceMoves;
-        } else {
-            return null;
-        }
+        throw new RuntimeException("Not Implemented");
     }
 
     /**
@@ -79,19 +73,6 @@ public class ChessGame {
         }
     }
 
-    public boolean isValidMove(ChessMove move) {
-        boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
-        boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
-        boardHistory.getLast().removePiece(move.getStartPosition());
-        if (isInCheck(getTeamTurn())) {
-            undoMove();
-            return false;
-        } else {
-            undoMove();
-            return true;
-        }
-    }
-
     public void undoMove() {
         boardHistory.removeLast();
     }
@@ -103,18 +84,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        KingMovesCalculator calculator = new KingMovesCalculator();
-        ChessPosition kingPosition = null;
-        outerLoop:
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)) != null && boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)).getPieceType() == ChessPiece.PieceType.KING && boardHistory.getLast().getPiece(new ChessPosition(i + 1,j + 1)).getTeamColor() == teamColor) {
-                    kingPosition = new ChessPosition(i,j);
-                    break outerLoop;
-                }
-            }
-        }
-        return calculator.isInCheck(boardHistory.getLast(), kingPosition);
+        throw new RuntimeException("Not Implemented");
     }
 
     /**
@@ -156,5 +126,3 @@ public class ChessGame {
         return boardHistory.getLast();
     }
 }
-
-Testing commit

@@ -14,34 +14,6 @@ public class KingMovesCalculator extends PieceMovesCalculator {
         return moves;
     }
 
-    public boolean isInCheck(ChessBoard board, ChessPosition kingPosition) {
-        for (int i = 0; i < 4; i++) {
-            possibleCheckPosition = new ChessPosition(kingPosition.getRow() + 1, kingPosition.getColumn() + 1);
-            changeMoveDirection(i);
-            moveNewPosition(possibleCheckPosition);
-            if (checkPossibleCheck(board, kingPosition, i)) {
-                return true;
-            }
-        }
-        for (int i = 4; i < 8; i++) {
-            possibleCheckPosition = new ChessPosition(kingPosition.getRow() + 1, kingPosition.getColumn() + 1);
-            changeMoveDirection(i);
-            moveNewPosition(possibleCheckPosition);
-            if (checkPossibleCheck(board, kingPosition, i)) {
-                return true;
-            }
-        }
-        for (int i = 8; i < 16; i++) {
-            possibleCheckPosition = new ChessPosition(kingPosition.getRow() + 1, kingPosition.getColumn() + 1);
-            changeMoveDirection(i);
-            moveNewPosition(possibleCheckPosition);
-            if (checkPossibleCheck(board, kingPosition, i)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void changeMoveDirection(int i) {
         switch (i) {
             case 0:
@@ -75,38 +47,6 @@ public class KingMovesCalculator extends PieceMovesCalculator {
             case 7:
                 dColumn = -1;
                 dRow = -1;
-                break;
-            case 8:
-                dColumn = 1;
-                dRow = 2;
-                break;
-            case 9:
-                dColumn = 2;
-                dRow = 1;
-                break;
-            case 10:
-                dColumn = 2;
-                dRow = -1;
-                break;
-            case 11:
-                dColumn = 1;
-                dRow = -2;
-                break;
-            case 12:
-                dColumn = -1;
-                dRow = -2;
-                break;
-            case 13:
-                dColumn = -2;
-                dRow = -1;
-                break;
-            case 14:
-                dColumn = -2;
-                dRow = 1;
-                break;
-            case 15:
-                dColumn = -1;
-                dRow = 2;
                 break;
         }
     }
