@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,7 +55,39 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not Implemented");
+        // Derive necessary variables from methods
+        ChessBoard board = new ChessBoard(boardHistory.getLast());
+        ChessPiece piece = board.getPiece(startPosition);
+        // If there is a piece at given position continue, otherwise return null
+        if (board.getPiece(startPosition) != null) {
+            // get piece moves for piece at given position
+            Collection<ChessMove> pieceMoves = piece.pieceMoves(board, startPosition);
+            // Loop through moves
+            Iterator<ChessMove> it = pieceMoves.iterator();
+            while (it.hasNext()) {
+                ChessMove move = it.next();
+                if (resultCheck(board, move)) {
+                    it.remove();
+                }
+                board = new ChessBoard(boardHistory.getLast());
+            }
+            return pieceMoves;
+        } else {
+            return null;
+        }
+    }
+
+    public boolean resultCheck(ChessBoard board, ChessMove move) {
+        // Derive variables
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition endPosition = move.getEndPosition();
+        TeamColor team = board.getPiece(startPosition).getTeamColor();
+        // Move piece
+        board.addPiece(endPosition, board.getPiece(startPosition));
+        board.removePiece(startPosition);
+        // if move results in check return true, otherwise false
+        CheckCalculator calculator = new CheckCalculator();
+        return calculator.isInCheck(board, team);
     }
 
     /**
@@ -64,10 +97,19 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (validMoves(move.getStartPosition()).contains(move)) {
+        if (boardHistory.getLast().getPiece(move.getStartPosition()) != null && validMoves(move.getStartPosition()).contains(move) && boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor() == getTeamTurn()) {
             boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
-            boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
+            if (move.getPromotionPiece() == null) {
+                boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
+            } else {
+                boardHistory.getLast().addPiece(move.getEndPosition(), new ChessPiece(boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
+            }
             boardHistory.getLast().removePiece(move.getStartPosition());
+            if (boardHistory.getLast().getPiece(move.getEndPosition()).getTeamColor() == TeamColor.WHITE) {
+                setTeamTurn(TeamColor.BLACK);
+            } else {
+                setTeamTurn(TeamColor.WHITE);
+            }
         } else {
             throw new InvalidMoveException("Not a Valid Move");
         }

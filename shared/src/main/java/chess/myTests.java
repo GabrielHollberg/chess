@@ -16,6 +16,8 @@ public class myTests {
         board.addPiece(new ChessPosition(1, 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
         board.addPiece(new ChessPosition(2, 1), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING));
         game.setBoard(board);
+        ChessPosition position = new ChessPosition(2, 1);
+        game.validMoves(position);
         game.setTeamTurn(ChessGame.TeamColor.BLACK);
         if (game.isInCheck(ChessGame.TeamColor.BLACK)) {
             System.out.println("Check");
