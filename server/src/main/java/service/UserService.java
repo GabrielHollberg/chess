@@ -1,5 +1,7 @@
 package service;
 
+import Requests.RegisterRequest;
+import Results.RegisterResult;
 import dataaccess.UserDAO;
 import dataaccess.DataAccessException;
 import model.UserData;
@@ -8,12 +10,7 @@ public class UserService {
 
     private UserDAO userDAO;
 
-    public void createUser(String username, String password, String email) throws DataAccessException {
-        UserData user = new UserData(username, password, email);
-        userDAO.createUser(user);
-    }
+    public RegisterResult registerUser(RegisterRequest registerRequest) {
 
-    public UserData readUser(String username) throws DataAccessException {
-        return userDAO.readUser(username);
     }
 }
