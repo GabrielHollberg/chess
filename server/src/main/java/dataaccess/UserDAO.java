@@ -4,11 +4,11 @@ import model.UserData;
 
 public interface UserDAO {
 
-    void createUser(UserData userData) throws DataAccessException;
+    void createUser(UserData userData);
 
-    UserData readUser(String username) throws DataAccessException;
+    UserData readUser(String username);
 
-    void updateUser(UserData userData) throws DataAccessException;
+    void updateUser(UserData userData);
 
-    void deleteUser(String username) throws DataAccessException;
+    void deleteUser(String username);
 }

@@ -1,16 +1,30 @@
 package service;
 
-import Requests.RegisterRequest;
-import Results.RegisterResult;
+import request.RegisterRequest;
+import result.RegisterResult;
 import dataaccess.UserDAO;
 import dataaccess.DataAccessException;
 import model.UserData;
 
 public class UserService {
 
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
+    private final AuthService authService;
 
-    public RegisterResult registerUser(RegisterRequest registerRequest) {
+    public UserService (UserDAO userDAO, AuthService authService) {
+        this.userDAO = userDAO;
+        this.authService = authService;
+    }
 
+    public RegisterResult registerUser(RegisterRequest registerRequest) throws DataAccessException {
+        if (userDAO.readUser(registerRequest.username()) == null) {
+            UserData userData = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
+            userDAO.createUser(userData);
+            String authToken = authService.generateToken();
+            authService.createAuth(authToken, registerRequest.username());
+            return new RegisterResult(registerRequest.username(), authToken);
+        } else {
+            throw new DataAccessException("username already exists");
+        }
     }
 }

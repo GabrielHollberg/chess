@@ -1,6 +1,8 @@
 package server;
 
 import io.javalin.*;
+import io.javalin.http.Context;
+import io.javalin.http.Handler;
 
 public class Server {
 
