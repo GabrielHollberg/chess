@@ -4,24 +4,24 @@ import model.AuthData;
 
 import java.util.HashMap;
 
-public class MemoryAuthDAO {
+public class MemoryAuthDAO implements AuthDAO {
 
-    public HashMap<String,AuthData> auths;
+    private final HashMap<String,AuthData> auths = new HashMap<>();
 
-    void createAuth(AuthData authData) throws DataAccessException {
+    public void createAuth(AuthData authData) throws DataAccessException {
         auths.put(authData.authToken(), authData);
     }
 
-    AuthData readAuth(String authToken) throws DataAccessException {
+    public AuthData readAuth(String authToken) throws DataAccessException {
         return auths.get(authToken);
     }
 
-    void updateAuth(AuthData authData) throws DataAccessException {
+    public void updateAuth(AuthData authData) throws DataAccessException {
         auths.remove(authData.authToken());
         auths.put(authData.authToken(), authData);
     }
 
-    void deleteAuth(String authToken) throws DataAccessException {
+    public void deleteAuth(String authToken) throws DataAccessException {
         auths.remove(authToken);
     }
 }

@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class UserHandler implements Handler {
+public class CreateGameHandler implements Handler {
 
-    public UserHandler() {}
+    public CreateGameHandler() {}
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {

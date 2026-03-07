@@ -1,7 +1,12 @@
 package server;
 
-import handler.UserHandler;
+import dataaccess.*;
+import handler.*;
 import io.javalin.*;
+import io.javalin.http.Context;
+import service.AuthService;
+import service.GameService;
+import service.UserService;
 
 public class Server {
 
@@ -12,8 +17,24 @@ public class Server {
 
         // Register your endpoints and exception handlers here.
 
-        javalin.post("/user", new UserHandler());
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new MemoryUserDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
 
+        AuthService authService = new AuthService(authDAO);
+        UserService userService = new UserService(userDAO, authService);
+
+        javalin.post("/user", new RegisterHandler(userService));
+        javalin.post("/session", new LoginHandler());
+        javalin.delete("/session", new LogoutHandler());
+        javalin.post("/game", new CreateGameHandler());
+        javalin.get("/game", new ListGamesHandler());
+        javalin.put("/game", new JoinGameHandler());
+        javalin.delete("/db", new ClearDatabaseHandler());
+
+        javalin.exception(UsernameTakenException.class, (e, ctx) -> {
+            ctx.status(400).json(new ErrorResult(e.getMessage()));
+        });
     }
 
     public int run(int desiredPort) {
