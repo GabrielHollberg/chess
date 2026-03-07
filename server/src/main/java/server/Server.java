@@ -31,10 +31,6 @@ public class Server {
         javalin.get("/game", new ListGamesHandler());
         javalin.put("/game", new JoinGameHandler());
         javalin.delete("/db", new ClearDatabaseHandler());
-
-        javalin.exception(UsernameTakenException.class, (e, ctx) -> {
-            ctx.status(400).json(new ErrorResult(e.getMessage()));
-        });
     }
 
     public int run(int desiredPort) {
