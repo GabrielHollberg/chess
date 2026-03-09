@@ -1,5 +1,6 @@
 package server;
 
+import com.google.gson.JsonSyntaxException;
 import dataaccess.*;
 import handler.*;
 import io.javalin.*;
@@ -35,6 +36,8 @@ public class Server {
         javalin.delete("/db", new ClearDatabaseHandler());
 
         javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
+        javalin.exception(BadRequestException.class, new BadRequestHandler());
+        javalin.exception(JsonSyntaxException.class, new JsonSyntaxHandler());
     }
 
     public int run(int desiredPort) {
