@@ -16,7 +16,7 @@ public class UserService {
         this.authService = authService;
     }
 
-    public RegisterResult registerUser(RegisterRequest registerRequest) throws DataAccessException {
+    public RegisterResult registerUser(RegisterRequest registerRequest) throws UsernameTakenException, DataAccessException {
         if (userDAO.readUser(registerRequest.username()) == null) {
             UserData userData = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
             userDAO.createUser(userData);
@@ -24,7 +24,7 @@ public class UserService {
             authService.createAuth(authToken, registerRequest.username());
             return new RegisterResult(registerRequest.username(), authToken);
         } else {
-            throw new DataAccessException("username already exists");
+            throw new UsernameTakenException("Error: already taken");
         }
     }
 }

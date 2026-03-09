@@ -4,9 +4,11 @@ import dataaccess.*;
 import handler.*;
 import io.javalin.*;
 import io.javalin.http.Context;
+import io.javalin.http.ExceptionHandler;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
+import service.UsernameTakenException;
 
 public class Server {
 
@@ -31,6 +33,8 @@ public class Server {
         javalin.get("/game", new ListGamesHandler());
         javalin.put("/game", new JoinGameHandler());
         javalin.delete("/db", new ClearDatabaseHandler());
+
+        javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
     }
 
     public int run(int desiredPort) {
