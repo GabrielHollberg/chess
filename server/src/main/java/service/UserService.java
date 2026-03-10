@@ -16,15 +16,19 @@ public class UserService {
         this.authService = authService;
     }
 
-    public RegisterResult registerUser(RegisterRequest registerRequest) throws UsernameTakenException, DataAccessException {
-        if (userDAO.readUser(registerRequest.username()) == null) {
+    public RegisterResult registerUser(RegisterRequest registerRequest) throws DataAccessException {
+        if (userDAO.readUserData(registerRequest.username()) == null) {
             UserData userData = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
-            userDAO.createUser(userData);
+            userDAO.createUserData(userData);
             String authToken = authService.generateToken();
             authService.createAuth(authToken, registerRequest.username());
             return new RegisterResult(registerRequest.username(), authToken);
         } else {
             throw new UsernameTakenException("Error: already taken");
         }
+    }
+
+    public void deleteAllUserData() {
+        userDAO.deleteAllUserData();
     }
 }

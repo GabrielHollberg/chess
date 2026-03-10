@@ -4,11 +4,13 @@ import model.GameData;
 
 public interface GameDAO {
 
-    void createGame(GameData gameData) throws DataAccessException;
+    public void createGameData(GameData gameData);
 
-    GameData readGame(int gameID) throws DataAccessException;
+    public GameData readGameData(int gameID);
 
-    void updateGame(GameData gameData) throws DataAccessException;
+    public void updateGameData(GameData gameData);
 
-    void deleteGame(int gameID) throws DataAccessException;
+    public void deleteGameData(int gameID);
+
+    public void deleteAllGameData();
 }

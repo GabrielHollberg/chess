@@ -1,19 +1,29 @@
 package handler;
 
-import com.google.gson.Gson;
+import service.AuthService;
+import service.GameService;
+import service.UserService;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
 public class ClearDatabaseHandler implements Handler {
 
-    public ClearDatabaseHandler() {}
+    AuthService authService;
+    UserService userService;
+    GameService gameService;
+
+    public ClearDatabaseHandler(AuthService authService, UserService userService, GameService gameService) {
+        this.authService = authService;
+        this.userService = userService;
+        this.gameService = gameService;
+    }
 
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
-        var bodyObject = new Gson().fromJson(ctx.body(), Map.class);
-        System.out.println(bodyObject.get("username"));
+        authService.deleteAllAuthData();
+        userService.deleteAllUserData();
+        gameService.deleteAllGameData();
+        ctx.status(200);
     }
 }

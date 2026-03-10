@@ -16,10 +16,14 @@ public class AuthService {
 
     public void createAuth(String authToken, String username) throws DataAccessException {
         AuthData authData = new AuthData(authToken, username);
-        authDAO.createAuth(authData);
+        authDAO.createAuthData(authData);
     }
 
     public String generateToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public void deleteAllAuthData() {
+        authDAO.deleteAllAuthData();
     }
 }

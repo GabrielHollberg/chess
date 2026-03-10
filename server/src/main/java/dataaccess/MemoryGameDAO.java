@@ -2,26 +2,33 @@ package dataaccess;
 
 import model.GameData;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class MemoryGameDAO implements GameDAO {
 
-    private HashMap<Integer,GameData> games;
+    private final Map<Integer, GameData> games;
 
-    public void createGame(GameData gameData) throws DataAccessException {
+    public MemoryGameDAO(Map<Integer, GameData> games) {
+        this.games = games;
+    }
+
+    public void createGameData(GameData gameData) {
         games.put(gameData.gameID(), gameData);
     }
 
-    public GameData readGame(int gameID) throws DataAccessException {
+    public GameData readGameData(int gameID) {
         return games.get(gameID);
     }
 
-    public void updateGame(GameData gameData) throws DataAccessException {
-        games.remove(gameData.gameID());
+    public void updateGameData(GameData gameData) {
         games.put(gameData.gameID(), gameData);
     }
 
-    public void deleteGame(int gameID) throws DataAccessException {
+    public void deleteGameData(int gameID) {
         games.remove(gameID);
+    }
+
+    public void deleteAllGameData() {
+        games.clear();
     }
 }

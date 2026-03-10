@@ -4,11 +4,13 @@ import model.UserData;
 
 public interface UserDAO {
 
-    void createUser(UserData userData);
+    public void createUserData(UserData userData);
 
-    UserData readUser(String username);
+    public UserData readUserData(String username);
 
-    void updateUser(UserData userData);
+    public void updateUserData(UserData userData);
 
-    void deleteUser(String username);
+    public void deleteUserData(String username);
+
+    public void deleteAllUserData();
 }
