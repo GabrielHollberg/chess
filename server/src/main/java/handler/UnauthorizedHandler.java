@@ -7,13 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class OtherExceptionsHandler implements ExceptionHandler<Exception> {
+public class UnauthorizedHandler implements ExceptionHandler<Exception> {
 
     @Override
     public void handle(@NotNull Exception e, @NotNull Context ctx) {
-        String errorMessage = "Error: " + e.getMessage();
-        String json = new Gson().toJson(Map.of("message", errorMessage));
-        ctx.status(500);
+        String json = new Gson().toJson(Map.of("message", e.getMessage()));
+        ctx.status(401);
         ctx.json(json);
     }
 }

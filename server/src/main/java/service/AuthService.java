@@ -19,8 +19,20 @@ public class AuthService {
         authDAO.createAuthData(authData);
     }
 
-    public String generateToken() {
+    public String createAuthToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public boolean authenticateUser(String authToken) {
+        if (authDAO.readAuthData(authToken) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void deleteAuthData(String authToken) {
+        authDAO.deleteAuthData(authToken);
     }
 
     public void deleteAllAuthData() {

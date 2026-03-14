@@ -7,9 +7,7 @@ import io.javalin.*;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
-import service.AuthService;
-import service.GameService;
-import service.UserService;
+import service.*;
 
 import java.util.HashMap;
 
@@ -32,20 +30,20 @@ public class Server {
 
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);
-        GameService gameService = new GameService(gameDAO);
+        GameService gameService = new GameService(gameDAO, authService);
 
         javalin.post("/user", new RegisterHandler(userService));
-        javalin.post("/session", new LoginHandler());
-        javalin.delete("/session", new LogoutHandler());
-        javalin.post("/game", new CreateGameHandler());
+        javalin.post("/session", new LoginHandler(userService));
+        javalin.delete("/session", new LogoutHandler(userService));
+        javalin.post("/game", new CreateGameHandler(gameService));
         javalin.get("/game", new ListGamesHandler());
         javalin.put("/game", new JoinGameHandler());
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
 
-        javalin.exception(JsonSyntaxException.class, new JsonSyntaxHandler());
         javalin.exception(BadRequestException.class, new BadRequestHandler());
-        javalin.exception(DataAccessException.class, new UsernameTakenHandler());
-        javalin.exception(DataAccessException.class, new OtherExceptionsHandler());
+        javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
+        javalin.exception(UnauthorizedException.class, new UnauthorizedHandler());
+        javalin.exception(Exception.class, new OtherExceptionsHandler());
     }
 
     public int run(int desiredPort) {

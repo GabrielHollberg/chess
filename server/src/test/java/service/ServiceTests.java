@@ -65,7 +65,7 @@ public class ServiceTests {
         GameDAO gameDAO = new MemoryGameDAO(games);
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);
-        GameService gameService = new GameService(gameDAO);
+        GameService gameService = new GameService(gameDAO, authService);
         RegisterResult registerResult = userService.registerUser(registerRequest);
         RegisterResult registerResult2 = userService.registerUser(registerRequest2);
         authService.deleteAllAuthData();

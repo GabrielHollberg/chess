@@ -23,7 +23,6 @@ public class RegisterHandler implements Handler {
             throw new BadRequestException("Error: bad request");
         }
         RegisterResult registerResult = userService.registerUser(registerRequest);
-        String json = new Gson().toJson(registerResult);
-        ctx.json(json);
+        ctx.json(new Gson().toJson(registerResult));
     }
 }
