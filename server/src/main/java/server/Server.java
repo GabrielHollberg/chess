@@ -1,10 +1,7 @@
 package server;
 
 import dataaccess.*;
-import exception.BadRequestException;
-import exception.TeamColorTakenException;
-import exception.UnauthorizedException;
-import exception.UsernameTakenException;
+import exception.*;
 import handler.*;
 import io.javalin.*;
 import model.AuthData;
@@ -46,6 +43,7 @@ public class Server {
         javalin.exception(BadRequestException.class, new BadRequestHandler());
         javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
         javalin.exception(TeamColorTakenException.class, new teamColorTakenHandler());
+        javalin.exception(AuthTakenException.class, new teamColorTakenHandler());
         javalin.exception(UnauthorizedException.class, new UnauthorizedHandler());
         javalin.exception(Exception.class, new OtherExceptionsHandler());
     }

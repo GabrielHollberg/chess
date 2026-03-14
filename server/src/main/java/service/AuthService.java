@@ -1,6 +1,8 @@
 package service;
 
 import dataaccess.AuthDAO;
+import exception.AuthTakenException;
+import exception.BadRequestException;
 import exception.DataAccessException;
 import model.AuthData;
 
@@ -15,8 +17,12 @@ public class AuthService {
     }
 
     public void createAuth(String authToken, String username) throws DataAccessException {
-        AuthData authData = new AuthData(authToken, username);
-        authDAO.createAuthData(authData);
+        if (authDAO.readAuthData(authToken) == null) {
+            AuthData authData = new AuthData(authToken, username);
+            authDAO.createAuthData(authData);
+        } else {
+            throw new AuthTakenException("auth already exists");
+        }
     }
 
     public String createAuthToken() {
