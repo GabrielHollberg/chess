@@ -1,11 +1,13 @@
 package service;
 
+import exception.UnauthorizedException;
+import exception.UsernameTakenException;
 import request.LoginRequest;
 import request.RegisterRequest;
 import result.LoginResult;
 import result.RegisterResult;
 import dataaccess.UserDAO;
-import dataaccess.DataAccessException;
+import exception.DataAccessException;
 import model.UserData;
 
 public class UserService {
@@ -35,6 +37,7 @@ public class UserService {
             UserData userData = userDAO.readUserData(loginRequest.username());
             if (userData.password().equals(loginRequest.password())) {
                 String authToken = authService.createAuthToken();
+                authService.createAuth(authToken, userData.username());
                 return new LoginResult(userData.username(), authToken);
             } else {
                 throw new UnauthorizedException("Error: unauthorized");

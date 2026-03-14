@@ -1,7 +1,10 @@
 package server;
 
-import com.google.gson.JsonSyntaxException;
 import dataaccess.*;
+import exception.BadRequestException;
+import exception.TeamColorTakenException;
+import exception.UnauthorizedException;
+import exception.UsernameTakenException;
 import handler.*;
 import io.javalin.*;
 import model.AuthData;
@@ -36,12 +39,13 @@ public class Server {
         javalin.post("/session", new LoginHandler(userService));
         javalin.delete("/session", new LogoutHandler(userService));
         javalin.post("/game", new CreateGameHandler(gameService));
-        javalin.get("/game", new ListGamesHandler());
-        javalin.put("/game", new JoinGameHandler());
+        javalin.get("/game", new ListGamesHandler(gameService));
+        javalin.put("/game", new JoinGameHandler(gameService));
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
 
         javalin.exception(BadRequestException.class, new BadRequestHandler());
         javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
+        javalin.exception(TeamColorTakenException.class, new teamColorTakenHandler());
         javalin.exception(UnauthorizedException.class, new UnauthorizedHandler());
         javalin.exception(Exception.class, new OtherExceptionsHandler());
     }

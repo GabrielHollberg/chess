@@ -1,7 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
-import dataaccess.DataAccessException;
+import exception.DataAccessException;
 import model.AuthData;
 
 import java.util.UUID;
@@ -29,6 +29,11 @@ public class AuthService {
         } else {
             return false;
         }
+    }
+
+    public String getUsername(String authToken) {
+        AuthData authData = authDAO.readAuthData(authToken);
+        return authData.username();
     }
 
     public void deleteAuthData(String authToken) {

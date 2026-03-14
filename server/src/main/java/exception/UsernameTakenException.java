@@ -1,6 +1,4 @@
-package service;
-
-import dataaccess.DataAccessException;
+package exception;
 
 public class UsernameTakenException extends DataAccessException {
     public UsernameTakenException(String message) {
