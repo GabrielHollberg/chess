@@ -1,4 +1,4 @@
-package exceptionHandler;
+package exceptionhandler;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;

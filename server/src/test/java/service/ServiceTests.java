@@ -56,7 +56,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Valid Login")
-    public void LoginUserPositiveTest() throws DataAccessException {
+    public void loginUserPositiveTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         authDAO.deleteAuthData(registerResult.authToken());
         assertNull(authDAO.readAuthData(registerResult.authToken()));
@@ -66,7 +66,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Invalid Login")
-    public void LoginUserNegativeTest() throws DataAccessException {
+    public void loginUserNegativeTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         authDAO.deleteAuthData(registerResult.authToken());
         assertNull(authDAO.readAuthData(registerResult.authToken()));
@@ -78,7 +78,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Valid Logout")
-    public void LogoutUserPositiveTest() throws DataAccessException {
+    public void logoutUserPositiveTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         assertNotNull(authDAO.readAuthData(registerResult.authToken()));
         assertDoesNotThrow(() -> userService.logoutUser(registerResult.authToken()));
@@ -87,7 +87,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Invalid Logout")
-    public void LogoutUserNegativeTest() throws DataAccessException {
+    public void logoutUserNegativeTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         assertNotNull(authDAO.readAuthData(registerResult.authToken()));
         assertDoesNotThrow(() -> userService.logoutUser(registerResult.authToken()));
@@ -97,7 +97,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Clear Database")
-    public void ClearDatabasePositiveTest() throws DataAccessException {
+    public void clearDatabasePositiveTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         RegisterResult registerResult2 = userService.registerUser(registerRequest2);
         authService.deleteAllAuthData();
@@ -111,7 +111,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Create Auth Valid")
-    public void CreateAuthPositiveTest() throws DataAccessException {
+    public void createAuthPositiveTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         String authToken = authService.createAuthToken();
         assertDoesNotThrow(() -> authService.createAuth(authToken, registerResult.username()));
@@ -120,7 +120,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Create Auth Invalid")
-    public void CreateAuthNegativeTest() throws DataAccessException {
+    public void createAuthNegativeTest() throws DataAccessException {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         String authToken = authService.createAuthToken();
         assertDoesNotThrow(() -> authService.createAuth(authToken, "Invalid Username"));

@@ -19,7 +19,7 @@ public class GameService {
 
     GameDAO gameDAO;
     AuthService authService;
-    int IDCounter = 0;
+    int idCounter = 0;
 
     public GameService(GameDAO gameDAO, AuthService authService) {
         this.gameDAO = gameDAO;
@@ -40,8 +40,8 @@ public class GameService {
 
     // Increment and return gameID counter
     public int createGameID() {
-        IDCounter++;
-        return IDCounter;
+        idCounter++;
+        return idCounter;
     }
 
     // Return list of GameData by reading all GameData with GameData access object

@@ -1,4 +1,4 @@
-package exceptionHandler;
+package exceptionhandler;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class UsernameTakenHandler implements ExceptionHandler<Exception> {
+public class TeamColorTakenHandler implements ExceptionHandler<Exception> {
 
     @Override
     public void handle(@NotNull Exception e, @NotNull Context ctx) {
