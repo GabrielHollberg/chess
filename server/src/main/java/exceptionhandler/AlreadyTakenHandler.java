@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class UsernameTakenHandler implements ExceptionHandler<Exception> {
+public class AlreadyTakenHandler implements ExceptionHandler<Exception> {
 
     @Override
     public void handle(@NotNull Exception e, @NotNull Context ctx) {

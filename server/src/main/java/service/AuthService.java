@@ -1,8 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
-import exception.AuthTakenException;
-import exception.BadRequestException;
+import exception.AlreadyTakenException;
 import exception.DataAccessException;
 import model.AuthData;
 
@@ -22,7 +21,7 @@ public class AuthService {
             AuthData authData = new AuthData(authToken, username);
             authDAO.createAuthData(authData);
         } else {
-            throw new AuthTakenException("auth already exists");
+            throw new AlreadyTakenException("auth already exists");
         }
     }
 

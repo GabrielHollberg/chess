@@ -45,9 +45,7 @@ public class Server {
 
         // Initialize exception handler objects
         javalin.exception(BadRequestException.class, new BadRequestHandler());
-        javalin.exception(UsernameTakenException.class, new UsernameTakenHandler());
-        javalin.exception(TeamColorTakenException.class, new TeamColorTakenHandler());
-        javalin.exception(AuthTakenException.class, new TeamColorTakenHandler());
+        javalin.exception(AlreadyTakenException.class, new AlreadyTakenHandler());
         javalin.exception(UnauthorizedException.class, new UnauthorizedHandler());
         javalin.exception(Exception.class, new OtherExceptionsHandler());
     }

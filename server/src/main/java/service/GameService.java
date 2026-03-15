@@ -1,10 +1,10 @@
 package service;
 
 import chess.ChessGame;
+import exception.AlreadyTakenException;
 import exception.DataAccessException;
 import dataaccess.GameDAO;
 import exception.BadRequestException;
-import exception.TeamColorTakenException;
 import exception.UnauthorizedException;
 import model.GameData;
 import model.LightGameData;
@@ -68,14 +68,14 @@ public class GameService {
                         GameData updatedGameData = new GameData(gameData.gameID(), authService.getUsername(authToken), gameData.blackUsername(), gameData.gameName(), gameData.game());
                         gameDAO.updateGameData(updatedGameData);
                     } else {
-                        throw new TeamColorTakenException("Error: already taken");
+                        throw new AlreadyTakenException("Error: already taken");
                     }
                 } else if (joinGameRequest.playerColor().equals("BLACK")) {
                     if (gameData.blackUsername() == null) {
                         GameData updatedGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authService.getUsername(authToken), gameData.gameName(), gameData.game());
                         gameDAO.updateGameData(updatedGameData);
                     } else {
-                        throw new TeamColorTakenException("Error: already taken");
+                        throw new AlreadyTakenException("Error: already taken");
                     }
                 } else {
                     throw new BadRequestException("Error: bad request");

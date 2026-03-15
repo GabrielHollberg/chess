@@ -1,7 +1,7 @@
 package service;
 
 import exception.UnauthorizedException;
-import exception.UsernameTakenException;
+import exception.AlreadyTakenException;
 import request.LoginRequest;
 import request.RegisterRequest;
 import result.LoginResult;
@@ -29,7 +29,7 @@ public class UserService {
             authService.createAuth(authToken, registerRequest.username());
             return new RegisterResult(registerRequest.username(), authToken);
         } else {
-            throw new UsernameTakenException("Error: already taken");
+            throw new AlreadyTakenException("Error: already taken");
         }
     }
 
