@@ -20,6 +20,7 @@ public class UserService {
         this.authService = authService;
     }
 
+    // Create UserData record and AuthData record if provided username doesn't exist in UserData data structure
     public RegisterResult registerUser(RegisterRequest registerRequest) throws DataAccessException {
         if (userDAO.readUserData(registerRequest.username()) == null) {
             UserData userData = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
@@ -32,6 +33,7 @@ public class UserService {
         }
     }
 
+    // Create AuthData record if provided username exists in UserData data structure and associated password matches provided password
     public LoginResult loginUser(LoginRequest loginRequest) throws DataAccessException {
         if (userDAO.readUserData(loginRequest.username()) != null) {
             UserData userData = userDAO.readUserData(loginRequest.username());
@@ -47,6 +49,7 @@ public class UserService {
         }
     }
 
+    // Delete AuthData by searching by authToken
     public void logoutUser(String authToken) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
             authService.deleteAuthData(authToken);
@@ -55,6 +58,7 @@ public class UserService {
         }
     }
 
+    // Delete all UserData
     public void deleteAllUserData() {
         userDAO.deleteAllUserData();
     }

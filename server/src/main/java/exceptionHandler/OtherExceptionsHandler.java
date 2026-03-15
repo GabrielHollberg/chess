@@ -1,4 +1,4 @@
-package handler;
+package exceptionHandler;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
@@ -7,12 +7,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class teamColorTakenHandler implements ExceptionHandler<Exception> {
+public class OtherExceptionsHandler implements ExceptionHandler<Exception> {
 
     @Override
     public void handle(@NotNull Exception e, @NotNull Context ctx) {
-        String json = new Gson().toJson(Map.of("message", e.getMessage()));
-        ctx.status(403);
+        String errorMessage = "Error: " + e.getMessage();
+        String json = new Gson().toJson(Map.of("message", errorMessage));
+        ctx.status(500);
         ctx.json(json);
     }
 }

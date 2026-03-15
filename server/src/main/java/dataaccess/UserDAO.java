@@ -2,6 +2,7 @@ package dataaccess;
 
 import model.UserData;
 
+// Provides methods for UserData database access
 public interface UserDAO {
 
     public void createUserData(UserData userData);

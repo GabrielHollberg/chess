@@ -4,6 +4,7 @@ import model.UserData;
 
 import java.util.Map;
 
+// Provides methods for AuthData memory access
 public class MemoryUserDAO implements UserDAO {
 
     private final Map<String, UserData> users;

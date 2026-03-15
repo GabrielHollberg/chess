@@ -26,6 +26,7 @@ public class GameService {
         this.authService = authService;
     }
 
+    // Create new GameData Record with provided gameName String, new gameID, and new ChessGame object
     public int createGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
             int gameID = createGameID();
@@ -37,11 +38,13 @@ public class GameService {
         }
     }
 
+    // Increment and return gameID counter
     public int createGameID() {
         IDCounter++;
         return IDCounter;
     }
 
+    // Return list of GameData by reading all GameData with GameData access object
     public List<LightGameData> listGames(String authToken) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
             Map<Integer,GameData> games = gameDAO.readAllGameData();
@@ -55,6 +58,7 @@ public class GameService {
         }
     }
 
+    // Update GameData by searching by gameID with new username and teamColor
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
             if (gameDAO.readGameData(joinGameRequest.gameID()) != null) {
@@ -84,6 +88,7 @@ public class GameService {
         }
     }
 
+    // Delete all GameData
     public void deleteAllGameData() {
         gameDAO.deleteAllGameData();
     }

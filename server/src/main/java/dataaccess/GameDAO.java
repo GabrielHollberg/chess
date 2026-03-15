@@ -4,6 +4,7 @@ import model.GameData;
 
 import java.util.Map;
 
+// Provides methods for GameData database access
 public interface GameDAO {
 
     public void createGameData(GameData gameData);

@@ -1,4 +1,4 @@
-package handler;
+package exceptionHandler;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class AuthTakenHandler implements ExceptionHandler<Exception> {
+public class UnauthorizedHandler implements ExceptionHandler<Exception> {
 
     @Override
     public void handle(@NotNull Exception e, @NotNull Context ctx) {
         String json = new Gson().toJson(Map.of("message", e.getMessage()));
-        ctx.status(403);
+        ctx.status(401);
         ctx.json(json);
     }
 }

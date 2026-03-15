@@ -16,6 +16,7 @@ public class AuthService {
         this.authDAO = authDAO;
     }
 
+    // Create new AuthData record and add it to AuthData data structure
     public void createAuth(String authToken, String username) throws DataAccessException {
         if (authDAO.readAuthData(authToken) == null) {
             AuthData authData = new AuthData(authToken, username);
@@ -25,6 +26,7 @@ public class AuthService {
         }
     }
 
+    // Create and return new authToken String
     public String createAuthToken() {
         return UUID.randomUUID().toString();
     }
@@ -37,15 +39,18 @@ public class AuthService {
         }
     }
 
+    // Return username String by reading AuthData by authToken
     public String getUsername(String authToken) {
         AuthData authData = authDAO.readAuthData(authToken);
         return authData.username();
     }
 
+    // Delete AuthData by authToken
     public void deleteAuthData(String authToken) {
         authDAO.deleteAuthData(authToken);
     }
 
+    // Delete all AuthData
     public void deleteAllAuthData() {
         authDAO.deleteAllAuthData();
     }

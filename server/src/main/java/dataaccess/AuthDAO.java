@@ -2,6 +2,7 @@ package dataaccess;
 
 import model.AuthData;
 
+// Provides methods for AuthData database access
 public interface AuthDAO {
 
     public void createAuthData(AuthData authData);

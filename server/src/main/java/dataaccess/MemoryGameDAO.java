@@ -4,6 +4,7 @@ import model.GameData;
 
 import java.util.Map;
 
+// Provides methods for AuthData memory access
 public class MemoryGameDAO implements GameDAO {
 
     private final Map<Integer,GameData> games;
