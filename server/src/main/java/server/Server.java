@@ -10,6 +10,7 @@ import model.GameData;
 import model.UserData;
 import service.*;
 
+import javax.xml.crypto.Data;
 import java.util.HashMap;
 
 public class Server {
@@ -18,6 +19,12 @@ public class Server {
 
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
+
+        try {
+            DatabaseManager.createDatabase();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("failed to create database", e);
+        }
 
         // Initialize all memory data structures
         HashMap<String, AuthData> auths = new HashMap<>();
@@ -28,7 +35,6 @@ public class Server {
         AuthDAO authDAO = new MemoryAuthDAO(auths);
         UserDAO userDAO = new MemoryUserDAO(users);
         GameDAO gameDAO = new MemoryGameDAO(games);
-
         // Initialize all Server Service objects
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);
