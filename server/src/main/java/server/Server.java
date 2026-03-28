@@ -33,7 +33,7 @@ public class Server {
 
         // Initialize all memory access objects
         AuthDAO authDAO = new MemoryAuthDAO(auths);
-        UserDAO userDAO = new MemoryUserDAO(users);
+        UserDAO userDAO = new MySQLUserDAO(users);
         GameDAO gameDAO = new MemoryGameDAO(games);
         // Initialize all Server Service objects
         AuthService authService = new AuthService(authDAO);
