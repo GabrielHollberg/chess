@@ -32,9 +32,9 @@ public class Server {
         HashMap<Integer, GameData> games = new HashMap<>();
 
         // Initialize all memory access objects
-        AuthDAO authDAO = new MemoryAuthDAO(auths);
+        AuthDAO authDAO = new MySQLAuthDAO(auths);
         UserDAO userDAO = new MySQLUserDAO(users);
-        GameDAO gameDAO = new MemoryGameDAO(games);
+        GameDAO gameDAO = new MySQLGameDAO(games);
         // Initialize all Server Service objects
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);

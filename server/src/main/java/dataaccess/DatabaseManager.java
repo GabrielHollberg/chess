@@ -1,6 +1,7 @@
 package dataaccess;
 
 import exception.DataAccessException;
+import model.AuthData;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
@@ -26,20 +27,21 @@ public class DatabaseManager {
      */
     static public void createDatabase() throws DataAccessException {
         var databaseStatement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-        var userDataTableStatement = "CREATE TABLE IF NOT EXISTS userData (\n" +
+
+        var userDataTableStatement = "CREATE TABLE IF NOT EXISTS user_data (\n" +
                 "username VARCHAR(255) NOT NULL,\n" +
                 "password VARCHAR(255) NOT NULL,\n" +
                 "email VARCHAR(255) NOT NULL\n" +
                 ")";
 
-        var gameDataTableStatement = "CREATE TABLE IF NOT EXISTS gameData (\n" +
-                "game_id VARCHAR(255) NOT NULL,\n" +
-                "white_username VARCHAR(255) NOT NULL,\n" +
-                "black_username VARCHAR(255) NOT NULL,\n" +
+        var gameDataTableStatement = "CREATE TABLE IF NOT EXISTS game_data (\n" +
+                "game_id INT NOT NULL,\n" +
+                "white_username VARCHAR(255),\n" +
+                "black_username VARCHAR(255),\n" +
                 "game_name VARCHAR(255) NOT NULL\n" +
                 ")";
 
-        var authDataTableStatement = "CREATE TABLE IF NOT EXISTS authData (\n" +
+        var authDataTableStatement = "CREATE TABLE IF NOT EXISTS auth_data (\n" +
                 "auth_token VARCHAR(255) NOT NULL,\n" +
                 "username VARCHAR(255) NOT NULL\n" +
                 ")";
@@ -64,23 +66,62 @@ public class DatabaseManager {
         }
     }
 
-    static int insertUserData(String username, String password, String email) throws SQLException {
+    static void insertUserData(String username, String password, String email) throws SQLException {
         try {
             var conn = getConnection();
-            try (var preparedStatement = conn.prepareStatement("INSERT INTO userData (username, password, email) VALUES(?, ?, ?)", RETURN_GENERATED_KEYS)) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO user_data (username, password, email) VALUES(?, ?, ?)")) {
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
                 preparedStatement.setString(3, email);
 
                 preparedStatement.executeUpdate();
+            }
+        } catch (DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
+    }
 
-                var resultSet = preparedStatement.getGeneratedKeys();
-                var ID = 0;
-                if (resultSet.next()) {
-                    ID = resultSet.getInt(1);
+    static void insertGameData(int gameID, String whiteUsername, String blackUsername, String gameName) throws SQLException {
+        try {
+            var conn = getConnection();
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO game_data (game_id, white_username, black_username, game_name) VALUES(?, ?, ?, ?)")) {
+                preparedStatement.setInt(1, gameID);
+                preparedStatement.setString(2, whiteUsername);
+                preparedStatement.setString(3, blackUsername);
+                preparedStatement.setString(4, gameName);
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
+    }
+
+    static void insertAuthData(String authToken, String username) throws SQLException {
+        try {
+            var conn = getConnection();
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO auth_data (auth_token, username) VALUES(?, ?)")) {
+                preparedStatement.setString(1, authToken);
+                preparedStatement.setString(2, username);
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
+    }
+
+    static AuthData readAuthData(String authToken) {
+        try {
+            var conn = getConnection();
+            try (var preparedStatement = conn.prepareStatement("SELECT username FROM auth_data WHERE auth_token=?)")) {
+                preparedStatement.setString(1, authToken);
+                try (var rs = preparedStatement.executeQuery()) {
+                    return new AuthData(authToken, rs.getString("username"));
                 }
-
-                return ID;
+            }
+            catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         } catch (DataAccessException e) {
             throw new RuntimeException("failed to establish database connection", e);

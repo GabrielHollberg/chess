@@ -1,7 +1,9 @@
 package dataaccess;
 
+import exception.DataAccessException;
 import model.GameData;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 // Provides methods for AuthData memory access
@@ -14,7 +16,11 @@ public class MySQLGameDAO implements GameDAO {
     }
 
     public void createGameData(GameData gameData) {
-        games.put(gameData.gameID(), gameData);
+        try {
+            DatabaseManager.insertGameData(gameData.gameID(), gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public GameData readGameData(int gameID) {
