@@ -3,6 +3,7 @@ package dataaccess;
 import exception.DataAccessException;
 import model.UserData;
 
+import javax.xml.crypto.Data;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
@@ -10,19 +11,28 @@ import java.util.Map;
 // Provides methods for AuthData memory access
 public class MySQLUserDAO implements UserDAO {
 
-    public MySQLUserDAO(Map<String, UserData> users) {}
+    public MySQLUserDAO() {}
 
     public void createUserData(UserData userData) {
         try {
-            DatabaseManager.insertUserData(userData.username(), userData.password(), userData.email());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("INSERT INTO user_data (username, password, email) VALUES(?, ?, ?)");
+                String username = userData.username();
+                String password = userData.password();
+                String email = userData.email();
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, password);
+                preparedStatement.setString(3, email);
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
         }
     }
 
     public UserData readUserData(String username) {
-        //return users.get(username);
-        return null;
+        return DatabaseManager.readUserData(username);
     }
 
     public void updateUserData(UserData userData) {
@@ -34,6 +44,6 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     public void deleteAllUserData() {
-        //users.clear();
+        DatabaseManager.deleteAllUserData();
     }
 }

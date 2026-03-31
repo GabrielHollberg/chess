@@ -2,6 +2,7 @@ package dataaccess;
 
 import exception.DataAccessException;
 import model.GameData;
+import model.LightGameData;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -9,11 +10,7 @@ import java.util.Map;
 // Provides methods for AuthData memory access
 public class MySQLGameDAO implements GameDAO {
 
-    private final Map<Integer,GameData> games;
-
-    public MySQLGameDAO(Map<Integer, GameData> games) {
-        this.games = games;
-    }
+    public MySQLGameDAO() {}
 
     public void createGameData(GameData gameData) {
         try {
@@ -24,22 +21,27 @@ public class MySQLGameDAO implements GameDAO {
     }
 
     public GameData readGameData(int gameID) {
-        return games.get(gameID);
+        return DatabaseManager.readGameData(gameID);
     }
 
+    /*public GameData readGameData(int gameID) {
+        return DatabaseManager.readGameData(gameID);
+    }*/
+
     public Map<Integer,GameData> readAllGameData() {
-        return games;
+        //return games;
+        return null;
     }
 
     public void updateGameData(GameData gameData) {
-        games.put(gameData.gameID(), gameData);
+        //games.put(gameData.gameID(), gameData);
     }
 
     public void deleteGameData(int gameID) {
-        games.remove(gameID);
+        //games.remove(gameID);
     }
 
     public void deleteAllGameData() {
-        games.clear();
+        DatabaseManager.deleteAllGameData();
     }
 }

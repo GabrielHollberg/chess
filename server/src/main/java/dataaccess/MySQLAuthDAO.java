@@ -8,11 +8,7 @@ import java.util.Map;
 // Provides methods for AuthData memory access
 public class MySQLAuthDAO implements AuthDAO {
 
-    private final Map<String, AuthData> auths;
-
-    public MySQLAuthDAO(Map<String, AuthData> auths) {
-        this.auths = auths;
-    }
+    public MySQLAuthDAO() {}
 
     public void createAuthData(AuthData authData) {
         try {
@@ -27,14 +23,14 @@ public class MySQLAuthDAO implements AuthDAO {
     }
 
     public void updateAuthData(AuthData authData) {
-        auths.put(authData.authToken(), authData);
+        //auths.put(authData.authToken(), authData);
     }
 
     public void deleteAuthData(String authToken) {
-        auths.remove(authToken);
+        //auths.remove(authToken);
     }
 
     public void deleteAllAuthData() {
-        auths.clear();
+        DatabaseManager.deleteAllAuthData();
     }
 }

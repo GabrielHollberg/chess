@@ -26,15 +26,10 @@ public class Server {
             throw new RuntimeException("failed to create database", e);
         }
 
-        // Initialize all memory data structures
-        HashMap<String, AuthData> auths = new HashMap<>();
-        HashMap<String, UserData> users = new HashMap<>();
-        HashMap<Integer, GameData> games = new HashMap<>();
-
         // Initialize all memory access objects
-        AuthDAO authDAO = new MySQLAuthDAO(auths);
-        UserDAO userDAO = new MySQLUserDAO(users);
-        GameDAO gameDAO = new MySQLGameDAO(games);
+        AuthDAO authDAO = new MySQLAuthDAO();
+        UserDAO userDAO = new MySQLUserDAO();
+        GameDAO gameDAO = new MySQLGameDAO();
         // Initialize all Server Service objects
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);
