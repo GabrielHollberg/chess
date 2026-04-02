@@ -2,6 +2,7 @@ package service;
 
 import exception.UnauthorizedException;
 import exception.AlreadyTakenException;
+import org.mindrot.jbcrypt.BCrypt;
 import request.LoginRequest;
 import request.RegisterRequest;
 import result.LoginResult;
@@ -37,7 +38,7 @@ public class UserService {
     public LoginResult loginUser(LoginRequest loginRequest) throws DataAccessException {
         if (userDAO.readUserData(loginRequest.username()) != null) {
             UserData userData = userDAO.readUserData(loginRequest.username());
-            if (userData.password().equals(loginRequest.password())) {
+            if (BCrypt.checkpw(loginRequest.password(), userData.password())) {
                 String authToken = authService.createAuthToken();
                 authService.createAuth(authToken, userData.username());
                 return new LoginResult(userData.username(), authToken);

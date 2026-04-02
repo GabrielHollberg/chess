@@ -1,5 +1,6 @@
 package dataaccess;
 
+import exception.DataAccessException;
 import model.AuthData;
 
 import java.sql.SQLException;
@@ -12,25 +13,67 @@ public class MySQLAuthDAO implements AuthDAO {
 
     public void createAuthData(AuthData authData) {
         try {
-            DatabaseManager.insertAuthData(authData.authToken(), authData.username());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("INSERT INTO auth_data (auth_token, username) VALUES(?, ?)");
+                preparedStatement.setString(1, authData.authToken());
+                preparedStatement.setString(2, authData.username());
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException("failed to establish database connection", e);
         }
     }
 
     public AuthData readAuthData(String authToken) {
-        return DatabaseManager.readAuthData(authToken);
+        try {
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("SELECT username FROM auth_data WHERE auth_token=?");
+                preparedStatement.setString(1, authToken);
+                var rs = preparedStatement.executeQuery();
+                if (rs.next()) {
+                    return new AuthData(authToken, rs.getString("username"));
+                }
+                return null;
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
     }
 
     public void updateAuthData(AuthData authData) {
-        //auths.put(authData.authToken(), authData);
+        try {
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("UPDATE auth_data SET username=? WHERE auth_token=?");
+                preparedStatement.setString(1, authData.username());
+                preparedStatement.setString(2, authData.authToken());
+                preparedStatement.executeUpdate();
+            }
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
     }
 
     public void deleteAuthData(String authToken) {
-        //auths.remove(authToken);
+        try {
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("DELETE FROM auth_data WHERE auth_token=?");
+                preparedStatement.setString(1, authToken);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
     }
 
     public void deleteAllAuthData() {
-        DatabaseManager.deleteAllAuthData();
+        try {
+            try (var conn = DatabaseManager.getConnection()) {
+                var preparedStatement = conn.prepareStatement("TRUNCATE auth_data");
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException("failed to establish database connection", e);
+        }
     }
 }
