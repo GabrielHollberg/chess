@@ -1,18 +1,16 @@
 package client;
 
 import chess.*;
+import request.RegisterRequest;
+import server.ServerFacade;
 
 import java.util.Scanner;
 
-import ui.EscapeSequences.*;
-
 import static ui.EscapeSequences.*;
-import static ui.EscapeSequences.BLACK_BISHOP;
-import static ui.EscapeSequences.WHITE_KING;
-import static ui.EscapeSequences.WHITE_PAWN;
 
 public class ClientMain {
     public static void main(String[] args) {
+        ServerFacade serverFacade = new ServerFacade("http://localhost:50066");
         Scanner scanner = new Scanner(System.in);
         String line = "";
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
@@ -32,6 +30,8 @@ public class ClientMain {
                 String password = scanner.nextLine();
                 System.out.println("\n" + EMPTY + "email\n");
                 String email = scanner.nextLine();
+                RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+                serverFacade.registerUser(registerRequest);
                 break;
             } else if (line.equalsIgnoreCase("login") || line.equalsIgnoreCase("l")) {
                 System.out.println("\n" + EMPTY + "username:\n");

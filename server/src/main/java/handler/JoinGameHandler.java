@@ -8,8 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import request.JoinGameRequest;
 import service.GameService;
 
-import java.util.Map;
-
 public class JoinGameHandler implements Handler {
 
     GameService gameService;
