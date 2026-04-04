@@ -1,7 +1,10 @@
 package client;
 
 import chess.*;
+import request.LoginRequest;
 import request.RegisterRequest;
+import result.LoginResult;
+import result.RegisterResult;
 import server.ServerFacade;
 
 import java.util.Scanner;
@@ -10,7 +13,9 @@ import static ui.EscapeSequences.*;
 
 public class ClientMain {
     public static void main(String[] args) {
-        ServerFacade serverFacade = new ServerFacade("http://localhost:50066");
+        ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
+        String authToken = "";
+        String username = "";
         Scanner scanner = new Scanner(System.in);
         String line = "";
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
@@ -25,20 +30,34 @@ public class ClientMain {
                 line = scanner.nextLine();
             } else if (line.equalsIgnoreCase("register") || line.equalsIgnoreCase("r")) {
                 System.out.println("\n" + EMPTY + "username:\n");
-                String username = scanner.nextLine();
+                username = scanner.nextLine();
                 System.out.println("\n" + EMPTY + "password:\n");
                 String password = scanner.nextLine();
                 System.out.println("\n" + EMPTY + "email\n");
                 String email = scanner.nextLine();
                 RegisterRequest registerRequest = new RegisterRequest(username, password, email);
-                serverFacade.registerUser(registerRequest);
-                break;
+                try {
+                    RegisterResult registerResult = serverFacade.registerUser(registerRequest);
+                    authToken = registerResult.authToken();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      Sorry, this username has already been taken!\n");
+                    line = scanner.nextLine();
+                }
             } else if (line.equalsIgnoreCase("login") || line.equalsIgnoreCase("l")) {
                 System.out.println("\n" + EMPTY + "username:\n");
-                String username = scanner.nextLine();
+                username = scanner.nextLine();
                 System.out.println("\n" + EMPTY + "password:\n");
                 String password = scanner.nextLine();
-                break;
+                LoginRequest loginRequest = new LoginRequest(username, password);
+                try {
+                    LoginResult loginResult = serverFacade.loginUser(loginRequest);
+                    authToken = loginResult.authToken();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      Incorrect login, please try again!\n");
+                    line = scanner.nextLine();
+                }
             } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
                 return;
             } else {
@@ -52,14 +71,8 @@ public class ClientMain {
         }
         while (true) {
             System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
-            System.out.println(EMPTY + "  --------Chess--------\n");
-            ChessBoard board = new ChessBoard();
-            board.resetBoard();
-            printBoard(board);
+            System.out.println(EMPTY + "  --------Chess--------      Hi " + username + ", you are signed in.\n");
             line = scanner.nextLine();
-            if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
-                System.out.println("Options\n");
-            }
         }
     }
 
