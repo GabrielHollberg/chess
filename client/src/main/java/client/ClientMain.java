@@ -7,6 +7,7 @@ import result.LoginResult;
 import result.RegisterResult;
 import server.ServerFacade;
 
+import java.awt.*;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -19,14 +20,14 @@ public class ClientMain {
         Scanner scanner = new Scanner(System.in);
         String line = "";
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
-        System.out.println(EMPTY + "  --------Chess--------      (type \"help\" for a list of commands)\n");
+        System.out.println(EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "(type \"help\" for a list of commands)\n" + SET_TEXT_COLOR_BLUE);
         line = scanner.nextLine();
         while (true) {
             if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
-                System.out.println("\n" + EMPTY + "\"help\" - \"h\"");
-                System.out.println(EMPTY + "\"register\" - \"r\"");
-                System.out.println(EMPTY + "\"login\" - \"l\"");
-                System.out.println(EMPTY + "\"quit\" - \"q\"\n");
+                System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "\"help\" or \"h\"");
+                System.out.println(EMPTY + "                             " + "\"register\" or \"r\"");
+                System.out.println(EMPTY + "                             " + "\"login\" or \"l\"");
+                System.out.println(EMPTY + "                             " + "\"quit\" or \"q\"\n" + SET_TEXT_COLOR_BLUE);
                 line = scanner.nextLine();
             } else if (line.equalsIgnoreCase("register") || line.equalsIgnoreCase("r")) {
                 System.out.println("\n" + EMPTY + "username:\n");
@@ -41,7 +42,7 @@ public class ClientMain {
                     authToken = registerResult.authToken();
                     break;
                 } catch (Exception e) {
-                    System.out.println("\n" + EMPTY + "  --------Chess--------      Sorry, this username has already been taken!\n");
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Sorry, this username has already been taken!\n" + SET_TEXT_COLOR_BLUE);
                     line = scanner.nextLine();
                 }
             } else if (line.equalsIgnoreCase("login") || line.equalsIgnoreCase("l")) {
@@ -55,23 +56,19 @@ public class ClientMain {
                     authToken = loginResult.authToken();
                     break;
                 } catch (Exception e) {
-                    System.out.println("\n" + EMPTY + "  --------Chess--------      Incorrect login, please try again!\n");
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Incorrect login, please try again!\n" + SET_TEXT_COLOR_BLUE);
                     line = scanner.nextLine();
                 }
             } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
                 return;
             } else {
-                System.out.println("\n" + EMPTY + "invalid command, please try again\n");
-                System.out.println(EMPTY + "\"help\" - \"h\"");
-                System.out.println(EMPTY + "\"register\" - \"r\"");
-                System.out.println(EMPTY + "\"login\" - \"l\"");
-                System.out.println(EMPTY + "\"quit\" - \"q\"\n");
+                System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Invalid command, please try again!\n" + SET_TEXT_COLOR_BLUE);
                 line = scanner.nextLine();
             }
         }
         while (true) {
             System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
-            System.out.println(EMPTY + "  --------Chess--------      Hi " + username + ", you are signed in.\n");
+            System.out.println(EMPTY + "  Signed in as " + username + "      " + SET_TEXT_COLOR_RED + "(type \"help\" for more commands)\n" + SET_TEXT_COLOR_BLUE);
             line = scanner.nextLine();
         }
     }
