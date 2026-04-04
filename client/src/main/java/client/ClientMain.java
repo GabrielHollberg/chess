@@ -13,17 +13,42 @@ import static ui.EscapeSequences.WHITE_PAWN;
 
 public class ClientMain {
     public static void main(String[] args) {
-        System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
         Scanner scanner = new Scanner(System.in);
-        System.out.println(EMPTY + "  --------Chess--------      (type help or h for list of commands)\n");
-        String line = scanner.nextLine();
-        System.out.println();
-        if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
-            System.out.println(EMPTY + "   register or r");
-            System.out.println(EMPTY + "   login or l");
-            System.out.println(EMPTY + "   quit or q");
-            System.out.println(EMPTY + "   help or h\n");
-            line = scanner.nextLine();
+        String line = "";
+        System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
+        System.out.println(EMPTY + "  --------Chess--------      (type \"help\" for a list of commands)\n");
+        line = scanner.nextLine();
+        while (true) {
+            if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                System.out.println("\n" + EMPTY + "\"help\" - \"h\"");
+                System.out.println(EMPTY + "\"register\" - \"r\"");
+                System.out.println(EMPTY + "\"login\" - \"l\"");
+                System.out.println(EMPTY + "\"quit\" - \"q\"\n");
+                line = scanner.nextLine();
+            } else if (line.equalsIgnoreCase("register") || line.equalsIgnoreCase("r")) {
+                System.out.println("\n" + EMPTY + "username:\n");
+                String username = scanner.nextLine();
+                System.out.println("\n" + EMPTY + "password:\n");
+                String password = scanner.nextLine();
+                System.out.println("\n" + EMPTY + "email\n");
+                String email = scanner.nextLine();
+                break;
+            } else if (line.equalsIgnoreCase("login") || line.equalsIgnoreCase("l")) {
+                System.out.println("\n" + EMPTY + "username:\n");
+                String username = scanner.nextLine();
+                System.out.println("\n" + EMPTY + "password:\n");
+                String password = scanner.nextLine();
+                break;
+            } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
+                return;
+            } else {
+                System.out.println("\n" + EMPTY + "invalid command, please try again\n");
+                System.out.println(EMPTY + "\"help\" - \"h\"");
+                System.out.println(EMPTY + "\"register\" - \"r\"");
+                System.out.println(EMPTY + "\"login\" - \"l\"");
+                System.out.println(EMPTY + "\"quit\" - \"q\"\n");
+                line = scanner.nextLine();
+            }
         }
         while (true) {
             System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
