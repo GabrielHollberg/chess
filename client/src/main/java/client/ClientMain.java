@@ -5,14 +5,10 @@ import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
-import result.CreateGameResult;
 import result.ListGamesResult;
-import result.LoginResult;
-import result.RegisterResult;
 import server.ServerFacade;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -20,9 +16,9 @@ import static ui.EscapeSequences.*;
 public class ClientMain {
     public static void main(String[] args) {
         ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
-        String username = "";
+        String username;
         Scanner scanner = new Scanner(System.in);
-        String line = "";
+        String line;
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
         System.out.println(EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_BLUE + "(type " + SET_TEXT_COLOR_RED + "\"help\"" + SET_TEXT_COLOR_BLUE + " or " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for a list of commands)\n" + SET_TEXT_COLOR_BLUE);
         line = scanner.nextLine();
@@ -43,7 +39,7 @@ public class ClientMain {
                     String email = scanner.nextLine();
                     RegisterRequest registerRequest = new RegisterRequest(username, password, email);
                     try {
-                        RegisterResult registerResult = serverFacade.registerUser(registerRequest);
+                        serverFacade.registerUser(registerRequest);
                         break;
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, this username has already been taken!\n" + SET_TEXT_COLOR_BLUE);
@@ -56,7 +52,7 @@ public class ClientMain {
                     String password = scanner.nextLine();
                     LoginRequest loginRequest = new LoginRequest(username, password);
                     try {
-                        LoginResult loginResult = serverFacade.loginUser(loginRequest);
+                        serverFacade.loginUser(loginRequest);
                         break;
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Incorrect login, please try again!\n" + SET_TEXT_COLOR_BLUE);
@@ -87,7 +83,7 @@ public class ClientMain {
                     String gameName = scanner.nextLine();
                     CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
                     try {
-                        CreateGameResult createGameResult = serverFacade.createGame(createGameRequest);
+                        serverFacade.createGame(createGameRequest);
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + gameName + SET_TEXT_COLOR_BLUE + " created!\n" + SET_TEXT_COLOR_BLUE);
                         line = scanner.nextLine();
                     } catch (Exception e) {
@@ -102,18 +98,16 @@ public class ClientMain {
                             System.out.println("No games have been created!" + SET_TEXT_COLOR_BLUE);
                         } else {
                             System.out.println(SET_TEXT_COLOR_RED + "use game number when joining a game!\n" + SET_TEXT_COLOR_BLUE);
-                            if (!listGamesResult.games().isEmpty()) {
-                                for (int i = 0; i < listGamesResult.games().size(); i++) {
-                                    System.out.print(EMPTY + "                                     " + SET_TEXT_COLOR_RED + (i + 1) + ". " + SET_TEXT_COLOR_BLUE + listGamesResult.games().get(i).gameName());
-                                    if (listGamesResult.games().get(i).whiteUsername() != null) {
-                                        System.out.print("\n" + EMPTY + "                                        " + "white: " + listGamesResult.games().get(i).whiteUsername() + " ");
-                                    }
-                                    if (listGamesResult.games().get(i).blackUsername() != null) {
-                                        System.out.print("\n" + EMPTY + "                                        " + "black: " + listGamesResult.games().get(i).blackUsername() + " ");
-                                    }
-                                    System.out.println();
-                                    System.out.println();
+                            for (int i = 0; i < listGamesResult.games().size(); i++) {
+                                System.out.print(EMPTY + "                                     " + SET_TEXT_COLOR_RED + (i + 1) + ". " + SET_TEXT_COLOR_BLUE + listGamesResult.games().get(i).gameName());
+                                if (listGamesResult.games().get(i).whiteUsername() != null) {
+                                    System.out.print("\n" + EMPTY + "                                        " + "white: " + listGamesResult.games().get(i).whiteUsername() + " ");
                                 }
+                                if (listGamesResult.games().get(i).blackUsername() != null) {
+                                    System.out.print("\n" + EMPTY + "                                        " + "black: " + listGamesResult.games().get(i).blackUsername() + " ");
+                                }
+                                System.out.println();
+                                System.out.println();
                             }
                         }
                         System.out.println();
@@ -174,10 +168,10 @@ public class ClientMain {
                     }
                 } else if (line.equalsIgnoreCase("spectate") || line.equalsIgnoreCase("s")) {
                     try {
-                        int gameIndex;
+                        //int gameIndex;
                         System.out.println("\n" + EMPTY + "  game number:\n");
                         if (scanner.hasNextInt()) {
-                            gameIndex = scanner.nextInt();
+                            //gameIndex = scanner.nextInt();
                             scanner.nextLine();
                         } else {
                             throw new Exception();
@@ -236,76 +230,76 @@ public class ClientMain {
                 if (board.getPiece(position) != null) {
                     switch (board.getPiece(position).getPieceType()) {
                         case ChessPiece.PieceType.ROOK:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_ROOK;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_ROOK;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_ROOK;
-                                    break;
-                            }
+                                    yield BLACK_ROOK;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.KNIGHT:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_KNIGHT;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_KNIGHT;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_KNIGHT;
-                                    break;
-                            }
+                                    yield BLACK_KNIGHT;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.BISHOP:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_BISHOP;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_BISHOP;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_BISHOP;
-                                    break;
-                            }
+                                    yield BLACK_BISHOP;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.KING:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_KING;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_KING;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_KING;
-                                    break;
-                            }
+                                    yield BLACK_KING;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.QUEEN:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_QUEEN;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_QUEEN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_QUEEN;
-                                    break;
-                            }
+                                    yield BLACK_QUEEN;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.PAWN:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_PAWN;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_PAWN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_PAWN;
-                                    break;
-                            }
+                                    yield BLACK_PAWN;
+                                }
+                            };
                             break;
                     }
                 } else {
@@ -317,18 +311,15 @@ public class ClientMain {
                     } else {
                         System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
                     }
-                    if (j == 7) {
-                        System.out.println(SET_BG_COLOR_BLACK);
-                    }
                 } else {
                     if (j % 2 == 1) {
                         System.out.print(SET_BG_COLOR_DARK_BLUE + pieceColor + pieceType);
                     } else {
                         System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
                     }
-                    if (j == 7) {
-                        System.out.println(SET_BG_COLOR_BLACK);
-                    }
+                }
+                if (j == 7) {
+                    System.out.println(SET_BG_COLOR_BLACK);
                 }
             }
             if (i == 0) {
@@ -351,76 +342,76 @@ public class ClientMain {
                 if (board.getPiece(position) != null) {
                     switch (board.getPiece(position).getPieceType()) {
                         case ChessPiece.PieceType.ROOK:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_ROOK;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_ROOK;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_ROOK;
-                                    break;
-                            }
+                                    yield BLACK_ROOK;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.KNIGHT:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_KNIGHT;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_KNIGHT;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_KNIGHT;
-                                    break;
-                            }
+                                    yield BLACK_KNIGHT;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.BISHOP:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_BISHOP;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_BISHOP;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_BISHOP;
-                                    break;
-                            }
+                                    yield BLACK_BISHOP;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.KING:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_KING;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_KING;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_KING;
-                                    break;
-                            }
+                                    yield BLACK_KING;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.QUEEN:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_QUEEN;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_QUEEN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_QUEEN;
-                                    break;
-                            }
+                                    yield BLACK_QUEEN;
+                                }
+                            };
                             break;
                         case ChessPiece.PieceType.PAWN:
-                            switch (board.getPiece(position).getTeamColor()) {
-                                case ChessGame.TeamColor.WHITE:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
                                     pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
-                                    pieceType = BLACK_PAWN;
-                                    break;
-                                case ChessGame.TeamColor.BLACK:
+                                    yield BLACK_PAWN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
                                     pieceColor = SET_TEXT_COLOR_BLACK;
-                                    pieceType = BLACK_PAWN;
-                                    break;
-                            }
+                                    yield BLACK_PAWN;
+                                }
+                            };
                             break;
                     }
                 } else {
@@ -432,18 +423,15 @@ public class ClientMain {
                     } else {
                         System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
                     }
-                    if (j == 0) {
-                        System.out.println(SET_BG_COLOR_BLACK);
-                    }
                 } else {
                     if (j % 2 == 1) {
                         System.out.print(SET_BG_COLOR_DARK_BLUE + pieceColor + pieceType);
                     } else {
                         System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
                     }
-                    if (j == 0) {
-                        System.out.println(SET_BG_COLOR_BLACK);
-                    }
+                }
+                if (j == 0) {
+                    System.out.println(SET_BG_COLOR_BLACK);
                 }
             }
             if (i == 7) {

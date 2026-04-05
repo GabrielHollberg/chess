@@ -9,6 +9,7 @@ import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import request.LoginRequest;
 import request.RegisterRequest;
 import result.RegisterResult;
@@ -37,7 +38,7 @@ public class ServiceTests {
         RegisterResult registerResult = userService.registerUser(registerRequest);
         UserData userData = userDAO.readUserData("Name");
         assertEquals("Name", userData.username());
-        assertEquals("Password", userData.password());
+        assertTrue(BCrypt.checkpw("Password", userData.password()));
         assertEquals("Email", userData.email());
         AuthData authData = authDAO.readAuthData(registerResult.authToken());
         assertEquals(registerResult.authToken(), authData.authToken());
@@ -120,7 +121,7 @@ public class ServiceTests {
     @Test
     @DisplayName("Create Auth Invalid")
     public void createAuthNegativeTest() throws DataAccessException {
-        RegisterResult registerResult = userService.registerUser(registerRequest);
+        userService.registerUser(registerRequest);
         String authToken = authService.createAuthToken();
         assertDoesNotThrow(() -> authService.createAuth(authToken, "Invalid Username"));
         assertThrows(AuthTakenException.class, () -> authService.createAuth(authToken, "Invalid Username"));

@@ -5,13 +5,7 @@ import dataaccess.*;
 import exception.*;
 import handler.*;
 import io.javalin.*;
-import model.AuthData;
-import model.GameData;
-import model.UserData;
 import service.*;
-
-import javax.xml.crypto.Data;
-import java.util.HashMap;
 
 public class Server {
 

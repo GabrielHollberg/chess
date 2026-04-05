@@ -7,22 +7,15 @@ import dataaccess.GameDAO;
 import exception.BadRequestException;
 import exception.UnauthorizedException;
 import model.GameData;
-import model.LightGameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import result.CreateGameResult;
 import result.ListGamesResult;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 public class GameService {
 
     GameDAO gameDAO;
     AuthService authService;
-    int idCounter = 0;
 
     public GameService(GameDAO gameDAO, AuthService authService) {
         this.gameDAO = gameDAO;
@@ -32,19 +25,12 @@ public class GameService {
     // Create new GameData Record with provided gameName String, new gameID, and new ChessGame object
     public CreateGameResult createGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
-            int gameID = createGameID();
-            GameData gameData = new GameData(gameID, null, null, createGameRequest.gameName(), new ChessGame());
-            gameDAO.createGameData(gameData);
+            GameData gameData = new GameData(0, null, null, createGameRequest.gameName(), new ChessGame());
+            int gameID = gameDAO.createGameData(gameData);
             return new CreateGameResult(gameID);
         } else {
             throw new UnauthorizedException("Error: unauthorized");
         }
-    }
-
-    // Increment and return gameID counter
-    public int createGameID() {
-        idCounter++;
-        return idCounter;
     }
 
     // Return list of GameData by reading all GameData with GameData access object

@@ -1,7 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
-import exception.AlreadyTakenException;
+import exception.AuthTakenException;
 import exception.DataAccessException;
 import model.AuthData;
 
@@ -21,7 +21,7 @@ public class AuthService {
             AuthData authData = new AuthData(authToken, username);
             authDAO.createAuthData(authData);
         } else {
-            throw new AlreadyTakenException("auth already exists");
+            throw new AuthTakenException("auth already exists");
         }
     }
 
@@ -31,11 +31,7 @@ public class AuthService {
     }
 
     public boolean authenticateUser(String authToken) {
-        if (authDAO.readAuthData(authToken) != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return authDAO.readAuthData(authToken) != null;
     }
 
     // Return username String by reading AuthData by authToken

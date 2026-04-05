@@ -13,17 +13,23 @@ public class MySQLGameDAO implements GameDAO {
 
     public MySQLGameDAO() {}
 
-    public void createGameData(GameData gameData) {
+    public int createGameData(GameData gameData) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (white_username, black_username, game_name, game) VALUES(?, ?, ?, ?)");
+                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (white_username, black_username, game_name, game) VALUES(?, ?, ?, ?)",
+                        java.sql.Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, gameData.whiteUsername());
                 preparedStatement.setString(2, gameData.blackUsername());
                 preparedStatement.setString(3, gameData.gameName());
                 Gson gson = new Gson();
                 preparedStatement.setString(4, gson.toJson(gameData.game()));
-
                 preparedStatement.executeUpdate();
+                try (var rs = preparedStatement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                    throw new RuntimeException("No generated key returned after insert");
+                }
             }
         } catch (SQLException | DataAccessException e) {
             throw new RuntimeException("failed to establish database connection", e);
@@ -36,11 +42,11 @@ public class MySQLGameDAO implements GameDAO {
                 var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game FROM game_data WHERE game_id=?");
                 preparedStatement.setInt(1, gameID);
                 var rs = preparedStatement.executeQuery();
-                int gameIDTemp = 0;
-                String whiteUsername = "";
-                String blackUsername = "";
-                String gameName = "";
-                String game = "";
+                int gameIDTemp;
+                String whiteUsername;
+                String blackUsername;
+                String gameName;
+                String game;
                 if (rs.next()) {
                     gameIDTemp = rs.getInt("game_id");
                     whiteUsername = rs.getString("white_username");
@@ -92,18 +98,6 @@ public class MySQLGameDAO implements GameDAO {
                 preparedStatement.setString(4, gson.toJson(gameData.game()));
                 preparedStatement.setInt(5, gameData.gameID());
 
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException | DataAccessException e) {
-            throw new RuntimeException("failed to establish database connection", e);
-        }
-    }
-
-    public void deleteGameData(int gameID) {
-        try {
-            try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("DELETE FROM game_data WHERE game_id=?");
-                preparedStatement.setInt(1, gameID);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException | DataAccessException e) {

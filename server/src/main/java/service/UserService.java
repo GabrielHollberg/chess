@@ -24,7 +24,7 @@ public class UserService {
     // Create UserData record and AuthData record if provided username doesn't exist in UserData data structure
     public RegisterResult registerUser(RegisterRequest registerRequest) throws DataAccessException {
         if (userDAO.readUserData(registerRequest.username()) == null) {
-            UserData userData = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
+            UserData userData = new UserData(registerRequest.username(), BCrypt.hashpw(registerRequest.password(), BCrypt.gensalt()), registerRequest.email());
             userDAO.createUserData(userData);
             String authToken = authService.createAuthToken();
             authService.createAuth(authToken, registerRequest.username());

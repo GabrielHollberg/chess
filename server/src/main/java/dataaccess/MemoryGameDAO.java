@@ -14,8 +14,9 @@ public class MemoryGameDAO implements GameDAO {
         this.games = games;
     }
 
-    public void createGameData(GameData gameData) {
+    public int createGameData(GameData gameData) {
         games.put(gameData.gameID(), gameData);
+        return gameData.gameID();
     }
 
     public GameData readGameData(int gameID) {
@@ -28,10 +29,6 @@ public class MemoryGameDAO implements GameDAO {
 
     public void updateGameData(GameData gameData) {
         games.put(gameData.gameID(), gameData);
-    }
-
-    public void deleteGameData(int gameID) {
-        games.remove(gameID);
     }
 
     public void deleteAllGameData() {
