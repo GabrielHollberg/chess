@@ -31,11 +31,12 @@ public class DatabaseManager {
                 ")";
 
         var gameDataTableStatement = "CREATE TABLE IF NOT EXISTS game_data (\n" +
-                "game_id INT NOT NULL,\n" +
+                "game_id INT NOT NULL AUTO_INCREMENT,\n" +
                 "white_username VARCHAR(255),\n" +
                 "black_username VARCHAR(255),\n" +
                 "game_name VARCHAR(255) NOT NULL,\n" +
-                "game TEXT NOT NULL\n" +
+                "game TEXT NOT NULL,\n" +
+                "PRIMARY KEY (game_id)" +
                 ")";
 
         var authDataTableStatement = "CREATE TABLE IF NOT EXISTS auth_data (\n" +

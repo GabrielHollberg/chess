@@ -16,13 +16,12 @@ public class MySQLGameDAO implements GameDAO {
     public void createGameData(GameData gameData) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (game_id, white_username, black_username, game_name, game) VALUES(?, ?, ?, ?, ?)");
-                preparedStatement.setInt(1, gameData.gameID());
-                preparedStatement.setString(2, gameData.whiteUsername());
-                preparedStatement.setString(3, gameData.blackUsername());
-                preparedStatement.setString(4, gameData.gameName());
+                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (white_username, black_username, game_name, game) VALUES(?, ?, ?, ?)");
+                preparedStatement.setString(1, gameData.whiteUsername());
+                preparedStatement.setString(2, gameData.blackUsername());
+                preparedStatement.setString(3, gameData.gameName());
                 Gson gson = new Gson();
-                preparedStatement.setString(5, gson.toJson(gameData.game()));
+                preparedStatement.setString(4, gson.toJson(gameData.game()));
 
                 preparedStatement.executeUpdate();
             }
