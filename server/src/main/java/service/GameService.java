@@ -10,8 +10,11 @@ import model.GameData;
 import model.LightGameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
+import result.CreateGameResult;
+import result.ListGamesResult;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +30,12 @@ public class GameService {
     }
 
     // Create new GameData Record with provided gameName String, new gameID, and new ChessGame object
-    public int createGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
+    public CreateGameResult createGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
             int gameID = createGameID();
             GameData gameData = new GameData(gameID, null, null, createGameRequest.gameName(), new ChessGame());
             gameDAO.createGameData(gameData);
-            return gameID;
+            return new CreateGameResult(gameID);
         } else {
             throw new UnauthorizedException("Error: unauthorized");
         }
@@ -45,14 +48,9 @@ public class GameService {
     }
 
     // Return list of GameData by reading all GameData with GameData access object
-    public List<LightGameData> listGames(String authToken) throws DataAccessException {
+    public ListGamesResult listGames(String authToken) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {
-            Map<Integer,GameData> games = gameDAO.readAllGameData();
-            List<LightGameData> lightGames = new ArrayList<>();
-            for (GameData game : games.values()) {
-                lightGames.add(new LightGameData(game.gameID(), game.whiteUsername(), game.blackUsername(), game.gameName()));
-            }
-            return lightGames;
+            return new ListGamesResult(gameDAO.readAllGameData());
         } else {
             throw new UnauthorizedException("Error: unauthorized");
         }

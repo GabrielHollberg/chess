@@ -3,13 +3,9 @@ package handler;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-import model.GameData;
-import model.LightGameData;
 import org.jetbrains.annotations.NotNull;
+import result.ListGamesResult;
 import service.GameService;
-
-import java.util.List;
-import java.util.Map;
 
 public class ListGamesHandler implements Handler {
 
@@ -22,8 +18,8 @@ public class ListGamesHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         String authToken = ctx.header("authorization");
-        List<LightGameData> games = gameService.listGames(authToken);
+        ListGamesResult listGamesResult = gameService.listGames(authToken);
         ctx.status(200);
-        ctx.json(new Gson().toJson(Map.of("games", games)));
+        ctx.json(new Gson().toJson(listGamesResult));
     }
 }

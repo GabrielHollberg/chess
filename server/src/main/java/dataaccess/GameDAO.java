@@ -2,7 +2,7 @@ package dataaccess;
 
 import model.GameData;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 // Provides methods for GameData database access
 public interface GameDAO {
@@ -11,7 +11,7 @@ public interface GameDAO {
 
     public GameData readGameData(int gameID);
 
-    public Map<Integer,GameData> readAllGameData();
+    public ArrayList<GameData> readAllGameData();
 
     public void updateGameData(GameData gameData);
 

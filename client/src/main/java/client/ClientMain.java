@@ -1,13 +1,17 @@
 package client;
 
 import chess.*;
+import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
+import result.CreateGameResult;
+import result.ListGamesResult;
 import result.LoginResult;
 import result.RegisterResult;
 import server.ServerFacade;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -66,10 +70,57 @@ public class ClientMain {
                 line = scanner.nextLine();
             }
         }
+        System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
+        System.out.println(EMPTY + "Signed in as " + username + "      " + SET_TEXT_COLOR_RED + "(type \"help\" for more commands)\n" + SET_TEXT_COLOR_BLUE);
+        line = scanner.nextLine();
         while (true) {
-            System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
-            System.out.println(EMPTY + "  Signed in as " + username + "      " + SET_TEXT_COLOR_RED + "(type \"help\" for more commands)\n" + SET_TEXT_COLOR_BLUE);
-            line = scanner.nextLine();
+            if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "\"help\" or \"h\"");
+                System.out.println(EMPTY + "                             " + "\"create\" or \"c\" (create a new game)");
+                System.out.println(EMPTY + "                             " + "\"list\" or \"l\" (list games)");
+                System.out.println(EMPTY + "                             " + "\"play\" or \"p\" (join a game)");
+                System.out.println(EMPTY + "                             " + "\"watch\" or \"w\" (spectate a game)");
+                System.out.println(EMPTY + "                             " + "\"logout\" or \"out\"");
+                System.out.println(EMPTY + "                             " + "\"quit\" or \"q\"\n" + SET_TEXT_COLOR_BLUE);
+                line = scanner.nextLine();
+            } else if (line.equalsIgnoreCase("create") || line.equalsIgnoreCase("c")) {
+                System.out.println("\n" + EMPTY + "game name:\n");
+                String gameName = scanner.nextLine();
+                CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
+                try {
+                    CreateGameResult createGameResult = serverFacade.createGame(createGameRequest);
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + gameName + " created!\n" + SET_TEXT_COLOR_BLUE);
+                    line = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Sorry, This game could not be created!\n" + SET_TEXT_COLOR_BLUE);
+                    line = scanner.nextLine();
+                }
+            } else if (line.equalsIgnoreCase("list") || line.equalsIgnoreCase("l")) {
+                try {
+                    ListGamesResult listGamesResult = serverFacade.listGames();
+                    System.out.print("\n" + EMPTY + "  --------Chess--------      ");
+                    if (listGamesResult.games().isEmpty()) {
+                        System.out.println(SET_TEXT_COLOR_RED + "No games have been created!" + SET_TEXT_COLOR_BLUE);
+                    } else {
+                        System.out.println(SET_TEXT_COLOR_RED + "use number when joining a game!\n" + SET_TEXT_COLOR_BLUE);
+                        if (!listGamesResult.games().isEmpty()) {
+                            for (int i = 0; i < listGamesResult.games().size(); i++) {
+                                System.out.println(EMPTY + "                             " + SET_TEXT_COLOR_RED + (i + 1) + ". " + listGamesResult.games().get(i).gameName() + SET_TEXT_COLOR_BLUE);
+                            }
+                        }
+                    }
+                    System.out.println();
+                    line = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Sorry, This game could not be created!\n" + SET_TEXT_COLOR_BLUE);
+                    line = scanner.nextLine();
+                }
+            } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
+                return;
+            } else {
+                System.out.println("\n" + EMPTY + "  --------Chess--------      " + SET_TEXT_COLOR_RED + "Invalid command, please try again!\n" + SET_TEXT_COLOR_BLUE);
+                line = scanner.nextLine();
+            }
         }
     }
 

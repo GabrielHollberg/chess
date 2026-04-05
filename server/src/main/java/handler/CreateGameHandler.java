@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 import request.CreateGameRequest;
+import result.CreateGameResult;
 import service.GameService;
 
 import java.util.Map;
@@ -23,9 +24,9 @@ public class CreateGameHandler implements Handler {
         String authToken = ctx.header("authorization");
         CreateGameRequest createGameRequest = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
         if (createGameRequest.gameName() != null && !createGameRequest.gameName().isBlank()) {
-            int gameID = gameService.createGame(authToken, createGameRequest);
+            CreateGameResult createGameResult = gameService.createGame(authToken, createGameRequest);
             ctx.status(200);
-            ctx.json(new Gson().toJson(Map.of("gameID", gameID)));
+            ctx.json(new Gson().toJson(createGameResult));
         } else {
             throw new BadRequestException("Error: bad request");
         }

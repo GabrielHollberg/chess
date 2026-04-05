@@ -4,11 +4,9 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import exception.DataAccessException;
 import model.GameData;
-import model.LightGameData;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 // Provides methods for AuthData memory access
 public class MySQLGameDAO implements GameDAO {
@@ -61,9 +59,9 @@ public class MySQLGameDAO implements GameDAO {
         }
     }
 
-    public Map<Integer,GameData> readAllGameData() {
+    public ArrayList<GameData> readAllGameData() {
         try {
-            Map<Integer,GameData> allGameData = new HashMap<>();
+            ArrayList<GameData> allGameData = new ArrayList<>();
             try (var conn = DatabaseManager.getConnection()) {
                 var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game FROM game_data");
                 var rs = preparedStatement.executeQuery();
@@ -75,7 +73,7 @@ public class MySQLGameDAO implements GameDAO {
                     String game = rs.getString("game");
                     Gson gson = new Gson();
                     ChessGame chessGame = gson.fromJson(game, ChessGame.class);
-                    allGameData.put(gameID, new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame));
+                    allGameData.add(new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame));
                 }
                 return allGameData;
             }

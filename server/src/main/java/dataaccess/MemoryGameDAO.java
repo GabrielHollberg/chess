@@ -2,6 +2,7 @@ package dataaccess;
 
 import model.GameData;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 // Provides methods for AuthData memory access
@@ -21,8 +22,8 @@ public class MemoryGameDAO implements GameDAO {
         return games.get(gameID);
     }
 
-    public Map<Integer,GameData> readAllGameData() {
-        return games;
+    public ArrayList<GameData> readAllGameData() {
+        return null;
     }
 
     public void updateGameData(GameData gameData) {
