@@ -12,7 +12,7 @@ public class WSHandler implements Consumer<WsConfig> {
             ctx.enableAutomaticPings();
             System.out.println("Websocket connected");
         });
-        ws.onMessage(ctx -> ctx.send("WebSocket response: " + ctx.message()));
+        ws.onMessage(ctx -> ctx.send(ctx.message()));
         ws.onClose(ctx -> System.out.println("Websocket closed"));
     }
 }

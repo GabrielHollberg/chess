@@ -109,11 +109,19 @@ public class ServerFacade extends Endpoint {
         URI uri = new URI("ws://localhost:8080/ws");
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         session = container.connectToServer(this, uri);
-        this.session.addMessageHandler((MessageHandler.Whole<String>) message -> {
-            System.out.println(message);
-        });
-        session.getBasicRemote().sendText("Hey, does this work??");
     }
 
-    public void onOpen(Session session, EndpointConfig endpointConfig) {}
+    public void onOpen(Session session, EndpointConfig endpointConfig) {
+        this.session = session;
+        session.addMessageHandler(new MessageHandler.Whole<String>() {
+            public void onMessage(String message) {
+                System.out.println(message);
+            }
+        });
+        try {
+            session.getBasicRemote().sendText("Hey, does this work??");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
