@@ -42,6 +42,10 @@ public class GameService {
         }
     }
 
+    public String getGameJson(String authToken, int gameID) {
+        return "result";
+    }
+
     // Update GameData by searching by gameID with new username and teamColor
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
         if (authService.authenticateUser(authToken)) {

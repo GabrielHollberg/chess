@@ -12,6 +12,7 @@ import result.ListGamesResult;
 import result.LoginResult;
 import result.RegisterResult;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 import java.net.URI;
@@ -109,19 +110,16 @@ public class ServerFacade extends Endpoint {
         URI uri = new URI("ws://localhost:8080/ws");
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         session = container.connectToServer(this, uri);
-    }
 
-    public void onOpen(Session session, EndpointConfig endpointConfig) {
-        this.session = session;
         session.addMessageHandler(new MessageHandler.Whole<String>() {
             public void onMessage(String message) {
-                System.out.println(message);
+                ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
             }
         });
-        try {
-            session.getBasicRemote().sendText("Hey, does this work??");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
+
+    public void onOpen(Session session, EndpointConfig endpointConfig) {}
 }
