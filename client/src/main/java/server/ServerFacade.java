@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
+import jakarta.websocket.*;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
@@ -10,18 +11,22 @@ import result.CreateGameResult;
 import result.ListGamesResult;
 import result.LoginResult;
 import result.RegisterResult;
+import websocket.commands.UserGameCommand;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class ServerFacade {
+public class ServerFacade extends Endpoint {
 
+    public Session session;
     private final String serverURL;
     private final HttpClient http;
     private final Gson gson;
     private String authToken;
+    private int gameID;
 
     public ServerFacade(String serverURL) {
         this.serverURL = serverURL;
@@ -29,16 +34,14 @@ public class ServerFacade {
         this.gson = new Gson();
     }
 
-    public RegisterResult registerUser(RegisterRequest registerRequest) throws ResponseException {
+    public void registerUser(RegisterRequest registerRequest) throws ResponseException {
         RegisterResult registerResult = this.makeRequest("POST", "/user", registerRequest, RegisterResult.class);
         authToken = registerResult.authToken();
-        return registerResult;
     }
 
-    public LoginResult loginUser(LoginRequest loginRequest) throws ResponseException {
+    public void loginUser(LoginRequest loginRequest) throws ResponseException {
         LoginResult loginResult = this.makeRequest("POST", "/session", loginRequest, LoginResult.class);
         authToken = loginResult.authToken();
-        return loginResult;
     }
 
     public CreateGameResult createGame(CreateGameRequest createGameRequest) throws ResponseException {
@@ -100,4 +103,17 @@ public class ServerFacade {
     private boolean isSuccessful(int status) {
         return status / 100 == 2;
     }
+
+    public void createWSConnection(int gameID) throws Exception {
+        this.gameID = gameID;
+        URI uri = new URI("ws://localhost:8080/ws");
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        session = container.connectToServer(this, uri);
+        this.session.addMessageHandler((MessageHandler.Whole<String>) message -> {
+            System.out.println(message);
+        });
+        session.getBasicRemote().sendText("Hey, does this work??");
+    }
+
+    public void onOpen(Session session, EndpointConfig endpointConfig) {}
 }

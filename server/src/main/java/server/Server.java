@@ -24,6 +24,7 @@ public class Server {
         AuthDAO authDAO = new MySQLAuthDAO();
         UserDAO userDAO = new MySQLUserDAO();
         GameDAO gameDAO = new MySQLGameDAO();
+
         // Initialize all Server Service objects
         AuthService authService = new AuthService(authDAO);
         UserService userService = new UserService(userDAO, authService);
@@ -37,6 +38,9 @@ public class Server {
         javalin.get("/game", new ListGamesHandler(gameService));
         javalin.put("/game", new JoinGameHandler(gameService));
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
+
+        // Initialize web socket handler
+        javalin.ws("/ws", new WSHandler());
 
         // Initialize exception handler objects
         javalin.exception(BadRequestException.class, new BadRequestHandler());
