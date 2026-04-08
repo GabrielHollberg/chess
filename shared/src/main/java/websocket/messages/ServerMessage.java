@@ -10,8 +10,9 @@ import java.util.Objects;
  */
 public class ServerMessage {
     ServerMessageType serverMessageType;
+    public String game;
     public String message;
-    public String boardOrientation;
+    public String errorMessage;
 
     public enum ServerMessageType {
         LOAD_GAME,
@@ -19,9 +20,11 @@ public class ServerMessage {
         NOTIFICATION
     }
 
-    public ServerMessage(ServerMessageType type, String message) {
+    public ServerMessage(ServerMessageType type, String gameJson, String message, String errorMessage) {
         this.serverMessageType = type;
+        this.game = gameJson;
         this.message = message;
+        this.errorMessage = errorMessage;
     }
 
     public ServerMessageType getServerMessageType() {

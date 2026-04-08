@@ -501,9 +501,9 @@ public class ClientGame {
     public void onMessage(String message) {
         ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
         if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
-            chessGame = new Gson().fromJson(serverMessage.message, ChessGame.class);
+            chessGame = new Gson().fromJson(serverMessage.game, ChessGame.class);
         } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
-            System.out.println(EMPTY + "  " + serverMessage.message);
+            System.out.println(EMPTY + "  " + serverMessage.game);
             if (team.equals("black")) {
                 printBoardFlipped(chessGame.getBoard());
             } else {

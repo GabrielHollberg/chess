@@ -56,18 +56,19 @@ public class WSHandler implements Consumer<WsConfig> {
                 String username = authService.getUsername(userGameCommand.getAuthToken());
                 gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
                 gameJson = new Gson().toJson(gameData.game());
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson);
+                System.out.println(gameJson);
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
                 ctx.send(new Gson().toJson(serverMessage));
-                String notification;
+                String message;
                 if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
-                    notification = username + " joined the game as white!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, notification);
+                    message = username + " joined the game as white!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 } else if (gameData.blackUsername() != null && gameData.blackUsername().equals(username)) {
-                    notification = username + " joined the game as black!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, notification);
+                    message = username + " joined the game as black!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 } else {
-                    notification = username + " joined the game as a spectator!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, notification);
+                    message = username + " joined the game as a spectator!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 }
                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                 for (WsContext wsContext : list) {
@@ -75,8 +76,10 @@ public class WSHandler implements Consumer<WsConfig> {
                         wsContext.send(new Gson().toJson(serverMessage));
                     }
                 }
-            } catch (DataAccessException e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ctx.send(new Gson().toJson(serverMessage));
             }
         }
     }
