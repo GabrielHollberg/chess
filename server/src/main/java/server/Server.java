@@ -40,7 +40,7 @@ public class Server {
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
 
         // Initialize web socket handler
-        javalin.ws("/ws", new WSHandler(gameService));
+        javalin.ws("/ws", new WSHandler(authService, gameService));
 
         // Initialize exception handler objects
         javalin.exception(BadRequestException.class, new BadRequestHandler());

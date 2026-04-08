@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import com.google.gson.Gson;
 import exception.AlreadyTakenException;
 import exception.DataAccessException;
 import dataaccess.GameDAO;
@@ -42,8 +43,12 @@ public class GameService {
         }
     }
 
-    public String getGameJson(String authToken, int gameID) {
-        return "result";
+    public GameData getGameData(String authToken, int gameID) throws DataAccessException{
+        if (authService.authenticateUser(authToken)) {
+            return gameDAO.readGameData(gameID);
+        } else {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
     }
 
     // Update GameData by searching by gameID with new username and teamColor
