@@ -2,6 +2,7 @@ package service;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import exception.AlreadyTakenException;
 import exception.DataAccessException;
 import dataaccess.GameDAO;
@@ -11,6 +12,7 @@ import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LeaveGameRequest;
+import request.UpdateGameRequest;
 import result.CreateGameResult;
 import result.ListGamesResult;
 
@@ -74,6 +76,20 @@ public class GameService {
                 } else {
                     throw new BadRequestException("Error: bad request");
                 }
+            } else {
+                throw new BadRequestException("Error: bad request");
+            }
+        } else {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+    }
+
+    public void updateGame(String authToken, UpdateGameRequest updateGameRequest) throws DataAccessException {
+        if (authService.authenticateUser(authToken)) {
+            if (gameDAO.readGameData(updateGameRequest.gameID()) != null) {
+                GameData gameData = gameDAO.readGameData(updateGameRequest.gameID());
+                GameData updatedGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), updateGameRequest.chessGame());
+                gameDAO.updateGameData(updatedGameData);
             } else {
                 throw new BadRequestException("Error: bad request");
             }

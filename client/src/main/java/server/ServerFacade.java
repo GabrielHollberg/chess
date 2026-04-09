@@ -1,9 +1,6 @@
 package server;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import client.ClientGame;
 import com.google.gson.Gson;
 import exception.ResponseException;
@@ -73,10 +70,14 @@ public class ServerFacade extends Endpoint {
     }
 
     public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException, IOException {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID());
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID(), null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
         session.close();
         this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
+    }
+
+    public void updateGame(UpdateGameRequest updateGameRequest) throws ResponseException {
+        this.makeRequest("PUT", "/updateGame", updateGameRequest, null);
     }
 
     public void throwIfGameNotExists(int gameNumber) throws ResponseException {
@@ -143,12 +144,12 @@ public class ServerFacade extends Endpoint {
             }
         });
 
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID, null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 
-    public void movePiece(String startPosition, String endPosition, int gameID) throws Exception {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
+    public void sendMove(int gameID, ChessMove chessMove) throws Exception {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, chessMove);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 

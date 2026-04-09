@@ -161,35 +161,35 @@ public class ClientGame {
                                     } else if (line.equalsIgnoreCase("move") || line.equalsIgnoreCase("m")) {
                                         System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
                                         String startSquare = scanner.nextLine();
-                                        if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                        if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
                                             System.out.println("\n" + EMPTY + "  move coordinates:\n");
                                             String endSquare = scanner.nextLine();
-                                            if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                            if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
                                                 int i = 0;
                                                 int j = 0;
                                                 switch (startSquare.charAt(0)) {
-                                                    case 'a':
+                                                    case 'a', 'A':
                                                         j = 0;
                                                         break;
-                                                    case 'b':
+                                                    case 'b', 'B':
                                                         j = 1;
                                                         break;
-                                                    case 'c':
+                                                    case 'c', 'C':
                                                         j = 2;
                                                         break;
-                                                    case 'd':
+                                                    case 'd', 'D':
                                                         j = 3;
                                                         break;
-                                                    case 'e':
+                                                    case 'e', 'E':
                                                         j = 4;
                                                         break;
-                                                    case 'f':
+                                                    case 'f', 'F':
                                                         j = 5;
                                                         break;
-                                                    case 'g':
+                                                    case 'g', 'G':
                                                         j = 6;
                                                         break;
-                                                    case 'h':
+                                                    case 'h', 'H':
                                                         j = 7;
                                                         break;
                                                 }
@@ -220,29 +220,29 @@ public class ClientGame {
                                                         break;
                                                 }
                                                 ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
-                                                switch (endSquare.charAt(0)) {
-                                                    case 'a':
+                                                switch (startSquare.charAt(0)) {
+                                                    case 'a', 'A':
                                                         j = 0;
                                                         break;
-                                                    case 'b':
+                                                    case 'b', 'B':
                                                         j = 1;
                                                         break;
-                                                    case 'c':
+                                                    case 'c', 'C':
                                                         j = 2;
                                                         break;
-                                                    case 'd':
+                                                    case 'd', 'D':
                                                         j = 3;
                                                         break;
-                                                    case 'e':
+                                                    case 'e', 'E':
                                                         j = 4;
                                                         break;
-                                                    case 'f':
+                                                    case 'f', 'F':
                                                         j = 5;
                                                         break;
-                                                    case 'g':
+                                                    case 'g', 'G':
                                                         j = 6;
                                                         break;
-                                                    case 'h':
+                                                    case 'h', 'H':
                                                         j = 7;
                                                         break;
                                                 }
@@ -277,7 +277,13 @@ public class ClientGame {
                                                 Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
                                                 if (validMoves.contains(chessMove)) {
                                                     chessGame.makeMove(chessMove);
+                                                    UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
+                                                    serverFacade.updateGame(updateGameRequest);
+                                                    serverFacade.sendMove(gameNumber, chessMove);
+                                                } else {
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid move!\n" + SET_TEXT_COLOR_BLUE);
                                                 }
+                                                line = "refresh";
                                             }
                                         }
                                     } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
@@ -308,6 +314,134 @@ public class ClientGame {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                         printBoardFlipped(chessGame.getBoard());
                                         line = scanner.nextLine();
+                                    } else if (line.equalsIgnoreCase("move") || line.equalsIgnoreCase("m")) {
+                                        System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
+                                        String startSquare = scanner.nextLine();
+                                        if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                            System.out.println("\n" + EMPTY + "  move coordinates:\n");
+                                            String endSquare = scanner.nextLine();
+                                            if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                                int i = 0;
+                                                int j = 0;
+                                                switch (startSquare.charAt(0)) {
+                                                    case 'a', 'A':
+                                                        j = 0;
+                                                        break;
+                                                    case 'b', 'B':
+                                                        j = 1;
+                                                        break;
+                                                    case 'c', 'C':
+                                                        j = 2;
+                                                        break;
+                                                    case 'd', 'D':
+                                                        j = 3;
+                                                        break;
+                                                    case 'e', 'E':
+                                                        j = 4;
+                                                        break;
+                                                    case 'f', 'F':
+                                                        j = 5;
+                                                        break;
+                                                    case 'g', 'G':
+                                                        j = 6;
+                                                        break;
+                                                    case 'h', 'H':
+                                                        j = 7;
+                                                        break;
+                                                }
+                                                switch (startSquare.charAt(1)) {
+                                                    case '1':
+                                                        i = 0;
+                                                        break;
+                                                    case '2':
+                                                        i = 1;
+                                                        break;
+                                                    case '3':
+                                                        i = 2;
+                                                        break;
+                                                    case '4':
+                                                        i = 3;
+                                                        break;
+                                                    case '5':
+                                                        i = 4;
+                                                        break;
+                                                    case '6':
+                                                        i = 5;
+                                                        break;
+                                                    case '7':
+                                                        i = 6;
+                                                        break;
+                                                    case '8':
+                                                        i = 7;
+                                                        break;
+                                                }
+                                                ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
+                                                switch (startSquare.charAt(0)) {
+                                                    case 'a', 'A':
+                                                        j = 0;
+                                                        break;
+                                                    case 'b', 'B':
+                                                        j = 1;
+                                                        break;
+                                                    case 'c', 'C':
+                                                        j = 2;
+                                                        break;
+                                                    case 'd', 'D':
+                                                        j = 3;
+                                                        break;
+                                                    case 'e', 'E':
+                                                        j = 4;
+                                                        break;
+                                                    case 'f', 'F':
+                                                        j = 5;
+                                                        break;
+                                                    case 'g', 'G':
+                                                        j = 6;
+                                                        break;
+                                                    case 'h', 'H':
+                                                        j = 7;
+                                                        break;
+                                                }
+                                                switch (endSquare.charAt(1)) {
+                                                    case '1':
+                                                        i = 0;
+                                                        break;
+                                                    case '2':
+                                                        i = 1;
+                                                        break;
+                                                    case '3':
+                                                        i = 2;
+                                                        break;
+                                                    case '4':
+                                                        i = 3;
+                                                        break;
+                                                    case '5':
+                                                        i = 4;
+                                                        break;
+                                                    case '6':
+                                                        i = 5;
+                                                        break;
+                                                    case '7':
+                                                        i = 6;
+                                                        break;
+                                                    case '8':
+                                                        i = 7;
+                                                        break;
+                                                }
+                                                ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
+                                                ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
+                                                if (validMoves.contains(chessMove)) {
+                                                    chessGame.makeMove(chessMove);
+                                                    UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
+                                                    serverFacade.updateGame(updateGameRequest);
+                                                    serverFacade.sendMove(gameNumber, chessMove);
+                                                } else {
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid move!\n" + SET_TEXT_COLOR_BLUE);
+                                                }
+                                                line = "refresh";
+                                            }
+                                        }
                                     } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"v\" " + SET_TEXT_COLOR_BLUE + " (view moves)" + SET_TEXT_COLOR_BLUE);
