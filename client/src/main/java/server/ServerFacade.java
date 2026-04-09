@@ -8,10 +8,7 @@ import client.ClientGame;
 import com.google.gson.Gson;
 import exception.ResponseException;
 import jakarta.websocket.*;
-import request.CreateGameRequest;
-import request.JoinGameRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
+import request.*;
 import result.CreateGameResult;
 import result.ListGamesResult;
 import result.LoginResult;
@@ -72,6 +69,10 @@ public class ServerFacade extends Endpoint {
 
     public void joinGame(JoinGameRequest joinGameRequest) throws ResponseException {
         this.makeRequest("PUT", "/game", joinGameRequest, null);
+    }
+
+    public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException {
+        this.makeRequest("PUT", "/leave-game", leaveGameRequest, null);
     }
 
     public void logoutUser() throws ResponseException {

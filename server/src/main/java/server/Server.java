@@ -37,6 +37,7 @@ public class Server {
         javalin.post("/game", new CreateGameHandler(gameService));
         javalin.get("/game", new ListGamesHandler(gameService));
         javalin.put("/game", new JoinGameHandler(gameService));
+        javalin.put("/leave-game", new LeaveGameHandler(gameService));
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
 
         // Initialize web socket handler

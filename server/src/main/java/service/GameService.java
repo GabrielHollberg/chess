@@ -10,6 +10,7 @@ import exception.UnauthorizedException;
 import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
+import request.LeaveGameRequest;
 import result.CreateGameResult;
 import result.ListGamesResult;
 
@@ -72,6 +73,25 @@ public class GameService {
                     }
                 } else {
                     throw new BadRequestException("Error: bad request");
+                }
+            } else {
+                throw new BadRequestException("Error: bad request");
+            }
+        } else {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+    }
+
+    public void leaveGame(String authToken, LeaveGameRequest leaveGameRequest) throws DataAccessException {
+        if (authService.authenticateUser(authToken)) {
+            if (gameDAO.readGameData(leaveGameRequest.gameID()) != null) {
+                GameData gameData = gameDAO.readGameData(leaveGameRequest.gameID());
+                if (leaveGameRequest.playerColor().equals("WHITE")) {
+                    GameData updatedGameData = new GameData(gameData.gameID(), null, gameData.blackUsername(), gameData.gameName(), gameData.game());
+                } else if (leaveGameRequest.playerColor().equals("BLACK")) {
+                    GameData updatedGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), null, gameData.gameName(), gameData.game());
+                } else {
+                    throw new BadRequestException("Error: could not remove player ");
                 }
             } else {
                 throw new BadRequestException("Error: bad request");

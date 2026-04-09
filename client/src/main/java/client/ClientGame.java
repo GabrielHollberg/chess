@@ -5,10 +5,7 @@ import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import com.google.gson.Gson;
-import request.CreateGameRequest;
-import request.JoinGameRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
+import request.*;
 import result.CreateGameResult;
 import result.ListGamesResult;
 import server.ServerFacade;
@@ -32,7 +29,7 @@ public class ClientGame {
     ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
     ChessGame chessGame = new ChessGame();
     String username;
-    String team;
+    String playerColor;
     Scanner scanner = new Scanner(System.in);
     String line;
 
@@ -143,7 +140,6 @@ public class ClientGame {
                     }
                 } else if (line.equalsIgnoreCase("join") || line.equalsIgnoreCase("j")) {
                     try {
-                        String playerColor;
                         int gameNumber;
                         System.out.println("\n" + EMPTY + "  (if you don't know your " + SET_TEXT_COLOR_RED + "game # " + SET_TEXT_COLOR_BLUE + "type " + SET_TEXT_COLOR_RED + "\"v\"" + SET_TEXT_COLOR_BLUE + ")");
                         System.out.println("\n" + EMPTY + "  game number:\n");
@@ -154,7 +150,6 @@ public class ClientGame {
                             playerColor = scanner.nextLine();
                             line = "refresh";
                             if (playerColor.equalsIgnoreCase("white") || playerColor.equalsIgnoreCase("w")) {
-                                team = "white";
                                 JoinGameRequest joinGameRequest = new JoinGameRequest("WHITE", gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
                                 serverFacade.createWSConnection(this, gameNumber);
@@ -172,6 +167,8 @@ public class ClientGame {
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
                                         line = scanner.nextLine();
                                     } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
+                                        LeaveGameRequest leaveGameRequest = new LeaveGameRequest("WHITE", gameNumber);
+                                        serverFacade.leaveGame(leaveGameRequest);
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
                                         line = scanner.nextLine();
                                         break;
@@ -181,7 +178,6 @@ public class ClientGame {
                                     }
                                 }
                             } else if (playerColor.equalsIgnoreCase("black") || playerColor.equalsIgnoreCase("b")) {
-                                team = "black";
                                 JoinGameRequest joinGameRequest = new JoinGameRequest("BLACK", gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
                                 serverFacade.createWSConnection(this, gameNumber);
@@ -504,7 +500,7 @@ public class ClientGame {
             chessGame = new Gson().fromJson(serverMessage.game, ChessGame.class);
         } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
             System.out.println(EMPTY + "  " + serverMessage.game);
-            if (team.equals("black")) {
+            if (playerColor.equals("black")) {
                 printBoardFlipped(chessGame.getBoard());
             } else {
                 printBoard(chessGame.getBoard());
