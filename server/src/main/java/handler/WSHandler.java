@@ -113,7 +113,7 @@ public class WSHandler implements Consumer<WsConfig> {
                 GameData gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
                 ChessGame chessGame = gameData.game();
                 Collection<ChessMove> validMoves = chessGame.validMoves(userGameCommand.getChessMove().getStartPosition());
-                if (validMoves.contains(userGameCommand.getChessMove())) {
+                if (userGameCommand.getPlayerColor() == chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() && validMoves.contains(userGameCommand.getChessMove())) {
                     char startPositionLetter;
                     switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
                         case 0:

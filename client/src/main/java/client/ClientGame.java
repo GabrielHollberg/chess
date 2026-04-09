@@ -274,16 +274,12 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                                Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
-                                                if (validMoves.contains(chessMove) && chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
-                                                    chessGame.makeMove(chessMove);
-                                                    chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
-                                                    UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
-                                                    serverFacade.updateGame(updateGameRequest);
-                                                    serverFacade.sendMove(gameNumber, chessMove);
-                                                } else {
-                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid move!\n" + SET_TEXT_COLOR_BLUE);
-                                                }
+                                                chessGame.makeMove(chessMove);
+                                                chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
+                                                UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
+                                                serverFacade.updateGame(updateGameRequest);
+                                                ChessGame.TeamColor teamColor = ChessGame.TeamColor.WHITE;
+                                                serverFacade.sendMove(gameNumber, chessMove, teamColor);
                                                 line = "refresh";
                                             }
                                         }
@@ -497,16 +493,12 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                                Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
-                                                if (validMoves.contains(chessMove) && chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
-                                                    chessGame.makeMove(chessMove);
-                                                    chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
-                                                    UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
-                                                    serverFacade.updateGame(updateGameRequest);
-                                                    serverFacade.sendMove(gameNumber, chessMove);
-                                                } else {
-                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid move!\n" + SET_TEXT_COLOR_BLUE);
-                                                }
+                                                chessGame.makeMove(chessMove);
+                                                chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
+                                                UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
+                                                serverFacade.updateGame(updateGameRequest);
+                                                ChessGame.TeamColor teamColor = ChessGame.TeamColor.BLACK;
+                                                serverFacade.sendMove(gameNumber, chessMove, teamColor);
                                                 line = "refresh";
                                             }
                                         }

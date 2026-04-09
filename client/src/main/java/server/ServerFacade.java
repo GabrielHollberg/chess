@@ -70,7 +70,7 @@ public class ServerFacade extends Endpoint {
     }
 
     public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException, IOException {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID(), null);
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID(), null, null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
         session.close();
         this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
@@ -144,12 +144,12 @@ public class ServerFacade extends Endpoint {
             }
         });
 
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID, null);
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID, null, null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 
-    public void sendMove(int gameID, ChessMove chessMove) throws Exception {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, chessMove);
+    public void sendMove(int gameID, ChessMove chessMove, ChessGame.TeamColor teamColor) throws Exception {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, chessMove, teamColor);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 
