@@ -275,8 +275,9 @@ public class ClientGame {
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
                                                 Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
-                                                if (validMoves.contains(chessMove)) {
+                                                if (validMoves.contains(chessMove) && chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
                                                     chessGame.makeMove(chessMove);
+                                                    chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
                                                     UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
                                                     serverFacade.updateGame(updateGameRequest);
                                                     serverFacade.sendMove(gameNumber, chessMove);
@@ -431,8 +432,9 @@ public class ClientGame {
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
                                                 Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
-                                                if (validMoves.contains(chessMove)) {
+                                                if (validMoves.contains(chessMove) && chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
                                                     chessGame.makeMove(chessMove);
+                                                    chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
                                                     UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
                                                     serverFacade.updateGame(updateGameRequest);
                                                     serverFacade.sendMove(gameNumber, chessMove);
