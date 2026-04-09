@@ -73,10 +73,10 @@ public class ServerFacade extends Endpoint {
     }
 
     public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException, IOException {
-        this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
         UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID());
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
         session.close();
+        this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
     }
 
     public void throwIfGameNotExists(int gameNumber) throws ResponseException {

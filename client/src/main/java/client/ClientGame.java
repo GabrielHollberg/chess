@@ -29,7 +29,7 @@ public class ClientGame {
     ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
     ChessGame chessGame = new ChessGame();
     String username;
-    String playerColor;
+    String playerColor = "white";
     Scanner scanner = new Scanner(System.in);
     String line;
 
@@ -366,6 +366,9 @@ public class ClientGame {
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
                                 line = scanner.nextLine();
                                 break;
+                            } else {
+                                System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
+                                line = scanner.nextLine();
                             }
                         }
                     } catch (Exception e) {
@@ -627,7 +630,7 @@ public class ClientGame {
             chessGame = new Gson().fromJson(serverMessage.game, ChessGame.class);
         } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
             System.out.println(EMPTY + "  " + serverMessage.message);
-            if (playerColor.equals("black")) {
+            if (playerColor.equals("black") || playerColor.equals("b")) {
                 printBoardFlipped(chessGame.getBoard());
             } else {
                 printBoard(chessGame.getBoard());

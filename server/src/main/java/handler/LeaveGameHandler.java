@@ -20,7 +20,7 @@ public class LeaveGameHandler implements Handler {
     public void handle(@NotNull Context ctx) throws Exception {
         String authToken = ctx.header("authorization");
         LeaveGameRequest leaveGameRequest = new Gson().fromJson(ctx.body(), LeaveGameRequest.class);
-        if (leaveGameRequest.playerColor() == null || leaveGameRequest.gameID() <= 0 || leaveGameRequest.playerColor().isBlank()) {
+        if (leaveGameRequest.gameID() <= 0) {
             throw new BadRequestException("Error: bad request");
         }
         gameService.leaveGame(authToken, leaveGameRequest);

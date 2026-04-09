@@ -67,7 +67,7 @@ public class WSHandler implements Consumer<WsConfig> {
                     message = username + " joined the game as black!";
                     serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 } else {
-                    message = username + " joined the game as a spectator!";
+                    message = username + " is now spectating!";
                     serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 }
                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
@@ -83,9 +83,16 @@ public class WSHandler implements Consumer<WsConfig> {
             }
         } else if (userGameCommand.getCommandType() == UserGameCommand.CommandType.LEAVE) {
             try {
+                GameData gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
                 String username = authService.getUsername(userGameCommand.getAuthToken());
                 String message;
-                message = username + " left the game!";
+                if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
+                    message = username + " left the game!";
+                } else if (gameData.blackUsername() != null && gameData.blackUsername().equals(username)) {
+                    message = username + " left the game!";
+                } else {
+                    message = username + " is no longer spectating!";
+                }
                 ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                 for (WsContext wsContext : list) {
