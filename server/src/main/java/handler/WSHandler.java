@@ -81,6 +81,23 @@ public class WSHandler implements Consumer<WsConfig> {
                 ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
                 ctx.send(new Gson().toJson(serverMessage));
             }
+        } else if (userGameCommand.getCommandType() == UserGameCommand.CommandType.LEAVE) {
+            try {
+                String username = authService.getUsername(userGameCommand.getAuthToken());
+                String message;
+                message = username + " left the game!";
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                for (WsContext wsContext : list) {
+                    if (!wsContext.equals(ctx)) {
+                        wsContext.send(new Gson().toJson(serverMessage));
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ctx.send(new Gson().toJson(serverMessage));
+            }
         }
     }
 }

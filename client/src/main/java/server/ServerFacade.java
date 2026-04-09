@@ -16,6 +16,7 @@ import result.RegisterResult;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -71,8 +72,16 @@ public class ServerFacade extends Endpoint {
         this.makeRequest("PUT", "/game", joinGameRequest, null);
     }
 
-    public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException {
-        this.makeRequest("PUT", "/leave-game", leaveGameRequest, null);
+    public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException, IOException {
+        this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID());
+        session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
+        session.close();
+    }
+
+    public void throwIfGameNotExists(int gameNumber) throws ResponseException {
+        JoinGameRequest joinGameRequest = new JoinGameRequest("", gameNumber);
+        this.makeRequest("GET", "/gameExists", joinGameRequest, null);
     }
 
     public void logoutUser() throws ResponseException {
@@ -135,6 +144,11 @@ public class ServerFacade extends Endpoint {
         });
 
         UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
+    }
+
+    public void movePiece(String startPosition, String endPosition, int gameID) throws Exception {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 

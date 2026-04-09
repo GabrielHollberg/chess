@@ -1,16 +1,16 @@
 package client;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import com.google.gson.Gson;
 import request.*;
 import result.CreateGameResult;
 import result.ListGamesResult;
 import server.ServerFacade;
+import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -158,6 +158,128 @@ public class ClientGame {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                         printBoard(chessGame.getBoard());
                                         line = scanner.nextLine();
+                                    } else if (line.equalsIgnoreCase("move") || line.equalsIgnoreCase("m")) {
+                                        System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
+                                        String startSquare = scanner.nextLine();
+                                        if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                            System.out.println("\n" + EMPTY + "  move coordinates:\n");
+                                            String endSquare = scanner.nextLine();
+                                            if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
+                                                int i = 0;
+                                                int j = 0;
+                                                switch (startSquare.charAt(0)) {
+                                                    case 'a':
+                                                        j = 0;
+                                                        break;
+                                                    case 'b':
+                                                        j = 1;
+                                                        break;
+                                                    case 'c':
+                                                        j = 2;
+                                                        break;
+                                                    case 'd':
+                                                        j = 3;
+                                                        break;
+                                                    case 'e':
+                                                        j = 4;
+                                                        break;
+                                                    case 'f':
+                                                        j = 5;
+                                                        break;
+                                                    case 'g':
+                                                        j = 6;
+                                                        break;
+                                                    case 'h':
+                                                        j = 7;
+                                                        break;
+                                                }
+                                                switch (startSquare.charAt(1)) {
+                                                    case '1':
+                                                        i = 0;
+                                                        break;
+                                                    case '2':
+                                                        i = 1;
+                                                        break;
+                                                    case '3':
+                                                        i = 2;
+                                                        break;
+                                                    case '4':
+                                                        i = 3;
+                                                        break;
+                                                    case '5':
+                                                        i = 4;
+                                                        break;
+                                                    case '6':
+                                                        i = 5;
+                                                        break;
+                                                    case '7':
+                                                        i = 6;
+                                                        break;
+                                                    case '8':
+                                                        i = 7;
+                                                        break;
+                                                }
+                                                ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
+                                                switch (endSquare.charAt(0)) {
+                                                    case 'a':
+                                                        j = 0;
+                                                        break;
+                                                    case 'b':
+                                                        j = 1;
+                                                        break;
+                                                    case 'c':
+                                                        j = 2;
+                                                        break;
+                                                    case 'd':
+                                                        j = 3;
+                                                        break;
+                                                    case 'e':
+                                                        j = 4;
+                                                        break;
+                                                    case 'f':
+                                                        j = 5;
+                                                        break;
+                                                    case 'g':
+                                                        j = 6;
+                                                        break;
+                                                    case 'h':
+                                                        j = 7;
+                                                        break;
+                                                }
+                                                switch (endSquare.charAt(1)) {
+                                                    case '1':
+                                                        i = 0;
+                                                        break;
+                                                    case '2':
+                                                        i = 1;
+                                                        break;
+                                                    case '3':
+                                                        i = 2;
+                                                        break;
+                                                    case '4':
+                                                        i = 3;
+                                                        break;
+                                                    case '5':
+                                                        i = 4;
+                                                        break;
+                                                    case '6':
+                                                        i = 5;
+                                                        break;
+                                                    case '7':
+                                                        i = 6;
+                                                        break;
+                                                    case '8':
+                                                        i = 7;
+                                                        break;
+                                                }
+                                                ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
+                                                ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                Collection<ChessMove> validMoves = chessGame.validMoves(startPosition);
+                                                if (validMoves.contains(chessMove)) {
+                                                    chessGame.makeMove(chessMove);
+                                                }
+                                            }
+                                        }
                                     } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"v\" " + SET_TEXT_COLOR_BLUE + " (view moves)" + SET_TEXT_COLOR_BLUE);
@@ -195,6 +317,8 @@ public class ClientGame {
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
                                         line = scanner.nextLine();
                                     } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
+                                        LeaveGameRequest leaveGameRequest = new LeaveGameRequest("BLACK", gameNumber);
+                                        serverFacade.leaveGame(leaveGameRequest);
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
                                         line = scanner.nextLine();
                                         break;
@@ -224,6 +348,7 @@ public class ClientGame {
                             throw new Exception();
                         }
                         line = "refresh";
+                        //serverFacade.throwIfGameNotExists(gameNumber);
                         serverFacade.createWSConnection(this, gameNumber);
                         while (true) {
                             if (line.equalsIgnoreCase("refresh") || line.equalsIgnoreCase("r")) {
@@ -236,6 +361,8 @@ public class ClientGame {
                                 System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
                                 line = scanner.nextLine();
                             } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
+                                LeaveGameRequest leaveGameRequest = new LeaveGameRequest("", gameNumber);
+                                serverFacade.leaveGame(leaveGameRequest);
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
                                 line = scanner.nextLine();
                                 break;
@@ -499,7 +626,7 @@ public class ClientGame {
         if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
             chessGame = new Gson().fromJson(serverMessage.game, ChessGame.class);
         } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
-            System.out.println(EMPTY + "  " + serverMessage.game);
+            System.out.println(EMPTY + "  " + serverMessage.message);
             if (playerColor.equals("black")) {
                 printBoardFlipped(chessGame.getBoard());
             } else {

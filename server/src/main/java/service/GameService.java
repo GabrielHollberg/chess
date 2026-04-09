@@ -88,10 +88,10 @@ public class GameService {
                 GameData gameData = gameDAO.readGameData(leaveGameRequest.gameID());
                 if (leaveGameRequest.playerColor().equals("WHITE")) {
                     GameData updatedGameData = new GameData(gameData.gameID(), null, gameData.blackUsername(), gameData.gameName(), gameData.game());
+                    gameDAO.updateGameData(updatedGameData);
                 } else if (leaveGameRequest.playerColor().equals("BLACK")) {
                     GameData updatedGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), null, gameData.gameName(), gameData.game());
-                } else {
-                    throw new BadRequestException("Error: could not remove player ");
+                    gameDAO.updateGameData(updatedGameData);
                 }
             } else {
                 throw new BadRequestException("Error: bad request");
