@@ -20,7 +20,7 @@ public class JoinGameHandler implements Handler {
     public void handle(@NotNull Context ctx) throws Exception {
         String authToken = ctx.header("authorization");
         JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
-        if (joinGameRequest.playerColor() == null || joinGameRequest.gameID() <= 0 || joinGameRequest.playerColor().isBlank()) {
+        if (joinGameRequest.playerColor() == null || joinGameRequest.gameID() <= 0) {
             throw new BadRequestException("Error: bad request");
         }
         gameService.joinGame(authToken, joinGameRequest);

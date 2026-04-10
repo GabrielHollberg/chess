@@ -31,21 +31,21 @@ public class ClientGame {
     String username;
     String playerColor = "white";
     Scanner scanner = new Scanner(System.in);
-    String line;
+    String command;
 
     public void run() {
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
         System.out.println(EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_BLUE + "(You can always type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for a list of commands)\n" + SET_TEXT_COLOR_BLUE);
-        line = scanner.nextLine();
+        command = scanner.nextLine();
         while (true) {
             while (true) {
-                if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                     System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + "(help)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"r\" " + SET_TEXT_COLOR_BLUE + "(register)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + "(login)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"q\" " + SET_TEXT_COLOR_BLUE + "(quit)\n");
-                    line = scanner.nextLine();
-                } else if (line.equalsIgnoreCase("register") || line.equalsIgnoreCase("r")) {
+                    command = scanner.nextLine();
+                } else if (command.equalsIgnoreCase("register") || command.equalsIgnoreCase("r")) {
                     System.out.println("\n" + EMPTY + "  username:\n");
                     username = scanner.nextLine();
                     System.out.println("\n" + EMPTY + "  password:\n");
@@ -58,9 +58,9 @@ public class ClientGame {
                         break;
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, this username has already been taken!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("login") || line.equalsIgnoreCase("l")) {
+                } else if (command.equalsIgnoreCase("login") || command.equalsIgnoreCase("l")) {
                     System.out.println("\n" + EMPTY + "  username:\n");
                     username = scanner.nextLine();
                     System.out.println("\n" + EMPTY + "  password:\n");
@@ -71,20 +71,20 @@ public class ClientGame {
                         break;
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Incorrect login!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
+                } else if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("q")) {
                     return;
                 } else {
                     System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
-                    line = scanner.nextLine();
+                    command = scanner.nextLine();
                 }
             }
             System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
             System.out.println(EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_BLUE + "Signed in as " + SET_TEXT_COLOR_RED + username + SET_TEXT_COLOR_BLUE + "! (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)\n" + SET_TEXT_COLOR_BLUE);
-            line = scanner.nextLine();
+            command = scanner.nextLine();
             while (true) {
-                if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                     System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"c\" " + SET_TEXT_COLOR_BLUE + " (create a new game)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"v\" " + SET_TEXT_COLOR_BLUE + " (view games)");
@@ -92,20 +92,20 @@ public class ClientGame {
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"s\" " + SET_TEXT_COLOR_BLUE + " (spectate a game)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (logout)");
                     System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"q\" " + SET_TEXT_COLOR_BLUE + " (quit)\n" + SET_TEXT_COLOR_BLUE);
-                    line = scanner.nextLine();
-                } else if (line.equalsIgnoreCase("create") || line.equalsIgnoreCase("c")) {
+                    command = scanner.nextLine();
+                } else if (command.equalsIgnoreCase("create") || command.equalsIgnoreCase("c")) {
                     System.out.println("\n" + EMPTY + "  game name:\n");
                     String gameName = scanner.nextLine();
                     CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
                     try {
                         CreateGameResult createGameResult = serverFacade.createGame(createGameRequest);
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Game " + SET_TEXT_COLOR_RED + gameName + SET_TEXT_COLOR_BLUE + " created! (type " + SET_TEXT_COLOR_RED + "\"join\"" + SET_TEXT_COLOR_BLUE + " or " + SET_TEXT_COLOR_RED + "\"j\"" + SET_TEXT_COLOR_BLUE + " and use game number " + SET_TEXT_COLOR_RED + createGameResult.gameID() + SET_TEXT_COLOR_BLUE + " if you would like to join this game)\n");
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, This game could not be created!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("view") || line.equalsIgnoreCase("v")) {
+                } else if (command.equalsIgnoreCase("view") || command.equalsIgnoreCase("v")) {
                     try {
                         ListGamesResult listGamesResult = serverFacade.listGames();
                         System.out.print("\n" + EMPTY + "  ------------Chess------------      ");
@@ -133,12 +133,12 @@ public class ClientGame {
                             System.out.println(EMPTY + "                                     (You may not take a slot that has already been filled)");
                         }
                         System.out.println();
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, the games could not be viewed!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("join") || line.equalsIgnoreCase("j")) {
+                } else if (command.equalsIgnoreCase("join") || command.equalsIgnoreCase("j")) {
                     try {
                         int gameNumber;
                         System.out.println("\n" + EMPTY + "  (if you don't know your " + SET_TEXT_COLOR_RED + "game # " + SET_TEXT_COLOR_BLUE + "type " + SET_TEXT_COLOR_RED + "\"v\"" + SET_TEXT_COLOR_BLUE + ")");
@@ -148,17 +148,17 @@ public class ClientGame {
                             scanner.nextLine();
                             System.out.println("\n" + EMPTY + "  player color:\n");
                             playerColor = scanner.nextLine();
-                            line = "refresh";
+                            command = "refresh";
                             if (playerColor.equalsIgnoreCase("white") || playerColor.equalsIgnoreCase("w")) {
-                                JoinGameRequest joinGameRequest = new JoinGameRequest("WHITE", gameNumber);
+                                JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
                                 serverFacade.createWSConnection(this, gameNumber);
                                 while (true) {
-                                    if (line.equalsIgnoreCase("refresh") || line.equalsIgnoreCase("r")) {
+                                    if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                         printBoard(chessGame.getBoard());
-                                        line = scanner.nextLine();
-                                    } else if (line.equalsIgnoreCase("move") || line.equalsIgnoreCase("m")) {
+                                        command = scanner.nextLine();
+                                    } else if (command.equalsIgnoreCase("move") || command.equalsIgnoreCase("m")) {
                                         System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
                                         String startSquare = scanner.nextLine();
                                         if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
@@ -274,24 +274,19 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                                chessGame.makeMove(chessMove);
-                                                chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
-                                                UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
-                                                serverFacade.updateGame(updateGameRequest);
-                                                ChessGame.TeamColor teamColor = ChessGame.TeamColor.WHITE;
-                                                serverFacade.sendMove(gameNumber, chessMove, teamColor);
-                                                line = "refresh";
+                                                serverFacade.makeMove(gameNumber, chessMove);
+                                                command = "refresh";
                                             }
                                         }
-                                    } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                                    } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"v\" " + SET_TEXT_COLOR_BLUE + " (view moves)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"m\" " + SET_TEXT_COLOR_BLUE + " (move piece)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"r\" " + SET_TEXT_COLOR_BLUE + " (refresh board)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"f\" " + SET_TEXT_COLOR_BLUE + " (forfeit)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
-                                        line = scanner.nextLine();
-                                    } else if (line.equalsIgnoreCase("view") || line.equalsIgnoreCase("v")) {
+                                        command = scanner.nextLine();
+                                    } else if (command.equalsIgnoreCase("view") || command.equalsIgnoreCase("v")) {
                                         System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
                                         String startSquare = scanner.nextLine();
                                         if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
@@ -351,33 +346,54 @@ public class ClientGame {
                                             }
                                             System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
                                         }
-                                    } else if (line.equalsIgnoreCase("forfeit") || line.equalsIgnoreCase("f")) {
+                                    } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n + EMPTY + Type \"f\" again to confirm forfeit:\n");
-                                        line = scanner.nextLine();
-                                        if (line.equalsIgnoreCase("forfeit") || line.equalsIgnoreCase("f")) {
-                                            System.out.println("\n" + EMPTY + "  ------------Chess------------      You forfeited the game!\n");
+                                        command = scanner.nextLine();
+                                        if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
+                                            serverFacade.forfeitGame(gameNumber);
+                                            command = "refresh";
+                                            while (true) {
+                                                if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      You forfeited the game!\n");
+                                                    printBoard(chessGame.getBoard());
+                                                    command = scanner.nextLine();
+                                                } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
+                                                    System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"r\" " + SET_TEXT_COLOR_BLUE + " (refresh board)" + SET_TEXT_COLOR_BLUE);
+                                                    System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
+                                                    command = scanner.nextLine();
+                                                } else if (command.equalsIgnoreCase("leave") || command.equalsIgnoreCase("l")) {
+                                                    serverFacade.leaveGame(gameNumber);
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
+                                                    command = scanner.nextLine();
+                                                    break;
+                                                } else {
+                                                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
+                                                    command = scanner.nextLine();
+                                                }
+                                            }
+                                            break;
                                         }
-                                    } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
-                                        LeaveGameRequest leaveGameRequest = new LeaveGameRequest("WHITE", gameNumber);
-                                        serverFacade.leaveGame(leaveGameRequest);
+                                    } else if (command.equalsIgnoreCase("leave") || command.equalsIgnoreCase("l")) {
+                                        serverFacade.leaveGame(gameNumber);
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
-                                        line = scanner.nextLine();
+                                        command = scanner.nextLine();
                                         break;
                                     } else {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
-                                        line = scanner.nextLine();
+                                        command = scanner.nextLine();
                                     }
                                 }
                             } else if (playerColor.equalsIgnoreCase("black") || playerColor.equalsIgnoreCase("b")) {
-                                JoinGameRequest joinGameRequest = new JoinGameRequest("BLACK", gameNumber);
+                                JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.BLACK, gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
                                 serverFacade.createWSConnection(this, gameNumber);
                                 while (true) {
-                                    if (line.equalsIgnoreCase("refresh") || line.equalsIgnoreCase("r")) {
+                                    if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                         printBoardFlipped(chessGame.getBoard());
-                                        line = scanner.nextLine();
-                                    } else if (line.equalsIgnoreCase("move") || line.equalsIgnoreCase("m")) {
+                                        command = scanner.nextLine();
+                                    } else if (command.equalsIgnoreCase("move") || command.equalsIgnoreCase("m")) {
                                         System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
                                         String startSquare = scanner.nextLine();
                                         if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
@@ -493,24 +509,19 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                                chessGame.makeMove(chessMove);
-                                                chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
-                                                UpdateGameRequest updateGameRequest = new UpdateGameRequest(gameNumber, chessGame);
-                                                serverFacade.updateGame(updateGameRequest);
-                                                ChessGame.TeamColor teamColor = ChessGame.TeamColor.BLACK;
-                                                serverFacade.sendMove(gameNumber, chessMove, teamColor);
-                                                line = "refresh";
+                                                serverFacade.makeMove(gameNumber, chessMove);
+                                                command = "refresh";
                                             }
                                         }
-                                    } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                                    } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"v\" " + SET_TEXT_COLOR_BLUE + " (view moves)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"m\" " + SET_TEXT_COLOR_BLUE + " (move piece)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"r\" " + SET_TEXT_COLOR_BLUE + " (refresh board)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"f\" " + SET_TEXT_COLOR_BLUE + " (forfeit)" + SET_TEXT_COLOR_BLUE);
                                         System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
-                                        line = scanner.nextLine();
-                                    } else if (line.equalsIgnoreCase("view") || line.equalsIgnoreCase("v")) {
+                                        command = scanner.nextLine();
+                                    } else if (command.equalsIgnoreCase("view") || command.equalsIgnoreCase("v")) {
                                         System.out.println("\n" + EMPTY + "  piece coordinates (letter then number - a1, b5, etc.):\n");
                                         String startSquare = scanner.nextLine();
                                         if (!(startSquare.length() != 2 || (startSquare.charAt(0) != 'a' && startSquare.charAt(0) != 'b' && startSquare.charAt(0) != 'c' && startSquare.charAt(0) != 'd' && startSquare.charAt(0) != 'e' && startSquare.charAt(0) != 'f' && startSquare.charAt(0) != 'g' && startSquare.charAt(0) != 'h' && startSquare.charAt(0) != 'A' && startSquare.charAt(0) != 'B' && startSquare.charAt(0) != 'C' && startSquare.charAt(0) != 'D' && startSquare.charAt(0) != 'E' && startSquare.charAt(0) != 'F' && startSquare.charAt(0) != 'G' && startSquare.charAt(0) != 'H') || (startSquare.charAt(1) != '1' && startSquare.charAt(1) != '2' && startSquare.charAt(1) != '3' && startSquare.charAt(1) != '4' && startSquare.charAt(1) != '5' && startSquare.charAt(1) != '6' && startSquare.charAt(1) != '7' && startSquare.charAt(1) != '8'))) {
@@ -570,34 +581,33 @@ public class ClientGame {
                                             }
                                             System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
                                         }
-                                    } else if (line.equalsIgnoreCase("forfeit") || line.equalsIgnoreCase("f")) {
+                                    } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n + EMPTY + Type \"f\" again to confirm forfeit:\n");
-                                        line = scanner.nextLine();
-                                        if (line.equalsIgnoreCase("forfeit") || line.equalsIgnoreCase("f")) {
+                                        command = scanner.nextLine();
+                                        if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                             System.out.println("\n" + EMPTY + "  ------------Chess------------      You forfeited the game!\n");
                                         }
-                                    } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
-                                        LeaveGameRequest leaveGameRequest = new LeaveGameRequest("BLACK", gameNumber);
-                                        serverFacade.leaveGame(leaveGameRequest);
+                                    } else if (command.equalsIgnoreCase("leave") || command.equalsIgnoreCase("l")) {
+                                        serverFacade.leaveGame(gameNumber);
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
-                                        line = scanner.nextLine();
+                                        command = scanner.nextLine();
                                         break;
                                     } else {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
-                                        line = scanner.nextLine();
+                                        command = scanner.nextLine();
                                     }
                                 }
                             } else {
                                 throw new Exception();
                             }
                         } else {
-                            line = scanner.nextLine();
+                            command = scanner.nextLine();
                         }
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, this game could not be joined!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("spectate") || line.equalsIgnoreCase("s")) {
+                } else if (command.equalsIgnoreCase("spectate") || command.equalsIgnoreCase("s")) {
                     try {
                         int gameNumber;
                         System.out.println("\n" + EMPTY + "  game number:\n");
@@ -607,45 +617,44 @@ public class ClientGame {
                         } else {
                             throw new Exception();
                         }
-                        line = "refresh";
+                        command = "refresh";
                         //serverFacade.throwIfGameNotExists(gameNumber);
                         serverFacade.createWSConnection(this, gameNumber);
                         while (true) {
-                            if (line.equalsIgnoreCase("refresh") || line.equalsIgnoreCase("r")) {
+                            if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      Spectating game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                 printBoard(chessGame.getBoard());
-                                line = scanner.nextLine();
-                            } else if (line.equalsIgnoreCase("help") || line.equalsIgnoreCase("h")) {
+                                command = scanner.nextLine();
+                            } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
                                 System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"r\" " + SET_TEXT_COLOR_BLUE + " (refresh board)" + SET_TEXT_COLOR_BLUE);
                                 System.out.println(EMPTY + "                                     " + SET_TEXT_COLOR_RED + "\"l\" " + SET_TEXT_COLOR_BLUE + " (leave game)\n" + SET_TEXT_COLOR_BLUE);
-                                line = scanner.nextLine();
-                            } else if (line.equalsIgnoreCase("leave") || line.equalsIgnoreCase("l")) {
-                                LeaveGameRequest leaveGameRequest = new LeaveGameRequest("", gameNumber);
-                                serverFacade.leaveGame(leaveGameRequest);
+                                command = scanner.nextLine();
+                            } else if (command.equalsIgnoreCase("leave") || command.equalsIgnoreCase("l")) {
+                                serverFacade.leaveGame(gameNumber);
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      You left the game!\n");
-                                line = scanner.nextLine();
+                                command = scanner.nextLine();
                                 break;
                             } else {
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
-                                line = scanner.nextLine();
+                                command = scanner.nextLine();
                             }
                         }
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, this game could not be spectated!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("logout") || line.equalsIgnoreCase("l")) {
+                } else if (command.equalsIgnoreCase("logout") || command.equalsIgnoreCase("l")) {
                     try {
                         serverFacade.logoutUser();
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      You are now signed out!\n");
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                         break;
                     } catch (Exception e) {
                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, you couldn't be logged out!\n" + SET_TEXT_COLOR_BLUE);
-                        line = scanner.nextLine();
+                        command = scanner.nextLine();
                     }
-                } else if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("q")) {
+                } else if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("q")) {
                     try {
                         serverFacade.logoutUser();
                         return;
@@ -654,7 +663,7 @@ public class ClientGame {
                     }
                 } else {
                     System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command, please try again!\n" + SET_TEXT_COLOR_BLUE);
-                    line = scanner.nextLine();
+                    command = scanner.nextLine();
                 }
             }
         }

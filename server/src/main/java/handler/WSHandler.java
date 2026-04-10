@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import exception.DataAccessException;
 import io.javalin.websocket.*;
 import model.GameData;
+import request.UpdateGameRequest;
 import service.AuthService;
 import service.GameService;
 import websocket.commands.UserGameCommand;
@@ -90,18 +91,34 @@ public class WSHandler implements Consumer<WsConfig> {
                 String message;
                 if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
                     message = username + " left the game!";
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                    for (WsContext wsContext : list) {
+                        if (!wsContext.sessionId().equals(ctx.sessionId())) {
+                            wsContext.send(new Gson().toJson(serverMessage));
+                        }
+                    }
                 } else if (gameData.blackUsername() != null && gameData.blackUsername().equals(username)) {
                     message = username + " left the game!";
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                    for (WsContext wsContext : list) {
+                        if (!wsContext.sessionId().equals(ctx.sessionId())) {
+                            wsContext.send(new Gson().toJson(serverMessage));
+                        }
+                    }
                 } else {
-                    message = username + " is no longer spectating!";
-                }
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
-                ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
-                for (WsContext wsContext : list) {
-                    if (!wsContext.equals(ctx)) {
-                        wsContext.send(new Gson().toJson(serverMessage));
+                    message = username + " stopped spectating!";
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                    for (WsContext wsContext : list) {
+                        if (!wsContext.sessionId().equals(ctx.sessionId())) {
+                            wsContext.send(new Gson().toJson(serverMessage));
+                        }
                     }
                 }
+                wsContexts.get(userGameCommand.getGameID()).remove(ctx);
+                gameService.leaveGame(userGameCommand);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
@@ -112,84 +129,217 @@ public class WSHandler implements Consumer<WsConfig> {
                 String username = authService.getUsername(userGameCommand.getAuthToken());
                 GameData gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
                 ChessGame chessGame = gameData.game();
+                if (chessGame.getGameOver()) {
+                    throw new Exception();
+                }
                 Collection<ChessMove> validMoves = chessGame.validMoves(userGameCommand.getChessMove().getStartPosition());
-                if (userGameCommand.getPlayerColor() == chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() && validMoves.contains(userGameCommand.getChessMove())) {
-                    char startPositionLetter;
-                    switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
-                        case 0:
-                            startPositionLetter = 'A';
-                            break;
-                        case 1:
-                            startPositionLetter = 'B';
-                            break;
-                        case 2:
-                            startPositionLetter = 'C';
-                            break;
-                        case 3:
-                            startPositionLetter = 'D';
-                            break;
-                        case 4:
-                            startPositionLetter = 'E';
-                            break;
-                        case 5:
-                            startPositionLetter = 'F';
-                            break;
-                        case 6:
-                            startPositionLetter = 'G';
-                            break;
-                        case 7:
-                            startPositionLetter = 'H';
-                            break;
-                        default:
-                            startPositionLetter = 'A';
-                            break;
+                if (gameData.whiteUsername().equals(username)) {
+                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.WHITE && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
+                        char startPositionLetter;
+                        switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
+                            case 0:
+                                startPositionLetter = 'A';
+                                break;
+                            case 1:
+                                startPositionLetter = 'B';
+                                break;
+                            case 2:
+                                startPositionLetter = 'C';
+                                break;
+                            case 3:
+                                startPositionLetter = 'D';
+                                break;
+                            case 4:
+                                startPositionLetter = 'E';
+                                break;
+                            case 5:
+                                startPositionLetter = 'F';
+                                break;
+                            case 6:
+                                startPositionLetter = 'G';
+                                break;
+                            case 7:
+                                startPositionLetter = 'H';
+                                break;
+                            default:
+                                startPositionLetter = 'A';
+                                break;
+                        }
+                        char endPositionLetter;
+                        switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
+                            case 0:
+                                endPositionLetter = 'A';
+                                break;
+                            case 1:
+                                endPositionLetter = 'B';
+                                break;
+                            case 2:
+                                endPositionLetter = 'C';
+                                break;
+                            case 3:
+                                endPositionLetter = 'D';
+                                break;
+                            case 4:
+                                endPositionLetter = 'E';
+                                break;
+                            case 5:
+                                endPositionLetter = 'F';
+                                break;
+                            case 6:
+                                endPositionLetter = 'G';
+                                break;
+                            case 7:
+                                endPositionLetter = 'H';
+                                break;
+                            default:
+                                endPositionLetter = 'A';
+                                break;
+                        }
+                        String message = username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
+                        chessGame.makeMove(userGameCommand.getChessMove());
+                        chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
+                        String gameJson = new Gson().toJson(chessGame);
+                        UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), chessGame);
+                        gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                        ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                        for (WsContext wsContext : list) {
+                            wsContext.send(new Gson().toJson(serverMessage));
+                        }
+                        if (chessGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
+                            chessGame.setGameOver(true);
+                            message = username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1) + " and won by checkmate!";
+                            serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                            for (WsContext wsContext : list) {
+                                wsContext.send(new Gson().toJson(serverMessage));
+                            }
+                        }
+                        serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                        for (WsContext wsContext : list) {
+                            if (!wsContext.equals(ctx)) {
+                                wsContext.send(new Gson().toJson(serverMessage));
+                            }
+                        }
+                    } else {
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                        ctx.send(new Gson().toJson(serverMessage));
                     }
-                    char endPositionLetter;
-                    switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
-                        case 0:
-                            endPositionLetter = 'A';
-                            break;
-                        case 1:
-                            endPositionLetter = 'B';
-                            break;
-                        case 2:
-                            endPositionLetter = 'C';
-                            break;
-                        case 3:
-                            endPositionLetter = 'D';
-                            break;
-                        case 4:
-                            endPositionLetter = 'E';
-                            break;
-                        case 5:
-                            endPositionLetter = 'F';
-                            break;
-                        case 6:
-                            endPositionLetter = 'G';
-                            break;
-                        case 7:
-                            endPositionLetter = 'H';
-                            break;
-                        default:
-                            endPositionLetter = 'A';
-                            break;
+                } else {
+                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.BLACK && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
+                        char startPositionLetter;
+                        switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
+                            case 0:
+                                startPositionLetter = 'A';
+                                break;
+                            case 1:
+                                startPositionLetter = 'B';
+                                break;
+                            case 2:
+                                startPositionLetter = 'C';
+                                break;
+                            case 3:
+                                startPositionLetter = 'D';
+                                break;
+                            case 4:
+                                startPositionLetter = 'E';
+                                break;
+                            case 5:
+                                startPositionLetter = 'F';
+                                break;
+                            case 6:
+                                startPositionLetter = 'G';
+                                break;
+                            case 7:
+                                startPositionLetter = 'H';
+                                break;
+                            default:
+                                startPositionLetter = 'A';
+                                break;
+                        }
+                        char endPositionLetter;
+                        switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
+                            case 0:
+                                endPositionLetter = 'A';
+                                break;
+                            case 1:
+                                endPositionLetter = 'B';
+                                break;
+                            case 2:
+                                endPositionLetter = 'C';
+                                break;
+                            case 3:
+                                endPositionLetter = 'D';
+                                break;
+                            case 4:
+                                endPositionLetter = 'E';
+                                break;
+                            case 5:
+                                endPositionLetter = 'F';
+                                break;
+                            case 6:
+                                endPositionLetter = 'G';
+                                break;
+                            case 7:
+                                endPositionLetter = 'H';
+                                break;
+                            default:
+                                endPositionLetter = 'A';
+                                break;
+                        }
+                        String message = username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
+                        chessGame.makeMove(userGameCommand.getChessMove());
+                        chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
+                        String gameJson = new Gson().toJson(chessGame);
+                        UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), chessGame);
+                        gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                        ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
+                        for (WsContext wsContext : list) {
+                            wsContext.send(new Gson().toJson(serverMessage));
+                        }
+                        if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
+                            chessGame.setGameOver(true);
+                            message = username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1) + " and won by checkmate!";
+                            serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                            for (WsContext wsContext : list) {
+                                wsContext.send(new Gson().toJson(serverMessage));
+                            }
+                        }
+                        serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                        for (WsContext wsContext : list) {
+                            if (!wsContext.equals(ctx)) {
+                                wsContext.send(new Gson().toJson(serverMessage));
+                            }
+                        }
+                    } else {
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                        ctx.send(new Gson().toJson(serverMessage));
                     }
-                    String message = username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
-                    String gameJson = new Gson().toJson(gameData.game());
-                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ctx.send(new Gson().toJson(serverMessage));
+            }
+        } else if (userGameCommand.getCommandType() == UserGameCommand.CommandType.RESIGN) {
+            try {
+                GameData gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
+                if (gameData.game().getGameOver()) {
+                    throw new Exception();
+                }
+                String username = authService.getUsername(userGameCommand.getAuthToken());
+                if ((gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) || (gameData.blackUsername() != null && gameData.blackUsername().equals(username))) {
+                    String message = username + " forfeited the game!";
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                     ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                     for (WsContext wsContext : list) {
                         wsContext.send(new Gson().toJson(serverMessage));
                     }
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
-                    for (WsContext wsContext : list) {
-                        if (!wsContext.equals(ctx)) {
-                            wsContext.send(new Gson().toJson(serverMessage));
-                        }
-                    }
+                    gameData.game().setGameOver(true);
+                    UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), gameData.game());
+                    gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);
                 } else {
-                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
-                    ctx.send(new Gson().toJson(serverMessage));
+                    throw new Exception();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

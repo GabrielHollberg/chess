@@ -11,27 +11,12 @@ import result.ListGamesResult;
 import result.LoginResult;
 import result.RegisterResult;
 import websocket.commands.UserGameCommand;
-import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
-import static ui.EscapeSequences.BLACK_BISHOP;
-import static ui.EscapeSequences.BLACK_KING;
-import static ui.EscapeSequences.BLACK_KNIGHT;
-import static ui.EscapeSequences.BLACK_PAWN;
-import static ui.EscapeSequences.BLACK_QUEEN;
-import static ui.EscapeSequences.BLACK_ROOK;
-import static ui.EscapeSequences.EMPTY;
-import static ui.EscapeSequences.SET_BG_COLOR_BLACK;
-import static ui.EscapeSequences.SET_BG_COLOR_BLUE;
-import static ui.EscapeSequences.SET_BG_COLOR_DARK_BLUE;
-import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
-import static ui.EscapeSequences.SET_TEXT_COLOR_BLUE;
-import static ui.EscapeSequences.SET_TEXT_COLOR_LIGHT_GREY;
 
 public class ServerFacade extends Endpoint {
 
@@ -69,20 +54,19 @@ public class ServerFacade extends Endpoint {
         this.makeRequest("PUT", "/game", joinGameRequest, null);
     }
 
-    public void leaveGame(LeaveGameRequest leaveGameRequest) throws ResponseException, IOException {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, leaveGameRequest.gameID(), null, null);
+    public void leaveGame(int gameID) throws IOException {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID, null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
         session.close();
-        this.makeRequest("PUT", "/leaveGame", leaveGameRequest, null);
+    }
+
+    public void forfeitGame(int gameID) throws IOException {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID, null);
+        session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 
     public void updateGame(UpdateGameRequest updateGameRequest) throws ResponseException {
         this.makeRequest("PUT", "/updateGame", updateGameRequest, null);
-    }
-
-    public void throwIfGameNotExists(int gameNumber) throws ResponseException {
-        JoinGameRequest joinGameRequest = new JoinGameRequest("", gameNumber);
-        this.makeRequest("GET", "/gameExists", joinGameRequest, null);
     }
 
     public void logoutUser() throws ResponseException {
@@ -144,12 +128,12 @@ public class ServerFacade extends Endpoint {
             }
         });
 
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID, null, null);
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID, null);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 
-    public void sendMove(int gameID, ChessMove chessMove, ChessGame.TeamColor teamColor) throws Exception {
-        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, chessMove, teamColor);
+    public void makeMove(int gameID, ChessMove chessMove) throws Exception {
+        UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, chessMove);
         session.getBasicRemote().sendText(new Gson().toJson(userGameCommand));
     }
 

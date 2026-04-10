@@ -12,6 +12,7 @@ public class ChessGame {
 
     TeamColor teamTurn;
     List<ChessBoard> boardHistory = new ArrayList<>(); // Keeps track of every state of the board so far
+    private boolean gameOver = false;
 
     public ChessGame() {
         setTeamTurn(TeamColor.WHITE);
@@ -232,6 +233,14 @@ public class ChessGame {
             }
         }
         return null;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean getGameOver() {
+        return gameOver;
     }
 
     /**

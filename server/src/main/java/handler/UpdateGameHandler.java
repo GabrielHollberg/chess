@@ -5,8 +5,6 @@ import exception.BadRequestException;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-import request.JoinGameRequest;
-import request.LeaveGameRequest;
 import request.UpdateGameRequest;
 import service.GameService;
 

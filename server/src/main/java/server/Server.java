@@ -38,7 +38,6 @@ public class Server {
         javalin.get("/game", new ListGamesHandler(gameService));
         javalin.put("/game", new JoinGameHandler(gameService));
         javalin.get("/gameExists", new CheckIfGameExistsHandler(gameService));
-        javalin.put("/leaveGame", new LeaveGameHandler(gameService));
         javalin.put("/updateGame", new UpdateGameHandler(gameService));
         javalin.delete("/db", new ClearDatabaseHandler(authService, userService, gameService));
 
