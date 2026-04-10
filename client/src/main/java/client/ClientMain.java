@@ -6,3 +6,4 @@ public class ClientMain {
         game.run();
     }
 }
+test
