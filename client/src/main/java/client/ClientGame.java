@@ -29,9 +29,10 @@ public class ClientGame {
     ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
     ChessGame chessGame = new ChessGame();
     String username;
-    String playerColor = "white";
+    String playerColor;
     Scanner scanner = new Scanner(System.in);
     String command;
+    int gameNumber;
 
     public void run() {
         System.out.println(SET_TEXT_COLOR_BLUE + SET_BG_COLOR_BLACK);
@@ -140,7 +141,6 @@ public class ClientGame {
                     }
                 } else if (command.equalsIgnoreCase("join") || command.equalsIgnoreCase("j")) {
                     try {
-                        int gameNumber;
                         System.out.println("\n" + EMPTY + "  (if you don't know your " + SET_TEXT_COLOR_RED + "game # " + SET_TEXT_COLOR_BLUE + "type " + SET_TEXT_COLOR_RED + "\"v\"" + SET_TEXT_COLOR_BLUE + ")");
                         System.out.println("\n" + EMPTY + "  game number:\n");
                         if (scanner.hasNextInt()) {
@@ -148,11 +148,12 @@ public class ClientGame {
                             scanner.nextLine();
                             System.out.println("\n" + EMPTY + "  player color:\n");
                             playerColor = scanner.nextLine();
-                            command = "refresh";
                             if (playerColor.equalsIgnoreCase("white") || playerColor.equalsIgnoreCase("w")) {
                                 JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
+                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                 serverFacade.createWSConnection(this, gameNumber);
+                                command = scanner.nextLine();
                                 while (true) {
                                     if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
@@ -274,8 +275,9 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                                 serverFacade.makeMove(gameNumber, chessMove);
-                                                command = "refresh";
+                                                command = scanner.nextLine();
                                             }
                                         }
                                     } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
@@ -387,7 +389,9 @@ public class ClientGame {
                             } else if (playerColor.equalsIgnoreCase("black") || playerColor.equalsIgnoreCase("b")) {
                                 JoinGameRequest joinGameRequest = new JoinGameRequest(ChessGame.TeamColor.BLACK, gameNumber);
                                 serverFacade.joinGame(joinGameRequest);
+                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                 serverFacade.createWSConnection(this, gameNumber);
+                                command = scanner.nextLine();
                                 while (true) {
                                     if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
@@ -509,8 +513,9 @@ public class ClientGame {
                                                 }
                                                 ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
                                                 ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                                                 serverFacade.makeMove(gameNumber, chessMove);
-                                                command = "refresh";
+                                                command = scanner.nextLine();
                                             }
                                         }
                                     } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
@@ -609,6 +614,7 @@ public class ClientGame {
                     }
                 } else if (command.equalsIgnoreCase("spectate") || command.equalsIgnoreCase("s")) {
                     try {
+                        playerColor = "spectator";
                         int gameNumber;
                         System.out.println("\n" + EMPTY + "  game number:\n");
                         if (scanner.hasNextInt()) {
@@ -617,9 +623,10 @@ public class ClientGame {
                         } else {
                             throw new Exception();
                         }
-                        command = "refresh";
                         //serverFacade.throwIfGameNotExists(gameNumber);
+                        System.out.println("\n" + EMPTY + "  ------------Chess------------      Spectating game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
                         serverFacade.createWSConnection(this, gameNumber);
+                        command = scanner.nextLine();
                         while (true) {
                             if (command.equalsIgnoreCase("refresh") || command.equalsIgnoreCase("r")) {
                                 System.out.println("\n" + EMPTY + "  ------------Chess------------      Spectating game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
@@ -897,13 +904,15 @@ public class ClientGame {
         ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
         if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
             chessGame = new Gson().fromJson(serverMessage.game, ChessGame.class);
-        } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
-            System.out.println(EMPTY + "  " + serverMessage.message);
             if (playerColor.equals("black") || playerColor.equals("b")) {
                 printBoardFlipped(chessGame.getBoard());
+            } else if (playerColor.equals("white") || playerColor.equals("w")) {
+                printBoard(chessGame.getBoard());
             } else {
                 printBoard(chessGame.getBoard());
             }
+        } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
+            System.out.println(serverMessage.message);
         }
     }
 }
