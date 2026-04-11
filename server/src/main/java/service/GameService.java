@@ -104,7 +104,7 @@ public class GameService {
             if (gameDAO.readGameData(userGameCommand.getGameID()) != null) {
                 GameData gameData = gameDAO.readGameData(userGameCommand.getGameID());
                 String username = authService.getUsername(userGameCommand.getAuthToken());
-                if (gameData.whiteUsername().equals(username)) {
+                if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
                     GameData updatedGameData = new GameData(gameData.gameID(), null, gameData.blackUsername(), gameData.gameName(), gameData.game());
                     gameDAO.updateGameData(updatedGameData);
                 } else {
