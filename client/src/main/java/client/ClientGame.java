@@ -369,6 +369,8 @@ public class ClientGame {
                                                     break;
                                             }
                                             System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
+                                            printAvailableMoves(i, j);
+                                            command = scanner.nextLine();
                                         }
                                     } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n" + EMPTY + "Type \"f\" again to confirm forfeit:\n");
@@ -629,6 +631,8 @@ public class ClientGame {
                                                     break;
                                             }
                                             System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
+                                            printAvailableMovesFlipped(i, j);
+                                            command = scanner.nextLine();
                                         }
                                     } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n" + EMPTY + "Type \"f\" again to confirm forfeit:\n");
@@ -964,6 +968,22 @@ public class ClientGame {
             }
         }
         System.out.println();
+    }
+
+    public void printAvailableMoves(int i, int j) {
+        ChessPosition chessPosition = new ChessPosition(i + 1, j + 1);
+        Collection<ChessMove> availableMoves = chessGame.validMoves(chessPosition);
+        for (ChessMove move : availableMoves) {
+            System.out.println(move.toString());
+        }
+    }
+
+    public void printAvailableMovesFlipped(int i, int j) {
+        ChessPosition chessPosition = new ChessPosition(i + 1, j + 1);
+        Collection<ChessMove> availableMoves = chessGame.validMoves(chessPosition);
+        for (ChessMove move : availableMoves) {
+            System.out.println(move.toString());
+        }
     }
 
     public void onMessage(String message) {

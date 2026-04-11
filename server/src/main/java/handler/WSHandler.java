@@ -199,7 +199,6 @@ public class WSHandler implements Consumer<WsConfig> {
                         String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
                         ServerMessage serverMessage;
                         chessGame.makeMove(userGameCommand.getChessMove());
-                        chessGame.setTeamTurn(ChessGame.TeamColor.BLACK);
                         ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                         serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                         for (WsContext wsContext : list) {
