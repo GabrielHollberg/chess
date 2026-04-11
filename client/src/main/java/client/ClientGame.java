@@ -243,7 +243,7 @@ public class ClientGame {
                                                         break;
                                                 }
                                                 ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
-                                                switch (startSquare.charAt(0)) {
+                                                switch (endSquare.charAt(0)) {
                                                     case 'a', 'A':
                                                         j = 0;
                                                         break;
@@ -505,7 +505,7 @@ public class ClientGame {
                                                         break;
                                                 }
                                                 ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
-                                                switch (startSquare.charAt(0)) {
+                                                switch (endSquare.charAt(0)) {
                                                     case 'a', 'A':
                                                         j = 0;
                                                         break;
@@ -976,6 +976,115 @@ public class ClientGame {
         for (ChessMove move : availableMoves) {
             System.out.println(move.toString());
         }
+        System.out.println();
+        for (int i = 7; i >= 0 ; i--) {
+            System.out.print(EMPTY + SET_TEXT_COLOR_BLUE);
+            System.out.print(i + 1);
+            System.out.print(" ");
+            for (int j = 0; j < 8; j++) {
+                String pieceColor = "";
+                String pieceType = "";
+                ChessPosition position = new ChessPosition(i + 1, j + 1);
+                if (board.getPiece(position) != null) {
+                    switch (board.getPiece(position).getPieceType()) {
+                        case ChessPiece.PieceType.ROOK:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_ROOK;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_ROOK;
+                                }
+                            };
+                            break;
+                        case ChessPiece.PieceType.KNIGHT:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_KNIGHT;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_KNIGHT;
+                                }
+                            };
+                            break;
+                        case ChessPiece.PieceType.BISHOP:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_BISHOP;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_BISHOP;
+                                }
+                            };
+                            break;
+                        case ChessPiece.PieceType.KING:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_KING;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_KING;
+                                }
+                            };
+                            break;
+                        case ChessPiece.PieceType.QUEEN:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_QUEEN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_QUEEN;
+                                }
+                            };
+                            break;
+                        case ChessPiece.PieceType.PAWN:
+                            pieceType = switch (board.getPiece(position).getTeamColor()) {
+                                case ChessGame.TeamColor.WHITE -> {
+                                    pieceColor = SET_TEXT_COLOR_LIGHT_GREY;
+                                    yield BLACK_PAWN;
+                                }
+                                case ChessGame.TeamColor.BLACK -> {
+                                    pieceColor = SET_TEXT_COLOR_BLACK;
+                                    yield BLACK_PAWN;
+                                }
+                            };
+                            break;
+                    }
+                } else {
+                    pieceType = " " + EMPTY + " ";
+                }
+                if (i % 2 == 1) {
+                    if (j % 2 == 0) {
+                        System.out.print(SET_BG_COLOR_DARK_BLUE + pieceColor + pieceType);
+                    } else {
+                        System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
+                    }
+                } else {
+                    if (j % 2 == 1) {
+                        System.out.print(SET_BG_COLOR_DARK_BLUE + pieceColor + pieceType);
+                    } else {
+                        System.out.print(SET_BG_COLOR_BLUE + pieceColor + pieceType);
+                    }
+                }
+                if (j == 7) {
+                    System.out.println(SET_BG_COLOR_BLACK);
+                }
+            }
+            if (i == 0) {
+                System.out.println(SET_TEXT_COLOR_BLUE + "     A" + EMPTY + " B" + EMPTY + " C" + EMPTY + " D" + EMPTY + " E" + EMPTY + " F" + EMPTY + " G" + EMPTY + " H");
+            }
+        }
+        System.out.println();
     }
 
     public void printAvailableMovesFlipped(int i, int j) {

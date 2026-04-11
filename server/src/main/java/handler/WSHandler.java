@@ -221,7 +221,6 @@ public class WSHandler implements Consumer<WsConfig> {
                                 wsContext.send(new Gson().toJson(serverMessage));
                             }
                         } else if (chessGame.isInCheck(ChessGame.TeamColor.BLACK)) {
-                            chessGame.setGameOver(true);
                             message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " is in check!";
                             serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                             for (WsContext wsContext : list) {
