@@ -184,23 +184,23 @@ public class ClientGame {
                                     } else if (command.equalsIgnoreCase("move") || command.equalsIgnoreCase("m")) {
                                         System.out.println("\n" + EMPTY + "  move coordinates (e2e4, b5c6, etc.):\n");
                                         String moveCoordinates = scanner.nextLine();
-                                        if (!(moveCoordinates.length() != 4 || (moveCoordinates.charAt(0) != 'a' && moveCoordinates.charAt(0) != 'b'
-                                                && moveCoordinates.charAt(0) != 'c' && moveCoordinates.charAt(0) != 'd' && moveCoordinates.charAt(0) != 'e'
-                                                && moveCoordinates.charAt(0) != 'f' && moveCoordinates.charAt(0) != 'g' && moveCoordinates.charAt(0) != 'h'
-                                                && moveCoordinates.charAt(0) != 'A' && moveCoordinates.charAt(0) != 'B' && moveCoordinates.charAt(0) != 'C'
-                                                && moveCoordinates.charAt(0) != 'D' && moveCoordinates.charAt(0) != 'E' && moveCoordinates.charAt(0) != 'F'
-                                                && moveCoordinates.charAt(0) != 'G' && moveCoordinates.charAt(0) != 'H') || (moveCoordinates.charAt(1) != '1'
-                                                && moveCoordinates.charAt(1) != '2' && moveCoordinates.charAt(1) != '3' && moveCoordinates.charAt(1) != '4'
-                                                && moveCoordinates.charAt(1) != '5' && moveCoordinates.charAt(1) != '6' && moveCoordinates.charAt(1) != '7'
-                                                && moveCoordinates.charAt(1) != '8')) || (moveCoordinates.charAt(2) != 'a' && moveCoordinates.charAt(2) != 'b'
-                                                && moveCoordinates.charAt(2) != 'c' && moveCoordinates.charAt(2) != 'd' && moveCoordinates.charAt(2) != 'e'
-                                                && moveCoordinates.charAt(2) != 'f' && moveCoordinates.charAt(2) != 'g' && moveCoordinates.charAt(2) != 'h'
-                                                && moveCoordinates.charAt(2) != 'A' && moveCoordinates.charAt(2) != 'B' && moveCoordinates.charAt(2) != 'C'
-                                                && moveCoordinates.charAt(2) != 'D' && moveCoordinates.charAt(2) != 'E' && moveCoordinates.charAt(2) != 'F'
-                                                && moveCoordinates.charAt(2) != 'G' && moveCoordinates.charAt(2) != 'H') || (moveCoordinates.charAt(3) != '1'
-                                                && moveCoordinates.charAt(3) != '2' && moveCoordinates.charAt(3) != '3' && moveCoordinates.charAt(3) != '4'
-                                                && moveCoordinates.charAt(3) != '5' && moveCoordinates.charAt(3) != '6' && moveCoordinates.charAt(3) != '7'
-                                                && moveCoordinates.charAt(3) != '8')) {
+                                        if (moveCoordinates.length() == 4 && (moveCoordinates.charAt(0) == 'a' || moveCoordinates.charAt(0) == 'b'
+                                                || moveCoordinates.charAt(0) == 'c' || moveCoordinates.charAt(0) == 'd' || moveCoordinates.charAt(0) == 'e'
+                                                || moveCoordinates.charAt(0) == 'f' || moveCoordinates.charAt(0) == 'g' || moveCoordinates.charAt(0) == 'h'
+                                                || moveCoordinates.charAt(0) == 'A' || moveCoordinates.charAt(0) == 'B' || moveCoordinates.charAt(0) == 'C'
+                                                || moveCoordinates.charAt(0) == 'D' || moveCoordinates.charAt(0) == 'E' || moveCoordinates.charAt(0) == 'F'
+                                                || moveCoordinates.charAt(0) == 'G' || moveCoordinates.charAt(0) == 'H') && (moveCoordinates.charAt(1) == '1'
+                                                || moveCoordinates.charAt(1) == '2' || moveCoordinates.charAt(1) == '3' || moveCoordinates.charAt(1) == '4'
+                                                || moveCoordinates.charAt(1) == '5' || moveCoordinates.charAt(1) == '6' || moveCoordinates.charAt(1) == '7'
+                                                || moveCoordinates.charAt(1) == '8') && (moveCoordinates.charAt(2) == 'a' || moveCoordinates.charAt(2) == 'b'
+                                                || moveCoordinates.charAt(2) == 'c' || moveCoordinates.charAt(2) == 'd' || moveCoordinates.charAt(2) == 'e'
+                                                || moveCoordinates.charAt(2) == 'f' || moveCoordinates.charAt(2) == 'g' || moveCoordinates.charAt(2) == 'h'
+                                                || moveCoordinates.charAt(2) == 'A' || moveCoordinates.charAt(2) == 'B' || moveCoordinates.charAt(2) == 'C'
+                                                || moveCoordinates.charAt(2) == 'D' || moveCoordinates.charAt(2) == 'E' || moveCoordinates.charAt(2) == 'F'
+                                                || moveCoordinates.charAt(2) == 'G' || moveCoordinates.charAt(2) == 'H') && (moveCoordinates.charAt(3) == '1'
+                                                || moveCoordinates.charAt(3) == '2' || moveCoordinates.charAt(3) == '3' || moveCoordinates.charAt(3) == '4'
+                                                || moveCoordinates.charAt(3) == '5' || moveCoordinates.charAt(3) == '6' || moveCoordinates.charAt(3) == '7'
+                                                || moveCoordinates.charAt(3) == '8')) {
                                             int i = 0;
                                             int j = 0;
                                             switch (moveCoordinates.charAt(0)) {
@@ -309,10 +309,12 @@ public class ClientGame {
                                                     break;
                                             }
                                             ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
-                                            ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                            System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
-                                            serverFacade.makeMove(gameNumber, chessMove);
-                                            command = scanner.nextLine();
+                                            if (chessGame.getBoard().getPiece(startPosition) != null) {
+                                                ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "white" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
+                                                serverFacade.makeMove(gameNumber, chessMove);
+                                                command = scanner.nextLine();
+                                            }
                                         }
                                     } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
@@ -380,9 +382,12 @@ public class ClientGame {
                                                     i = 7;
                                                     break;
                                             }
-                                            System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
-                                            printAvailableMoves(i, j);
-                                            command = scanner.nextLine();
+                                            ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
+                                            if (chessGame.getBoard().getPiece(startPosition) != null) {
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
+                                                printAvailableMoves(i, j);
+                                                command = scanner.nextLine();
+                                            }
                                         }
                                     } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n" + EMPTY + "Type \"f\" again to confirm forfeit:\n");
@@ -458,23 +463,23 @@ public class ClientGame {
                                     } else if (command.equalsIgnoreCase("move") || command.equalsIgnoreCase("m")) {
                                         System.out.println("\n" + EMPTY + "  move coordinates (e7e5, b6c5, etc.):\n");
                                         String moveCoordinates = scanner.nextLine();
-                                        if (!(moveCoordinates.length() != 4 || (moveCoordinates.charAt(0) != 'a' && moveCoordinates.charAt(0) != 'b'
-                                                && moveCoordinates.charAt(0) != 'c' && moveCoordinates.charAt(0) != 'd' && moveCoordinates.charAt(0) != 'e'
-                                                && moveCoordinates.charAt(0) != 'f' && moveCoordinates.charAt(0) != 'g' && moveCoordinates.charAt(0) != 'h'
-                                                && moveCoordinates.charAt(0) != 'A' && moveCoordinates.charAt(0) != 'B' && moveCoordinates.charAt(0) != 'C'
-                                                && moveCoordinates.charAt(0) != 'D' && moveCoordinates.charAt(0) != 'E' && moveCoordinates.charAt(0) != 'F'
-                                                && moveCoordinates.charAt(0) != 'G' && moveCoordinates.charAt(0) != 'H') || (moveCoordinates.charAt(1) != '1'
-                                                && moveCoordinates.charAt(1) != '2' && moveCoordinates.charAt(1) != '3' && moveCoordinates.charAt(1) != '4'
-                                                && moveCoordinates.charAt(1) != '5' && moveCoordinates.charAt(1) != '6' && moveCoordinates.charAt(1) != '7'
-                                                && moveCoordinates.charAt(1) != '8')) || (moveCoordinates.charAt(2) != 'a' && moveCoordinates.charAt(2) != 'b'
-                                                && moveCoordinates.charAt(2) != 'c' && moveCoordinates.charAt(2) != 'd' && moveCoordinates.charAt(2) != 'e'
-                                                && moveCoordinates.charAt(2) != 'f' && moveCoordinates.charAt(2) != 'g' && moveCoordinates.charAt(2) != 'h'
-                                                && moveCoordinates.charAt(2) != 'A' && moveCoordinates.charAt(2) != 'B' && moveCoordinates.charAt(2) != 'C'
-                                                && moveCoordinates.charAt(2) != 'D' && moveCoordinates.charAt(2) != 'E' && moveCoordinates.charAt(2) != 'F'
-                                                && moveCoordinates.charAt(2) != 'G' && moveCoordinates.charAt(2) != 'H') || (moveCoordinates.charAt(3) != '1'
-                                                && moveCoordinates.charAt(3) != '2' && moveCoordinates.charAt(3) != '3' && moveCoordinates.charAt(3) != '4'
-                                                && moveCoordinates.charAt(3) != '5' && moveCoordinates.charAt(3) != '6' && moveCoordinates.charAt(3) != '7'
-                                                && moveCoordinates.charAt(3) != '8')) {
+                                        if (moveCoordinates.length() == 4 && (moveCoordinates.charAt(0) == 'a' || moveCoordinates.charAt(0) == 'b'
+                                                || moveCoordinates.charAt(0) == 'c' || moveCoordinates.charAt(0) == 'd' || moveCoordinates.charAt(0) == 'e'
+                                                || moveCoordinates.charAt(0) == 'f' || moveCoordinates.charAt(0) == 'g' || moveCoordinates.charAt(0) == 'h'
+                                                || moveCoordinates.charAt(0) == 'A' || moveCoordinates.charAt(0) == 'B' || moveCoordinates.charAt(0) == 'C'
+                                                || moveCoordinates.charAt(0) == 'D' || moveCoordinates.charAt(0) == 'E' || moveCoordinates.charAt(0) == 'F'
+                                                || moveCoordinates.charAt(0) == 'G' || moveCoordinates.charAt(0) == 'H') && (moveCoordinates.charAt(1) == '1'
+                                                || moveCoordinates.charAt(1) == '2' || moveCoordinates.charAt(1) == '3' || moveCoordinates.charAt(1) == '4'
+                                                || moveCoordinates.charAt(1) == '5' || moveCoordinates.charAt(1) == '6' || moveCoordinates.charAt(1) == '7'
+                                                || moveCoordinates.charAt(1) == '8') && (moveCoordinates.charAt(2) == 'a' || moveCoordinates.charAt(2) == 'b'
+                                                || moveCoordinates.charAt(2) == 'c' || moveCoordinates.charAt(2) == 'd' || moveCoordinates.charAt(2) == 'e'
+                                                || moveCoordinates.charAt(2) == 'f' || moveCoordinates.charAt(2) == 'g' || moveCoordinates.charAt(2) == 'h'
+                                                || moveCoordinates.charAt(2) == 'A' || moveCoordinates.charAt(2) == 'B' || moveCoordinates.charAt(2) == 'C'
+                                                || moveCoordinates.charAt(2) == 'D' || moveCoordinates.charAt(2) == 'E' || moveCoordinates.charAt(2) == 'F'
+                                                || moveCoordinates.charAt(2) == 'G' || moveCoordinates.charAt(2) == 'H') && (moveCoordinates.charAt(3) == '1'
+                                                || moveCoordinates.charAt(3) == '2' || moveCoordinates.charAt(3) == '3' || moveCoordinates.charAt(3) == '4'
+                                                || moveCoordinates.charAt(3) == '5' || moveCoordinates.charAt(3) == '6' || moveCoordinates.charAt(3) == '7'
+                                                || moveCoordinates.charAt(3) == '8')) {
                                             int i = 0;
                                             int j = 0;
                                             switch (moveCoordinates.charAt(0)) {
@@ -583,10 +588,12 @@ public class ClientGame {
                                                     break;
                                             }
                                             ChessPosition endPosition = new ChessPosition(i + 1, j + 1);
-                                            ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
-                                            System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
-                                            serverFacade.makeMove(gameNumber, chessMove);
-                                            command = scanner.nextLine();
+                                            if (chessGame.getBoard().getPiece(startPosition) != null) {
+                                                ChessMove chessMove = new ChessMove(startPosition, endPosition, null);
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      Playing game " + SET_TEXT_COLOR_RED + gameNumber + SET_TEXT_COLOR_BLUE + " as " + SET_TEXT_COLOR_RED + "black" + SET_TEXT_COLOR_BLUE + " (type " + SET_TEXT_COLOR_RED + "\"h\"" + SET_TEXT_COLOR_BLUE + " for more commands)" + SET_TEXT_COLOR_BLUE);
+                                                serverFacade.makeMove(gameNumber, chessMove);
+                                                command = scanner.nextLine();
+                                            }
                                         }
                                     } else if (command.equalsIgnoreCase("help") || command.equalsIgnoreCase("h")) {
                                         System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "\"h\" " + SET_TEXT_COLOR_BLUE + " (help)");
@@ -654,9 +661,12 @@ public class ClientGame {
                                                     i = 7;
                                                     break;
                                             }
-                                            System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
-                                            printAvailableMovesFlipped(i, j);
-                                            command = scanner.nextLine();
+                                            ChessPosition startPosition = new ChessPosition(i + 1, j + 1);
+                                            if (chessGame.getBoard().getPiece(startPosition) != null) {
+                                                System.out.println("\n" + EMPTY + "  ------------Chess------------      " + "Available Moves\n" + SET_TEXT_COLOR_BLUE);
+                                                printAvailableMovesFlipped(i, j);
+                                                command = scanner.nextLine();
+                                            }
                                         }
                                     } else if (command.equalsIgnoreCase("forfeit") || command.equalsIgnoreCase("f")) {
                                         System.out.println("\n" + EMPTY + "Type \"f\" again to confirm forfeit:\n");
@@ -1285,6 +1295,14 @@ public class ClientGame {
             }
         } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
             System.out.println(serverMessage.message);
+        } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
+            if (playerColor.equals("black") || playerColor.equals("b")) {
+                printBoardFlipped(chessGame.getBoard());
+            } else if (playerColor.equals("white") || playerColor.equals("w")) {
+                printBoard(chessGame.getBoard());
+            } else {
+                printBoard(chessGame.getBoard());
+            }
         }
     }
 }
