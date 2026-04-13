@@ -21,10 +21,6 @@ public class MemoryAuthDAO implements AuthDAO {
         return auths.get(authToken);
     }
 
-    public void updateAuthData(AuthData authData) {
-        auths.put(authData.authToken(), authData);
-    }
-
     public void deleteAuthData(String authToken) {
         auths.remove(authToken);
     }

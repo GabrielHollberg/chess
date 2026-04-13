@@ -9,8 +9,6 @@ public interface AuthDAO {
 
     public AuthData readAuthData(String authToken);
 
-    public void updateAuthData(AuthData authData);
-
     public void deleteAuthData(String authToken);
 
     public void deleteAllAuthData();
