@@ -747,12 +747,14 @@ public class ClientGame {
                                 command = scanner.nextLine();
                                 break;
                             } else {
-                                System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
+                                System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED
+                                        + "Invalid command!\n" + SET_TEXT_COLOR_BLUE);
                                 command = scanner.nextLine();
                             }
                         }
                     } catch (Exception e) {
-                        System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, this game could not be spectated!\n" + SET_TEXT_COLOR_BLUE);
+                        System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED
+                                + "Sorry, this game could not be spectated!\n" + SET_TEXT_COLOR_BLUE);
                         command = scanner.nextLine();
                     }
                 } else if (command.equalsIgnoreCase("logout") || command.equalsIgnoreCase("l")) {
@@ -762,7 +764,8 @@ public class ClientGame {
                         command = scanner.nextLine();
                         break;
                     } catch (Exception e) {
-                        System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Sorry, you couldn't be logged out!\n" + SET_TEXT_COLOR_BLUE);
+                        System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED
+                                + "Sorry, you couldn't be logged out!\n" + SET_TEXT_COLOR_BLUE);
                         command = scanner.nextLine();
                     }
                 } else if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("q")) {
@@ -773,7 +776,8 @@ public class ClientGame {
                         return;
                     }
                 } else {
-                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED + "Invalid command, please try again!\n" + SET_TEXT_COLOR_BLUE);
+                    System.out.println("\n" + EMPTY + "  ------------Chess------------      " + SET_TEXT_COLOR_RED
+                            + "Invalid command, please try again!\n" + SET_TEXT_COLOR_BLUE);
                     command = scanner.nextLine();
                 }
             }
@@ -886,7 +890,8 @@ public class ClientGame {
                 }
             }
             if (i == 0) {
-                System.out.println(SET_TEXT_COLOR_BLUE + "     A" + EMPTY + " B" + EMPTY + " C" + EMPTY + " D" + EMPTY + " E" + EMPTY + " F" + EMPTY + " G" + EMPTY + " H");
+                System.out.println(SET_TEXT_COLOR_BLUE + "     A" + EMPTY + " B" + EMPTY + " C" + EMPTY + " D" + EMPTY
+                        + " E" + EMPTY + " F" + EMPTY + " G" + EMPTY + " H");
             }
         }
         System.out.println();
@@ -998,7 +1003,8 @@ public class ClientGame {
                 }
             }
             if (i == 7) {
-                System.out.println(SET_TEXT_COLOR_BLUE + "     H" + EMPTY + " G" + EMPTY + " F" + EMPTY + " E" + EMPTY + " D" + EMPTY + " C" + EMPTY + " B" + EMPTY + " A");
+                System.out.println(SET_TEXT_COLOR_BLUE + "     H" + EMPTY + " G" + EMPTY + " F" + EMPTY
+                        + " E" + EMPTY + " D" + EMPTY + " C" + EMPTY + " B" + EMPTY + " A");
             }
         }
         System.out.println();
@@ -1137,7 +1143,8 @@ public class ClientGame {
                 }
             }
             if (i == 0) {
-                System.out.println(SET_TEXT_COLOR_BLUE + "     A" + EMPTY + " B" + EMPTY + " C" + EMPTY + " D" + EMPTY + " E" + EMPTY + " F" + EMPTY + " G" + EMPTY + " H");
+                System.out.println(SET_TEXT_COLOR_BLUE + "     A" + EMPTY + " B" + EMPTY + " C" + EMPTY + " D" + EMPTY
+                        + " E" + EMPTY + " F" + EMPTY + " G" + EMPTY + " H");
             }
         }
         System.out.println();
@@ -1276,7 +1283,8 @@ public class ClientGame {
                 }
             }
             if (i == 7) {
-                System.out.println(SET_TEXT_COLOR_BLUE + "     H" + EMPTY + " G" + EMPTY + " F" + EMPTY + " E" + EMPTY + " D" + EMPTY + " C" + EMPTY + " B" + EMPTY + " A");
+                System.out.println(SET_TEXT_COLOR_BLUE + "     H" + EMPTY + " G" + EMPTY + " F" + EMPTY + " E"
+                        + EMPTY + " D" + EMPTY + " C" + EMPTY + " B" + EMPTY + " A");
             }
         }
         System.out.println();

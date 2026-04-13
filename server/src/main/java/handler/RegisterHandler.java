@@ -20,7 +20,8 @@ public class RegisterHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         RegisterRequest registerRequest = new Gson().fromJson(ctx.body(), RegisterRequest.class);
-        if (registerRequest.username() == null || registerRequest.password() == null || registerRequest.email() == null || registerRequest.username().isBlank() || registerRequest.password().isBlank() || registerRequest.email().isBlank()) {
+        if (registerRequest.username() == null || registerRequest.password() == null || registerRequest.email() == null
+                || registerRequest.username().isBlank() || registerRequest.password().isBlank() || registerRequest.email().isBlank()) {
             throw new BadRequestException("Error: bad request");
         }
         RegisterResult registerResult = userService.registerUser(registerRequest);

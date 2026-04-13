@@ -16,8 +16,8 @@ public class MySQLGameDAO implements GameDAO {
     public int createGameData(GameData gameData) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (white_username, black_username, game_name, game) VALUES(?, ?, ?, ?)",
-                        java.sql.Statement.RETURN_GENERATED_KEYS);
+                var preparedStatement = conn.prepareStatement("INSERT INTO game_data (white_username, black_username," +
+                        "game_name, game) VALUES(?, ?, ?, ?)", java.sql.Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, gameData.whiteUsername());
                 preparedStatement.setString(2, gameData.blackUsername());
                 preparedStatement.setString(3, gameData.gameName());
@@ -39,7 +39,8 @@ public class MySQLGameDAO implements GameDAO {
     public GameData readGameData(int gameID) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game FROM game_data WHERE game_id=?");
+                var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username," +
+                        "game_name, game FROM game_data WHERE game_id=?");
                 preparedStatement.setInt(1, gameID);
                 var rs = preparedStatement.executeQuery();
                 int gameIDTemp;
@@ -90,7 +91,8 @@ public class MySQLGameDAO implements GameDAO {
     public void updateGameData(GameData gameData) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("UPDATE game_data SET white_username=?, black_username=?, game_name=?, game=? WHERE game_id=?");
+                var preparedStatement = conn.prepareStatement("UPDATE game_data SET white_username=?, black_username=?," +
+                        "game_name=?, game=? WHERE game_id=?");
                 preparedStatement.setString(1, gameData.whiteUsername());
                 preparedStatement.setString(2, gameData.blackUsername());
                 preparedStatement.setString(3, gameData.gameName());

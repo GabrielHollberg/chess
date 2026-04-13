@@ -135,7 +135,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 }
                 Collection<ChessMove> validMoves = chessGame.validMoves(userGameCommand.getChessMove().getStartPosition());
                 if (gameData.whiteUsername().equals(username)) {
-                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.WHITE && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
+                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.WHITE
+                            && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
                         char startPositionLetter;
                         switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
                             case 0:
@@ -196,7 +197,9 @@ public class WSHandler implements Consumer<WsConfig> {
                                 endPositionLetter = 'A';
                                 break;
                         }
-                        String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
+                        String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter +
+                                (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter +
+                                (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
                         ServerMessage serverMessage;
                         chessGame.makeMove(userGameCommand.getChessMove());
                         ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
@@ -215,7 +218,8 @@ public class WSHandler implements Consumer<WsConfig> {
                             }
                         } else if (chessGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
                             chessGame.setGameOver(true);
-                            message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername() + " and " + gameData.blackUsername() + "drew by stalemate!";
+                            message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername() + " and " +
+                                    gameData.blackUsername() + "drew by stalemate!";
                             serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                             for (WsContext wsContext : list) {
                                 wsContext.send(new Gson().toJson(serverMessage));
@@ -239,7 +243,8 @@ public class WSHandler implements Consumer<WsConfig> {
                         ctx.send(new Gson().toJson(serverMessage));
                     }
                 } else {
-                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.BLACK && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
+                    if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.BLACK
+                            && validMoves.contains(userGameCommand.getChessMove()) && chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
                         char startPositionLetter;
                         switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
                             case 0:
@@ -300,7 +305,9 @@ public class WSHandler implements Consumer<WsConfig> {
                                 endPositionLetter = 'A';
                                 break;
                         }
-                        String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
+                        String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter
+                                + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter
+                                + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
                         ServerMessage serverMessage;
                         chessGame.makeMove(userGameCommand.getChessMove());
                         chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
@@ -320,7 +327,8 @@ public class WSHandler implements Consumer<WsConfig> {
                             }
                         } else if (chessGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
                             chessGame.setGameOver(true);
-                            message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " and " + gameData.whiteUsername() + "drew by stalemate!";
+                            message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " and " + gameData.whiteUsername()
+                                    + "drew by stalemate!";
                             serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
                             for (WsContext wsContext : list) {
                                 wsContext.send(new Gson().toJson(serverMessage));
@@ -356,7 +364,8 @@ public class WSHandler implements Consumer<WsConfig> {
                     throw new Exception();
                 }
                 String username = authService.getUsername(userGameCommand.getAuthToken());
-                if ((gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) || (gameData.blackUsername() != null && gameData.blackUsername().equals(username))) {
+                if ((gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) || (gameData.blackUsername() != null
+                        && gameData.blackUsername().equals(username))) {
                     gameData.game().setGameOver(true);
                     UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), gameData.game());
                     gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);

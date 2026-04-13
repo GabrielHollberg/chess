@@ -41,19 +41,6 @@ public class MySQLAuthDAO implements AuthDAO {
         }
     }
 
-    public void updateAuthData(AuthData authData) {
-        try {
-            try (var conn = DatabaseManager.getConnection()) {
-                var preparedStatement = conn.prepareStatement("UPDATE auth_data SET username=? WHERE auth_token=?");
-                preparedStatement.setString(1, authData.username());
-                preparedStatement.setString(2, authData.authToken());
-                preparedStatement.executeUpdate();
-            }
-        } catch (DataAccessException | SQLException e) {
-            throw new RuntimeException("failed to establish database connection", e);
-        }
-    }
-
     public void deleteAuthData(String authToken) {
         try {
             try (var conn = DatabaseManager.getConnection()) {
