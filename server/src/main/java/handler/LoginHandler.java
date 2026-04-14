@@ -20,7 +20,8 @@ public class LoginHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx) throws Exception {
         LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
-        if (loginRequest.username() == null || loginRequest.password() == null || loginRequest.username().isBlank() || loginRequest.password().isBlank()) {
+        if (loginRequest.username() == null || loginRequest.password() == null
+                || loginRequest.username().isBlank() || loginRequest.password().isBlank()) {
             throw new BadRequestException("Error: bad request");
         }
         LoginResult loginResult = userService.loginUser(loginRequest);

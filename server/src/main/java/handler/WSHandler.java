@@ -61,18 +61,25 @@ public class WSHandler implements Consumer<WsConfig> {
                 String username = authService.getUsername(userGameCommand.getAuthToken());
                 gameData = gameService.getGameData(userGameCommand.getAuthToken(), userGameCommand.getGameID());
                 gameJson = new Gson().toJson(gameData.game());
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME,
+                        gameJson, null, null);
                 ctx.send(new Gson().toJson(serverMessage));
                 String message;
                 if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
-                    message = "\n" + EMPTY + "  ------------Chess------------      " + username + " joined the game as white!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    message = "\n" + EMPTY + "  ------------Chess------------      " + username
+                            + " joined the game as white!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                 } else if (gameData.blackUsername() != null && gameData.blackUsername().equals(username)) {
-                    message = "\n" + EMPTY + "  ------------Chess------------      " + username + " joined the game as black!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    message = "\n" + EMPTY + "  ------------Chess------------      " + username
+                            + " joined the game as black!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                 } else {
-                    message = "\n" + EMPTY + "  ------------Chess------------      " + username + " is now spectating!";
-                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    message = "\n" + EMPTY + "  ------------Chess------------      " + username
+                            + " is now spectating!";
+                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                 }
                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                 for (WsContext wsContext : list) {
@@ -82,7 +89,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                        null, null, "Error");
                 ctx.send(new Gson().toJson(serverMessage));
             }
         } else if (userGameCommand.getCommandType() == UserGameCommand.CommandType.LEAVE) {
@@ -92,7 +100,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 String message;
                 if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(username)) {
                     message = "\n" + EMPTY + "  ------------Chess------------      " + username + " left the game!";
-                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                     ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                     for (WsContext wsContext : list) {
                         if (!wsContext.sessionId().equals(ctx.sessionId())) {
@@ -101,7 +110,8 @@ public class WSHandler implements Consumer<WsConfig> {
                     }
                 } else if (gameData.blackUsername() != null && gameData.blackUsername().equals(username)) {
                     message = "\n" + EMPTY + "  ------------Chess------------      " + username + " left the game!";
-                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                     ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                     for (WsContext wsContext : list) {
                         if (!wsContext.sessionId().equals(ctx.sessionId())) {
@@ -110,7 +120,8 @@ public class WSHandler implements Consumer<WsConfig> {
                     }
                 } else {
                     message = "\n" + EMPTY + "  ------------Chess------------      " + username + " stopped spectating!";
-                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                    ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                            null, message, null);
                     ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                     for (WsContext wsContext : list) {
                         if (!wsContext.sessionId().equals(ctx.sessionId())) {
@@ -122,7 +133,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 gameService.leaveGame(userGameCommand);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                        null, null, "Error");
                 ctx.send(new Gson().toJson(serverMessage));
             }
         } else if (userGameCommand.getCommandType() == UserGameCommand.CommandType.MAKE_MOVE) {
@@ -136,7 +148,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 Collection<ChessMove> validMoves = chessGame.validMoves(userGameCommand.getChessMove().getStartPosition());
                 if (gameData.whiteUsername().equals(username)) {
                     if (chessGame.getTeamTurn() == ChessGame.TeamColor.WHITE) {
-                        if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition())
+                                .getTeamColor() == ChessGame.TeamColor.WHITE) {
                             if (validMoves.contains(userGameCommand.getChessMove())) {
                                 char startPositionLetter;
                                 switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
@@ -198,13 +211,16 @@ public class WSHandler implements Consumer<WsConfig> {
                                         endPositionLetter = 'A';
                                         break;
                                 }
-                                String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter +
-                                        (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter +
+                                String message = "\n" + EMPTY + "  ------------Chess------------      "
+                                        + username + " moved from " + startPositionLetter +
+                                        (userGameCommand.getChessMove().getStartPosition().getRow() + 1)
+                                        + " to " + endPositionLetter +
                                         (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
                                 ServerMessage serverMessage;
                                 chessGame.makeMove(userGameCommand.getChessMove());
                                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
-                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                        null, message, null);
                                 for (WsContext wsContext : list) {
                                     if (!wsContext.equals(ctx)) {
                                         wsContext.send(new Gson().toJson(serverMessage));
@@ -212,8 +228,10 @@ public class WSHandler implements Consumer<WsConfig> {
                                 }
                                 if (chessGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
                                     chessGame.setGameOver(true);
-                                    message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " lost by checkmate!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    message = "\n" + EMPTY + "  ------------Chess------------      "
+                                            + gameData.blackUsername() + " lost by checkmate!";
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
@@ -221,13 +239,15 @@ public class WSHandler implements Consumer<WsConfig> {
                                     chessGame.setGameOver(true);
                                     message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername() + " and " +
                                             gameData.blackUsername() + "drew by stalemate!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
                                 } else if (chessGame.isInCheck(ChessGame.TeamColor.BLACK)) {
                                     message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " is in check!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
@@ -235,25 +255,30 @@ public class WSHandler implements Consumer<WsConfig> {
                                 String gameJson = new Gson().toJson(chessGame);
                                 UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), chessGame);
                                 gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);
-                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson,
+                                        null, null);
                                 for (WsContext wsContext : list) {
                                     wsContext.send(new Gson().toJson(serverMessage));
                                 }
                             } else {
-                                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "This is not a valid move!");
+                                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                        null, null, "This is not a valid move!");
                                 ctx.send(new Gson().toJson(serverMessage));
                             }
                         } else {
-                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Starting square must have a white piece!");
+                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                    null, null, "Starting square must have a white piece!");
                             ctx.send(new Gson().toJson(serverMessage));
                         }
                     } else {
-                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "It's not your turn!");
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                null, null, "It's not your turn!");
                         ctx.send(new Gson().toJson(serverMessage));
                     }
                 } else {
                     if (chessGame.getTeamTurn() == ChessGame.TeamColor.BLACK) {
-                        if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition()).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        if (chessGame.getBoard().getPiece(userGameCommand.getChessMove().getStartPosition())
+                                .getTeamColor() == ChessGame.TeamColor.BLACK) {
                             if (validMoves.contains(userGameCommand.getChessMove())) {
                                 char startPositionLetter;
                                 switch (userGameCommand.getChessMove().getStartPosition().getColumn()) {
@@ -315,14 +340,17 @@ public class WSHandler implements Consumer<WsConfig> {
                                         endPositionLetter = 'A';
                                         break;
                                 }
-                                String message = "\n" + EMPTY + "  ------------Chess------------      " + username + " moved from " + startPositionLetter
-                                        + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to " + endPositionLetter
+                                String message = "\n" + EMPTY + "  ------------Chess------------      " + username
+                                        + " moved from " + startPositionLetter
+                                        + (userGameCommand.getChessMove().getStartPosition().getRow() + 1) + " to "
+                                        + endPositionLetter
                                         + (userGameCommand.getChessMove().getEndPosition().getRow() + 1);
                                 ServerMessage serverMessage;
                                 chessGame.makeMove(userGameCommand.getChessMove());
                                 chessGame.setTeamTurn(ChessGame.TeamColor.WHITE);
                                 ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
-                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                        null, message, null);
                                 for (WsContext wsContext : list) {
                                     if (!wsContext.equals(ctx)) {
                                         wsContext.send(new Gson().toJson(serverMessage));
@@ -330,22 +358,27 @@ public class WSHandler implements Consumer<WsConfig> {
                                 }
                                 if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
                                     chessGame.setGameOver(true);
-                                    message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername() + " lost by checkmate!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername()
+                                            + " lost by checkmate!";
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
                                 } else if (chessGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
                                     chessGame.setGameOver(true);
-                                    message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername() + " and " + gameData.whiteUsername()
+                                    message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.blackUsername()
+                                            + " and " + gameData.whiteUsername()
                                             + "drew by stalemate!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
                                 } else if (chessGame.isInCheck(ChessGame.TeamColor.WHITE)) {
                                     message = "\n" + EMPTY + "  ------------Chess------------      " + gameData.whiteUsername() + " is in check!";
-                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                                    serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                            null, message, null);
                                     for (WsContext wsContext : list) {
                                         wsContext.send(new Gson().toJson(serverMessage));
                                     }
@@ -353,20 +386,24 @@ public class WSHandler implements Consumer<WsConfig> {
                                 String gameJson = new Gson().toJson(chessGame);
                                 UpdateGameRequest updateGameRequest = new UpdateGameRequest(userGameCommand.getGameID(), chessGame);
                                 gameService.updateGame(userGameCommand.getAuthToken(), updateGameRequest);
-                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson, null, null);
+                                serverMessage = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameJson,
+                                        null, null);
                                 for (WsContext wsContext : list) {
                                     wsContext.send(new Gson().toJson(serverMessage));
                                 }
                             } else {
-                                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "This is not a valid move!");
+                                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                        null, null, "This is not a valid move!");
                                 ctx.send(new Gson().toJson(serverMessage));
                             }
                         } else {
-                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Starting square must have a black piece!");
+                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                    null, null, "Starting square must have a black piece!");
                             ctx.send(new Gson().toJson(serverMessage));
                         }
                     } else {
-                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "It's not your turn!");
+                        ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                                null, null, "It's not your turn!");
                         ctx.send(new Gson().toJson(serverMessage));
                     }
                 }
@@ -392,10 +429,12 @@ public class WSHandler implements Consumer<WsConfig> {
                     ArrayList<WsContext> list = wsContexts.get(userGameCommand.getGameID());
                     for (WsContext wsContext : list) {
                         if (wsContext.sessionId().equals(ctx.sessionId())) {
-                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, selfMessage, null);
+                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                    null, selfMessage, null);
                             wsContext.send(new Gson().toJson(serverMessage));
                         } else {
-                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, null, message, null);
+                            ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                                    null, message, null);
                             wsContext.send(new Gson().toJson(serverMessage));
                         }
                     }
@@ -404,7 +443,8 @@ public class WSHandler implements Consumer<WsConfig> {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR, null, null, "Error");
+                ServerMessage serverMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR,
+                        null, null, "Error");
                 ctx.send(new Gson().toJson(serverMessage));
             }
         }
