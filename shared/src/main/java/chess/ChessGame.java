@@ -91,7 +91,9 @@ public class ChessGame {
                 if (move.getPromotionPiece() == null) {
                     boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
                 } else {
-                    boardHistory.getLast().addPiece(move.getEndPosition(), new ChessPiece(boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
+                    boardHistory.getLast().addPiece(move.getEndPosition(),
+                            new ChessPiece(boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor(),
+                                    move.getPromotionPiece()));
                 }
                 boardHistory.getLast().removePiece(move.getStartPosition());
                 // Remove move if it results in checking own king
@@ -113,12 +115,16 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (boardHistory.getLast().getPiece(move.getStartPosition()) != null && validMoves(move.getStartPosition()).contains(move) && boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor() == getTeamTurn()) {
+        if (boardHistory.getLast().getPiece(move.getStartPosition()) != null
+                && validMoves(move.getStartPosition()).contains(move)
+                && boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor() == getTeamTurn()) {
             boardHistory.add(new ChessBoard(this.boardHistory.getLast()));
             if (move.getPromotionPiece() == null) {
                 boardHistory.getLast().addPiece(move.getEndPosition(), boardHistory.getLast().getPiece(move.getStartPosition()));
             } else {
-                boardHistory.getLast().addPiece(move.getEndPosition(), new ChessPiece(boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
+                boardHistory.getLast().addPiece(move.getEndPosition(),
+                        new ChessPiece(boardHistory.getLast().getPiece(move.getStartPosition()).getTeamColor(),
+                                move.getPromotionPiece()));
             }
             boardHistory.getLast().removePiece(move.getStartPosition());
             if (boardHistory.getLast().getPiece(move.getEndPosition()).getTeamColor() == TeamColor.WHITE) {
@@ -154,7 +160,8 @@ public class ChessGame {
                     // Loop through piece's moves
                     for (ChessMove move : pieceMoves) {
                         // If move's end position is same as non-opponent king's position return true
-                        if (move.getEndPosition().getRow() == kingPosition.getRow() && move.getEndPosition().getColumn() == kingPosition.getColumn()) {
+                        if (move.getEndPosition().getRow() == kingPosition.getRow()
+                                && move.getEndPosition().getColumn() == kingPosition.getColumn()) {
                             return true;
                         }
                     }
